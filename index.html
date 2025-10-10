@@ -84,89 +84,10 @@
             color: var(--secondary);
         }
 
-        /* Admin Login Modal */
-        .admin-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .admin-login-form {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            max-width: 400px;
-            width: 90%;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-        }
-
-        .admin-login-form h3 {
-            margin-bottom: 1.5rem;
-            color: var(--dark);
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: var(--transition);
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .admin-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 12px;
-            width: 100%;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .admin-btn:hover {
-            background: var(--primary-dark);
-        }
-
-        .close-admin {
-            float: right;
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: var(--gray);
-        }
-
         /* User Profile Section */
         .user-profile-section {
             padding: 3rem 0;
             background: white;
-            display: none;
         }
 
         .profile-header {
@@ -290,31 +211,6 @@
 
         .user-action-btn:hover {
             background: var(--primary-dark);
-        }
-
-        /* Status Badges */
-        .status-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-right: 5px;
-        }
-
-        .status-pending {
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .status-in-progress {
-            background: #dbeafe;
-            color: #2563eb;
-        }
-
-        .status-completed {
-            background: #dcfce7;
-            color: #16a34a;
         }
 
         /* Hero Section */
@@ -536,7 +432,6 @@
         .login-section {
             padding: 5rem 0;
             background: white;
-            display: none;
         }
 
         .login-container {
@@ -640,10 +535,6 @@
                 gap: 1rem;
             }
             
-            .user-profile-section {
-                padding: 2rem 0;
-            }
-            
             .chat-messages {
                 height: 200px;
             }
@@ -659,36 +550,16 @@
                 <span>Sonidos de Recuerdos</span>
             </div>
             <ul class="nav-links">
-                <li><a href="#como-funciona" onclick="scrollToSection('como-funciona')">Cómo funciona</a></li>
-                <li><a href="#enviar-idea" onclick="scrollToSection('enviar-idea')">Envía tu idea</a></li>
-                <li><a href="#iniciar-sesion" onclick="scrollToSection('iniciar-sesion')">Iniciar sesión</a></li>
+                <li><a href="#como-funciona" onclick="showSection('como-funciona')">Cómo funciona</a></li>
+                <li><a href="#enviar-idea" onclick="showSection('enviar-idea')">Envía tu idea</a></li>
+                <li><a href="#iniciar-sesion" onclick="showSection('iniciar-sesion')">Iniciar sesión</a></li>
                 <li><a href="#" onclick="openAdminLogin()">Admin</a></li>
             </ul>
         </div>
     </header>
 
-    <!-- Admin Login Modal -->
-    <div class="admin-modal" id="adminModal">
-        <div class="admin-login-form">
-            <span class="close-admin" onclick="closeAdminLogin()">&times;</span>
-            <h3>Panel de Administración</h3>
-            <form id="adminLoginForm">
-                <div class="form-group">
-                    <label for="adminEmail">Email</label>
-                    <input type="email" id="adminEmail" placeholder="adminraell@gmail.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="adminPassword">Contraseña</label>
-                    <input type="password" id="adminPassword" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="admin-btn">Iniciar Sesión</button>
-                <div id="adminError" style="color: red; margin-top: 10px; text-align: center;"></div>
-            </form>
-        </div>
-    </div>
-
-    <!-- User Profile Section -->
-    <section id="user-profile" class="user-profile-section">
+    <!-- User Profile Section (hidden by default) -->
+    <section id="user-profile" class="user-profile-section" style="display: none;">
         <div class="container">
             <div class="profile-header">
                 <h2>Mi Proyecto Musical</h2>
@@ -736,98 +607,100 @@
             </div>
 
             <div class="user-actions">
-                <button class="user-action-btn" onclick="goBackToHome()">Volver al inicio</button>
-                <button class="user-action-btn" onclick="logoutUser()">Cerrar sesión</button>
+                <button class="user-action-btn" onclick="showSection('main')">Volver al inicio</button>
             </div>
         </div>
     </section>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>Transforma tus recuerdos en melodías únicas</h1>
-            <p>Comparte tus ideas, emociones o momentos especiales y los convertiré en composiciones musicales originales solo para ti.</p>
-            <div class="hero-buttons">
-                <a href="#enviar-idea" onclick="scrollToSection('enviar-idea')" class="btn">Comienza ahora</a>
-                <a href="#como-funciona" onclick="scrollToSection('como-funciona')" class="btn btn-secondary">Descubre cómo</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- How it works -->
-    <section id="como-funciona" class="how-it-works">
-        <div class="container">
-            <div class="section-title">
-                <h2>Cómo funciona</h2>
-                <p>El proceso es simple y mágico. Tu idea se convierte en música en pocos pasos.</p>
-            </div>
-            <div class="steps">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <h3>Comparte tu idea</h3>
-                    <p>Describe tu recuerdo, emoción o concepto que quieres transformar en música.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <h3>Obtén tu código</h3>
-                    <p>Recibirás un código único para hacer seguimiento a tu proyecto musical.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <h3>Seguimiento y entrega</h3>
-                    <p>Accede a tu perfil para ver el progreso, escuchar demos y comunicarte directamente.</p>
+    <!-- Main Content (shown by default) -->
+    <div id="main-content">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Transforma tus recuerdos en melodías únicas</h1>
+                <p>Comparte tus ideas, emociones o momentos especiales y los convertiré en composiciones musicales originales solo para ti.</p>
+                <div class="hero-buttons">
+                    <a href="#enviar-idea" onclick="showSection('enviar-idea')" class="btn">Comienza ahora</a>
+                    <a href="#como-funciona" onclick="showSection('como-funciona')" class="btn btn-secondary">Descubre cómo</a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Form Section -->
-    <section id="enviar-idea" class="form-section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Envía tu idea</h2>
-                <p>Completa el formulario y comencemos a crear tu melodía personalizada.</p>
+        <!-- How it works -->
+        <section id="como-funciona" class="how-it-works" style="display: none;">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Cómo funciona</h2>
+                    <p>El proceso es simple y mágico. Tu idea se convierte en música en pocos pasos.</p>
+                </div>
+                <div class="steps">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Comparte tu idea</h3>
+                        <p>Describe tu recuerdo, emoción o concepto que quieres transformar en música.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>Obtén tu código</h3>
+                        <p>Recibirás un código único para hacer seguimiento a tu proyecto musical.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Seguimiento y entrega</h3>
+                        <p>Accede a tu perfil para ver el progreso, escuchar demos y comunicarte directamente.</p>
+                    </div>
+                </div>
             </div>
-            <div class="form-container">
-                <form id="ideaForm">
-                    <div class="form-group">
-                        <label for="name">Nombre completo</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Correo electrónico</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="idea">Describe tu idea o recuerdo</label>
-                        <textarea id="idea" name="idea" placeholder="Cuéntame sobre el momento, emoción o idea que quieres transformar en música..." required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="reference">Referencias musicales (opcional)</label>
-                        <input type="text" id="reference" name="reference" placeholder="Artistas, géneros o canciones que te inspiran">
-                    </div>
-                    <button type="submit" class="btn" style="width: 100%;">Enviar mi idea</button>
-                </form>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Login Section -->
-    <section id="iniciar-sesion" class="login-section">
-        <div class="container">
-            <div class="login-container">
-                <h2>Iniciar Sesión</h2>
-                <p>Ingresa el código de seguimiento que recibiste al enviar tu idea</p>
-                <form id="loginForm" style="margin-top: 2rem;">
-                    <div class="form-group">
-                        <label for="trackingCode">Código de Seguimiento</label>
-                        <input type="text" id="trackingCode" name="trackingCode" placeholder="Ej: R1234LL" required>
-                    </div>
-                    <button type="submit" class="btn" style="width: 100%;">Acceder a mi perfil</button>
-                </form>
+        <!-- Form Section -->
+        <section id="enviar-idea" class="form-section" style="display: none;">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Envía tu idea</h2>
+                    <p>Completa el formulario y comencemos a crear tu melodía personalizada.</p>
+                </div>
+                <div class="form-container">
+                    <form id="ideaForm">
+                        <div class="form-group">
+                            <label for="name">Nombre completo</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Correo electrónico</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="idea">Describe tu idea o recuerdo</label>
+                            <textarea id="idea" name="idea" placeholder="Cuéntame sobre el momento, emoción o idea que quieres transformar en música..." required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="reference">Referencias musicales (opcional)</label>
+                            <input type="text" id="reference" name="reference" placeholder="Artistas, géneros o canciones que te inspiran">
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">Enviar mi idea</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Login Section -->
+        <section id="iniciar-sesion" class="login-section" style="display: none;">
+            <div class="container">
+                <div class="login-container">
+                    <h2>Iniciar Sesión</h2>
+                    <p>Ingresa el código de seguimiento que recibiste al enviar tu idea</p>
+                    <form id="loginForm" style="margin-top: 2rem;">
+                        <div class="form-group">
+                            <label for="trackingCode">Código de Seguimiento</label>
+                            <input type="text" id="trackingCode" name="trackingCode" placeholder="Ej: R1234LL" required>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">Acceder a mi perfil</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
 
     <!-- Success Modal -->
     <div class="modal" id="successModal">
@@ -861,9 +734,9 @@
                 </div>
                 <div class="footer-column">
                     <h3>Enlaces rápidos</h3>
-                    <a href="#como-funciona" onclick="scrollToSection('como-funciona')">Cómo funciona</a><br>
-                    <a href="#enviar-idea" onclick="scrollToSection('enviar-idea')">Envía tu idea</a><br>
-                    <a href="#iniciar-sesion" onclick="scrollToSection('iniciar-sesion')">Iniciar sesión</a><br>
+                    <a href="#como-funciona" onclick="showSection('como-funciona')">Cómo funciona</a><br>
+                    <a href="#enviar-idea" onclick="showSection('enviar-idea')">Envía tu idea</a><br>
+                    <a href="#iniciar-sesion" onclick="showSection('iniciar-sesion')">Iniciar sesión</a><br>
                     <a href="#">Términos y condiciones</a>
                 </div>
             </div>
@@ -874,486 +747,145 @@
     </footer>
 
     <script>
-        // Funciones globales
-        function openAdminLogin() {
-            document.getElementById('adminModal').style.display = 'flex';
+        // Simple section management
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('#main-content > section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show the requested section or main content
+            if (sectionId === 'main') {
+                document.getElementById('user-profile').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                // Show hero by default
+                document.querySelector('.hero').style.display = 'block';
+            } else if (sectionId === 'como-funciona' || sectionId === 'enviar-idea' || sectionId === 'iniciar-sesion') {
+                document.getElementById('user-profile').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                document.getElementById(sectionId).style.display = 'block';
+            }
         }
 
-        function closeAdminLogin() {
-            document.getElementById('adminModal').style.display = 'none';
-            document.getElementById('adminError').textContent = '';
+        function openAdminLogin() {
+            alert('Función de administrador no implementada en esta versión');
         }
 
         function closeModal() {
             document.getElementById('successModal').style.display = 'none';
         }
 
-        function scrollToSection(sectionId) {
-            const target = document.getElementById(sectionId);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
+        // Inicializar Supabase
+        const supabase = window.supabase.createClient(
+            'https://hpgzsbqfncyehjlizkoh.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
+        );
+
+        // Generate tracking code
+        function generateTrackingCode() {
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const numbers = '0123456789';
+            let code = 'R';
+            for (let i = 0; i < 4; i++) {
+                code += numbers.charAt(Math.floor(Math.random() * numbers.length));
             }
+            for (let i = 0; i < 2; i++) {
+                code += letters.charAt(Math.floor(Math.random() * letters.length));
+            }
+            return code;
         }
 
-        function goBackToHome() {
-            // Mostrar sección principal
-            document.getElementById('user-profile').style.display = 'none';
-            document.querySelector('.hero').style.display = 'block';
-            document.querySelector('.how-it-works').style.display = 'block';
-            document.querySelector('footer').style.display = 'block';
-        }
-
-        function logoutUser() {
-            // Cerrar sesión
-            const supabaseClient = window.supabase.createClient(
-                'https://hpgzsbqfncyehjlizkoh.supabase.co',
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
-            );
+        // Form submission
+        document.getElementById('ideaForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
             
-            supabaseClient.auth.signOut().then(() => {
-                goBackToHome();
-                alert('Has cerrado sesión correctamente');
-            });
-        }
-
-        // Inicializar todo después de que el DOM esté cargado
-        document.addEventListener('DOMContentLoaded', function() {
-            // Verificar que la librería de Supabase esté cargada
-            if (typeof window.supabase === 'undefined') {
-                console.error('Supabase library not loaded');
-                return;
-            }
-
-            // Inicializar Supabase client
-            const supabaseClient = window.supabase.createClient(
-                'https://hpgzsbqfncyehjlizkoh.supabase.co',
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
-            );
-
-            // Admin login form handling
-            document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
+            try {
+                const formData = new FormData(this);
+                const trackingCode = generateTrackingCode();
                 
-                const email = document.getElementById('adminEmail').value;
-                const password = document.getElementById('adminPassword').value;
-                const errorDiv = document.getElementById('adminError');
+                const { data, error } = await supabase
+                    .from('projects')
+                    .insert({
+                        tracking_code: trackingCode,
+                        client_name: formData.get('name'),
+                        client_email: formData.get('email'),
+                        idea_description: formData.get('idea'),
+                        musical_references: formData.get('reference')
+                    })
+                    .select();
                 
-                try {
-                    const { data, error } = await supabaseClient.auth.signInWithPassword({
-                        email: email,
-                        password: password
-                    });
-                    
-                    if (error) {
-                        errorDiv.textContent = 'Error: ' + error.message;
-                        return;
-                    }
-                    
-                    // Cerrar modal y mostrar panel de admin
-                    closeAdminLogin();
-                    showAdminPanel();
-                    alert('¡Inicio de sesión exitoso como administrador!');
-                    
-                } catch (error) {
-                    errorDiv.textContent = 'Error inesperado: ' + error.message;
-                }
-            });
-
-            // Generate tracking code
-            function generateTrackingCode() {
-                const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                const numbers = '0123456789';
-                let code = 'R';
+                if (error) throw error;
                 
-                // Add 4 random numbers
-                for (let i = 0; i < 4; i++) {
-                    code += numbers.charAt(Math.floor(Math.random() * numbers.length));
-                }
+                document.getElementById('generatedCode').textContent = trackingCode;
+                document.getElementById('successModal').style.display = 'flex';
+                this.reset();
                 
-                // Add 2 random letters
-                for (let i = 0; i < 2; i++) {
-                    code += letters.charAt(Math.floor(Math.random() * letters.length));
-                }
-                
-                return code;
-            }
-
-            // Form submission handling with Supabase
-            document.getElementById('ideaForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                try {
-                    // Get form data
-                    const formData = new FormData(this);
-                    const name = formData.get('name');
-                    const email = formData.get('email');
-                    const idea = formData.get('idea');
-                    const reference = formData.get('reference');
-                    
-                    // Generate tracking code
-                    const trackingCode = generateTrackingCode();
-                    
-                    // Send to Supabase
-                    const { data, error } = await supabaseClient
-                        .from('projects')
-                        .insert({
-                            tracking_code: trackingCode,
-                            client_name: name,
-                            client_email: email,
-                            idea_description: idea,
-                            musical_references: reference
-                        })
-                        .select();
-                    
-                    if (error) throw error;
-                    
-                    // Show success modal
-                    document.getElementById('generatedCode').textContent = trackingCode;
-                    document.getElementById('successModal').style.display = 'flex';
-                    
-                    // Reset form
-                    this.reset();
-                    
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('Hubo un error al enviar tu idea. Por favor intenta nuevamente.');
-                }
-            });
-
-            // Login form handling with Supabase
-            document.getElementById('loginForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                try {
-                    const trackingCode = document.getElementById('trackingCode').value.toUpperCase();
-                    
-                    const { data, error } = await supabaseClient
-                        .from('projects')
-                        .select('*')
-                        .eq('tracking_code', trackingCode)
-                        .single();
-                    
-                    if (error) throw error;
-                    
-                    if (data) {
-                        // Show user profile section
-                        document.getElementById('enviar-idea').style.display = 'none';
-                        document.getElementById('iniciar-sesion').style.display = 'none';
-                        document.querySelector('.hero').style.display = 'none';
-                        document.querySelector('.how-it-works').style.display = 'none';
-                        document.querySelector('footer').style.display = 'none';
-                        document.getElementById('user-profile').style.display = 'block';
-                        
-                        // Fill profile data
-                        document.querySelector('#profileCode span').textContent = data.tracking_code;
-                        document.getElementById('projectStatus').textContent = data.status;
-                        document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
-                        document.getElementById('lyricsStatus').textContent = data.status === 'lyrics_ready' ? 'Lista' : 'Pendiente';
-                        
-                        // Show demo if available (this would be dynamic in real implementation)
-                        if (data.status === 'demo_ready') {
-                            document.getElementById('demoStatus').textContent = '¡Disponible!';
-                            document.getElementById('demoAudio').style.display = 'block';
-                        }
-                        
-                        // Load chat messages
-                        loadChatMessages(data.id);
-                        
-                        // Scroll to profile
-                        document.getElementById('user-profile').scrollIntoView({ behavior: 'smooth' });
-                    } else {
-                        alert('Código de seguimiento no válido. Por favor verifica e intenta nuevamente.');
-                    }
-                    
-                } catch (error) {
-                    console.error('Error login:', error);
-                    alert('Error al iniciar sesión. Por favor intenta nuevamente.');
-                }
-            });
-
-            // Chat functionality with Supabase
-            document.getElementById('sendChat').addEventListener('click', async function() {
-                const chatInput = document.getElementById('chatInput');
-                const message = chatInput.value.trim();
-                
-                if (message) {
-                    try {
-                        const trackingCode = document.querySelector('#profileCode span').textContent;
-                        
-                        // Get project ID first
-                        const {  projectData, error: projectError } = await supabaseClient
-                            .from('projects')
-                            .select('id')
-                            .eq('tracking_code', trackingCode)
-                            .single();
-                        
-                        if (projectError) throw projectError;
-                        
-                        // Send message to Supabase
-                        const { error: messageError } = await supabaseClient
-                            .from('chat_messages')
-                            .insert({
-                                project_id: projectData.id,
-                                sender: 'client',
-                                message: message
-                            });
-                        
-                        if (messageError) throw messageError;
-                        
-                        // Add message to UI
-                        const chatMessages = document.getElementById('chatMessages');
-                        const messageDiv = document.createElement('div');
-                        messageDiv.className = 'message client';
-                        messageDiv.innerHTML = `<strong>Tú:</strong><br>${message}`;
-                        chatMessages.appendChild(messageDiv);
-                        chatInput.value = '';
-                        chatMessages.scrollTop = chatMessages.scrollHeight;
-                        
-                    } catch (error) {
-                        console.error('Error enviar mensaje:', error);
-                        alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
-                    }
-                }
-            });
-
-            // Allow Enter key to send chat message
-            document.getElementById('chatInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    document.getElementById('sendChat').click();
-                }
-            });
-
-            // Close modals when clicking outside
-            window.addEventListener('click', function(e) {
-                const adminModal = document.getElementById('adminModal');
-                const successModal = document.getElementById('successModal');
-                
-                if (e.target === adminModal) {
-                    closeAdminLogin();
-                }
-                if (e.target === successModal) {
-                    closeModal();
-                }
-            });
-
-            // Load chat messages
-            async function loadChatMessages(projectId) {
-                try {
-                    const { data, error } = await supabaseClient
-                        .from('chat_messages')
-                        .select('*')
-                        .eq('project_id', projectId)
-                        .order('created_at', { ascending: true });
-                    
-                    if (error) throw error;
-                    
-                    const chatMessages = document.getElementById('chatMessages');
-                    chatMessages.innerHTML = '';
-                    
-                    if (data && data.length > 0) {
-                        data.forEach(message => {
-                            const messageDiv = document.createElement('div');
-                            messageDiv.className = message.sender === 'admin' ? 'message admin' : 'message client';
-                            messageDiv.innerHTML = `<strong>${message.sender === 'admin' ? 'Compositor' : 'Tú'}:</strong><br>${message.message}`;
-                            chatMessages.appendChild(messageDiv);
-                        });
-                    } else {
-                        const welcomeMessage = document.createElement('div');
-                        welcomeMessage.className = 'message admin';
-                        welcomeMessage.innerHTML = `<strong>Compositor:</strong><br>¡Hola! Bienvenido a tu espacio de seguimiento. Estoy trabajando en tu composición.`;
-                        chatMessages.appendChild(welcomeMessage);
-                    }
-                    
-                    // Scroll to bottom
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                } catch (error) {
-                    console.error('Error al cargar mensajes:', error);
-                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Hubo un error al enviar tu idea. Por favor intenta nuevamente.');
             }
         });
 
-        // Admin Panel Functions
-        function showAdminPanel() {
-            // Ocultar todas las secciones principales
-            document.getElementById('enviar-idea').style.display = 'none';
-            document.getElementById('iniciar-sesion').style.display = 'none';
-            document.querySelector('.hero').style.display = 'none';
-            document.querySelector('.how-it-works').style.display = 'none';
-            document.querySelector('footer').style.display = 'none';
-            document.getElementById('user-profile').style.display = 'none';
-            
-            // Mostrar panel de admin
-            document.getElementById('adminPanel').style.display = 'block';
-            
-            // Cargar proyectos si ya hay datos
-            loadProjects();
-        }
-
-        function hideAdminPanel() {
-            // Ocultar panel de admin
-            document.getElementById('adminPanel').style.display = 'none';
-            
-            // Mostrar sección principal
-            document.querySelector('.hero').style.display = 'block';
-            document.querySelector('.how-it-works').style.display = 'block';
-            document.querySelector('footer').style.display = 'block';
-        }
-
-        async function loadProjects() {
-            const supabaseClient = window.supabase.createClient(
-                'https://hpgzsbqfncyehjlizkoh.supabase.co',
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
-            );
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
             
             try {
-                const { data, error } = await supabaseClient
+                const trackingCode = document.getElementById('trackingCode').value.toUpperCase();
+                
+                const { data, error } = await supabase
                     .from('projects')
                     .select('*')
-                    .order('created_at', { ascending: false });
-                
-                if (error) throw error;
-                
-                const adminContent = document.getElementById('adminContent');
-                
-                if (data && data.length > 0) {
-                    let projectsHTML = '<h3>Proyectos Activos</h3>';
-                    projectsHTML += '<div class="projects-list">';
-                    
-                    data.forEach(project => {
-                        const statusClass = project.status === 'pending' ? 'status-pending' : 
-                                          project.status === 'in_progress' ? 'status-in-progress' : 'status-completed';
-                        
-                        projectsHTML += `
-                            <div class="project-card">
-                                <h3>${project.client_name} (${project.tracking_code})</h3>
-                                <p><strong>Email:</strong> ${project.client_email}</p>
-                                <p><strong>Idea:</strong> ${project.idea_description.substring(0, 50)}${project.idea_description.length > 50 ? '...' : ''}</p>
-                                <p><strong>Estado:</strong> <span class="status-badge ${statusClass}">${project.status}</span></p>
-                                <p><strong>Fecha:</strong> ${new Date(project.created_at).toLocaleDateString()}</p>
-                                <div class="action-buttons">
-                                    <button class="action-button" onclick="updateProjectStatus('${project.id}', 'pending')">Pendiente</button>
-                                    <button class="action-button" onclick="updateProjectStatus('${project.id}', 'in_progress')">En Progreso</button>
-                                    <button class="action-button" onclick="updateProjectStatus('${project.id}', 'demo_ready')">Demo Lista</button>
-                                    <button class="action-button" onclick="updateProjectStatus('${project.id}', 'completed')">Completado</button>
-                                    <button class="action-button" onclick="viewProjectDetails('${project.id}')">Detalles</button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    
-                    projectsHTML += '</div>';
-                    adminContent.innerHTML = projectsHTML;
-                } else {
-                    adminContent.innerHTML = '<p>No hay proyectos registrados.</p>';
-                }
-            } catch (error) {
-                console.error('Error al cargar proyectos:', error);
-                document.getElementById('adminContent').innerHTML = '<p>Error al cargar proyectos. Por favor intenta nuevamente.</p>';
-            }
-        }
-
-        async function updateProjectStatus(projectId, newStatus) {
-            const supabaseClient = window.supabase.createClient(
-                'https://hpgzsbqfncyehjlizkoh.supabase.co',
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
-            );
-            
-            try {
-                const { error } = await supabaseClient
-                    .from('projects')
-                    .update({ status: newStatus })
-                    .eq('id', projectId);
-                
-                if (error) throw error;
-                
-                // Actualizar estado en UI
-                alert('Estado actualizado correctamente');
-                loadProjects(); // Recargar proyectos
-                
-                // Añadir registro de actualización
-                await supabaseClient
-                    .from('project_updates')
-                    .insert({
-                        project_id: projectId,
-                        update_type: 'status_change',
-                        content: `Estado actualizado a: ${newStatus}`
-                    });
-            } catch (error) {
-                console.error('Error al actualizar estado:', error);
-                alert('Error al actualizar estado. Por favor intenta nuevamente.');
-            }
-        }
-
-        async function viewProjectDetails(projectId) {
-            const supabaseClient = window.supabase.createClient(
-                'https://hpgzsbqfncyehjlizkoh.supabase.co',
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
-            );
-            
-            try {
-                const { data, error } = await supabaseClient
-                    .from('projects')
-                    .select('*')
-                    .eq('id', projectId)
+                    .eq('tracking_code', trackingCode)
                     .single();
                 
-                if (error) throw error;
+                if (error || !data) {
+                    alert('Código de seguimiento no válido. Por favor verifica e intenta nuevamente.');
+                    return;
+                }
                 
-                // Mostrar detalles en un modal
-                const detailsHTML = `
-                    <h3>Detalles del Proyecto</h3>
-                    <p><strong>Código:</strong> ${data.tracking_code}</p>
-                    <p><strong>Cliente:</strong> ${data.client_name}</p>
-                    <p><strong>Email:</strong> ${data.client_email}</p>
-                    <p><strong>Idea:</strong> ${data.idea_description}</p>
-                    <p><strong>Referencias:</strong> ${data.musical_references || 'No especificadas'}</p>
-                    <p><strong>Estado:</strong> ${data.status}</p>
-                    <p><strong>Fecha de creación:</strong> ${new Date(data.created_at).toLocaleString()}</p>
-                    <p><strong>Fecha de entrega:</strong> ${data.delivery_date || 'No establecida'}</p>
-                    <div class="action-buttons">
-                        <button class="action-button" onclick="closeProjectDetails()">Cerrar</button>
-                        <button class="action-button" onclick="sendMessageToClient('${projectId}')">Enviar Mensaje</button>
-                    </div>
-                `;
+                // Show user profile
+                document.getElementById('main-content').style.display = 'none';
+                document.getElementById('user-profile').style.display = 'block';
                 
-                document.getElementById('adminContent').innerHTML = detailsHTML;
+                // Fill data
+                document.querySelector('#profileCode span').textContent = data.tracking_code;
+                document.getElementById('projectStatus').textContent = data.status || 'En progreso';
+                document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
+                document.getElementById('lyricsStatus').textContent = data.status === 'lyrics_ready' ? 'Lista' : 'Pendiente';
+                
+                if (data.status === 'demo_ready') {
+                    document.getElementById('demoStatus').textContent = '¡Disponible!';
+                    document.getElementById('demoAudio').style.display = 'block';
+                }
+                
             } catch (error) {
-                console.error('Error al cargar detalles:', error);
-                alert('Error al cargar detalles del proyecto. Por favor intenta nuevamente.');
+                console.error('Error login:', error);
+                alert('Error al iniciar sesión. Por favor intenta nuevamente.');
             }
-        }
+        });
 
-        function closeProjectDetails() {
-            loadProjects(); // Volver a cargar la lista de proyectos
-        }
-
-        async function sendMessageToClient(projectId) {
-            const message = prompt('Escribe tu mensaje al cliente:');
-            if (!message) return;
+        // Chat functionality
+        document.getElementById('sendChat').addEventListener('click', async function() {
+            const chatInput = document.getElementById('chatInput');
+            const message = chatInput.value.trim();
             
-            const supabaseClient = window.supabase.createClient(
-                'https://hpgzsbqfncyehjlizkoh.supabase.co',
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
-            );
-            
-            try {
-                const { error } = await supabaseClient
-                    .from('chat_messages')
-                    .insert({
-                        project_id: projectId,
-                        sender: 'admin',
-                        message: message
-                    });
-                
-                if (error) throw error;
-                
-                alert('Mensaje enviado correctamente');
-                viewProjectDetails(projectId); // Recargar detalles
-            } catch (error) {
-                console.error('Error al enviar mensaje:', error);
-                alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
+            if (message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message client';
+                messageDiv.innerHTML = `<strong>Tú:</strong><br>${message}`;
+                document.getElementById('chatMessages').appendChild(messageDiv);
+                chatInput.value = '';
+                document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
             }
-        }
+        });
+
+        // Allow Enter key to send chat message
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('sendChat').click();
+            }
+        });
     </script>
 </body>
 </html>
