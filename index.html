@@ -84,10 +84,89 @@
             color: var(--secondary);
         }
 
+        /* Admin Login Modal */
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-login-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .admin-login-form h3 {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .admin-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .admin-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .close-admin {
+            float: right;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+
         /* User Profile Section */
         .user-profile-section {
             padding: 3rem 0;
             background: white;
+            display: none;
         }
 
         .profile-header {
@@ -211,6 +290,31 @@
 
         .user-action-btn:hover {
             background: var(--primary-dark);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-in-progress {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #16a34a;
         }
 
         /* Hero Section */
@@ -432,6 +536,7 @@
         .login-section {
             padding: 5rem 0;
             background: white;
+            display: none;
         }
 
         .login-container {
@@ -535,6 +640,10 @@
                 gap: 1rem;
             }
             
+            .user-profile-section {
+                padding: 2rem 0;
+            }
+            
             .chat-messages {
                 height: 200px;
             }
@@ -558,8 +667,28 @@
         </div>
     </header>
 
-    <!-- User Profile Section (hidden by default) -->
-    <section id="user-profile" class="user-profile-section" style="display: none;">
+    <!-- Admin Login Modal -->
+    <div class="admin-modal" id="adminModal">
+        <div class="admin-login-form">
+            <span class="close-admin" onclick="closeAdminLogin()">&times;</span>
+            <h3>Panel de Administración</h3>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminEmail">Email</label>
+                    <input type="email" id="adminEmail" placeholder="adminraell@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Contraseña</label>
+                    <input type="password" id="adminPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="admin-btn">Iniciar Sesión</button>
+                <div id="adminError" style="color: red; margin-top: 10px; text-align: center;"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- User Profile Section -->
+    <section id="user-profile" class="user-profile-section">
         <div class="container">
             <div class="profile-header">
                 <h2>Mi Proyecto Musical</h2>
@@ -607,12 +736,13 @@
             </div>
 
             <div class="user-actions">
-                <button class="user-action-btn" onclick="showSection('main')">Volver al inicio</button>
+                <button class="user-action-btn" onclick="goBackToHome()">Volver al inicio</button>
+                <button class="user-action-btn" onclick="logoutUser()">Cerrar sesión</button>
             </div>
         </div>
     </section>
 
-    <!-- Main Content (shown by default) -->
+    <!-- Main Content -->
     <div id="main-content">
         <!-- Hero Section -->
         <section class="hero">
@@ -747,32 +877,57 @@
     </footer>
 
     <script>
-        // Simple section management
+        // Funciones globales
         function showSection(sectionId) {
-            // Hide all sections
-            document.querySelectorAll('#main-content > section').forEach(section => {
-                section.style.display = 'none';
-            });
+            // Ocultar todas las secciones principales
+            document.getElementById('user-profile').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
             
-            // Show the requested section or main content
-            if (sectionId === 'main') {
-                document.getElementById('user-profile').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                // Show hero by default
-                document.querySelector('.hero').style.display = 'block';
-            } else if (sectionId === 'como-funciona' || sectionId === 'enviar-idea' || sectionId === 'iniciar-sesion') {
-                document.getElementById('user-profile').style.display = 'none';
-                document.getElementById('main-content').style.display = 'block';
-                document.getElementById(sectionId).style.display = 'block';
+            // Mostrar la sección solicitada
+            if (sectionId === 'como-funciona') {
+                document.querySelector('.hero').style.display = 'none';
+                document.getElementById('como-funciona').style.display = 'block';
+                document.getElementById('enviar-idea').style.display = 'none';
+                document.getElementById('iniciar-sesion').style.display = 'none';
+            } else if (sectionId === 'enviar-idea') {
+                document.querySelector('.hero').style.display = 'none';
+                document.getElementById('como-funciona').style.display = 'none';
+                document.getElementById('enviar-idea').style.display = 'block';
+                document.getElementById('iniciar-sesion').style.display = 'none';
+            } else if (sectionId === 'iniciar-sesion') {
+                document.querySelector('.hero').style.display = 'none';
+                document.getElementById('como-funciona').style.display = 'none';
+                document.getElementById('enviar-idea').style.display = 'none';
+                document.getElementById('iniciar-sesion').style.display = 'block';
             }
         }
 
         function openAdminLogin() {
-            alert('Función de administrador no implementada en esta versión');
+            document.getElementById('adminModal').style.display = 'flex';
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('adminModal').style.display = 'none';
+            document.getElementById('adminError').textContent = '';
         }
 
         function closeModal() {
             document.getElementById('successModal').style.display = 'none';
+        }
+
+        function goBackToHome() {
+            document.getElementById('user-profile').style.display = 'none';
+            document.getElementById('main-content').style.display = 'block';
+            document.querySelector('.hero').style.display = 'block';
+            document.getElementById('como-funciona').style.display = 'none';
+            document.getElementById('enviar-idea').style.display = 'none';
+            document.getElementById('iniciar-sesion').style.display = 'none';
+        }
+
+        function logoutUser() {
+            // En esta versión simplificada, simplemente volvemos al inicio
+            goBackToHome();
+            alert('Has cerrado sesión correctamente');
         }
 
         // Inicializar Supabase
@@ -786,38 +941,54 @@
             const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             const numbers = '0123456789';
             let code = 'R';
+            
+            // Add 4 random numbers
             for (let i = 0; i < 4; i++) {
                 code += numbers.charAt(Math.floor(Math.random() * numbers.length));
             }
+            
+            // Add 2 random letters
             for (let i = 0; i < 2; i++) {
                 code += letters.charAt(Math.floor(Math.random() * letters.length));
             }
+            
             return code;
         }
 
-        // Form submission
+        // Form submission handling with Supabase
         document.getElementById('ideaForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             try {
+                // Get form data
                 const formData = new FormData(this);
+                const name = formData.get('name');
+                const email = formData.get('email');
+                const idea = formData.get('idea');
+                const reference = formData.get('reference');
+                
+                // Generate tracking code
                 const trackingCode = generateTrackingCode();
                 
+                // Send to Supabase
                 const { data, error } = await supabase
                     .from('projects')
                     .insert({
                         tracking_code: trackingCode,
-                        client_name: formData.get('name'),
-                        client_email: formData.get('email'),
-                        idea_description: formData.get('idea'),
-                        musical_references: formData.get('reference')
+                        client_name: name,
+                        client_email: email,
+                        idea_description: idea,
+                        musical_references: reference
                     })
                     .select();
                 
                 if (error) throw error;
                 
+                // Show success modal
                 document.getElementById('generatedCode').textContent = trackingCode;
                 document.getElementById('successModal').style.display = 'flex';
+                
+                // Reset form
                 this.reset();
                 
             } catch (error) {
@@ -826,7 +997,7 @@
             }
         });
 
-        // Login form
+        // Login form handling with Supabase
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -839,24 +1010,29 @@
                     .eq('tracking_code', trackingCode)
                     .single();
                 
-                if (error || !data) {
+                if (error) throw error;
+                
+                if (data) {
+                    // Show user profile section
+                    document.getElementById('main-content').style.display = 'none';
+                    document.getElementById('user-profile').style.display = 'block';
+                    
+                    // Fill profile data
+                    document.querySelector('#profileCode span').textContent = data.tracking_code;
+                    document.getElementById('projectStatus').textContent = data.status;
+                    document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
+                    document.getElementById('lyricsStatus').textContent = data.status === 'lyrics_ready' ? 'Lista' : 'Pendiente';
+                    
+                    // Show demo if available (this would be dynamic in real implementation)
+                    if (data.status === 'demo_ready') {
+                        document.getElementById('demoStatus').textContent = '¡Disponible!';
+                        document.getElementById('demoAudio').style.display = 'block';
+                    }
+                    
+                    // Scroll to profile
+                    document.getElementById('user-profile').scrollIntoView({ behavior: 'smooth' });
+                } else {
                     alert('Código de seguimiento no válido. Por favor verifica e intenta nuevamente.');
-                    return;
-                }
-                
-                // Show user profile
-                document.getElementById('main-content').style.display = 'none';
-                document.getElementById('user-profile').style.display = 'block';
-                
-                // Fill data
-                document.querySelector('#profileCode span').textContent = data.tracking_code;
-                document.getElementById('projectStatus').textContent = data.status || 'En progreso';
-                document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
-                document.getElementById('lyricsStatus').textContent = data.status === 'lyrics_ready' ? 'Lista' : 'Pendiente';
-                
-                if (data.status === 'demo_ready') {
-                    document.getElementById('demoStatus').textContent = '¡Disponible!';
-                    document.getElementById('demoAudio').style.display = 'block';
                 }
                 
             } catch (error) {
@@ -865,18 +1041,48 @@
             }
         });
 
-        // Chat functionality
+        // Chat functionality with Supabase
         document.getElementById('sendChat').addEventListener('click', async function() {
             const chatInput = document.getElementById('chatInput');
             const message = chatInput.value.trim();
             
             if (message) {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message client';
-                messageDiv.innerHTML = `<strong>Tú:</strong><br>${message}`;
-                document.getElementById('chatMessages').appendChild(messageDiv);
-                chatInput.value = '';
-                document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+                try {
+                    const trackingCode = document.querySelector('#profileCode span').textContent;
+                    
+                    // Get project ID first
+                    const {  projectData, error: projectError } = await supabase
+                        .from('projects')
+                        .select('id')
+                        .eq('tracking_code', trackingCode)
+                        .single();
+                    
+                    if (projectError) throw projectError;
+                    
+                    // Send message to Supabase
+                    const { error: messageError } = await supabase
+                        .from('chat_messages')
+                        .insert({
+                            project_id: projectData.id,
+                            sender: 'client',
+                            message: message
+                        });
+                    
+                    if (messageError) throw messageError;
+                    
+                    // Add message to UI
+                    const chatMessages = document.getElementById('chatMessages');
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'message client';
+                    messageDiv.innerHTML = `<strong>Tú:</strong><br>${message}`;
+                    chatMessages.appendChild(messageDiv);
+                    chatInput.value = '';
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                } catch (error) {
+                    console.error('Error enviar mensaje:', error);
+                    alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
+                }
             }
         });
 
@@ -884,6 +1090,47 @@
         document.getElementById('chatInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 document.getElementById('sendChat').click();
+            }
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(e) {
+            const adminModal = document.getElementById('adminModal');
+            const successModal = document.getElementById('successModal');
+            
+            if (e.target === adminModal) {
+                closeAdminLogin();
+            }
+            if (e.target === successModal) {
+                closeModal();
+            }
+        });
+
+        // Admin login form handling
+        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            const errorDiv = document.getElementById('adminError');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) {
+                    errorDiv.textContent = 'Error: ' + error.message;
+                    return;
+                }
+                
+                // Cerrar modal y mostrar mensaje de éxito
+                closeAdminLogin();
+                alert('¡Inicio de sesión exitoso como administrador!');
+                
+            } catch (error) {
+                errorDiv.textContent = 'Error inesperado: ' + error.message;
             }
         });
     </script>
