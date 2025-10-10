@@ -285,7 +285,7 @@
             <label for="adminPassword">Contraseña</label>
             <input type="password" id="adminPassword" placeholder="••••••••" required>
         </div>
-        <button class="btn" onclick="loginAdmin()">Iniciar Sesión</button>
+        <button class="btn" id="loginButton">Iniciar Sesión</button>
         <div id="error-message" style="color: red; margin-top: 10px;"></div>
     </div>
 
@@ -330,7 +330,7 @@
                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
             );
 
-            // Login function
+            // Función para iniciar sesión
             async function loginAdmin() {
                 const email = document.getElementById('adminEmail').value;
                 const password = document.getElementById('adminPassword').value;
@@ -361,6 +361,9 @@
                     errorDiv.textContent = 'Error inesperado: ' + error.message;
                 }
             }
+
+            // Asignar evento al botón
+            document.getElementById('loginButton').addEventListener('click', loginAdmin);
 
             // Logout function
             async function logoutAdmin() {
