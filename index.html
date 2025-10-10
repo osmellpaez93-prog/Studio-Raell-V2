@@ -84,6 +84,84 @@
             color: var(--secondary);
         }
 
+        /* Admin Login Modal */
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-login-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .admin-login-form h3 {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .admin-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            width: 100%;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .admin-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .close-admin {
+            float: right;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--gray);
+        }
+
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
@@ -515,9 +593,30 @@
                 <li><a href="#como-funciona">Cómo funciona</a></li>
                 <li><a href="#enviar-idea">Envía tu idea</a></li>
                 <li><a href="#iniciar-sesion">Iniciar sesión</a></li>
+                <li><a href="#" onclick="openAdminLogin()">Admin</a></li>
             </ul>
         </div>
     </header>
+
+    <!-- Admin Login Modal -->
+    <div class="admin-modal" id="adminModal">
+        <div class="admin-login-form">
+            <span class="close-admin" onclick="closeAdminLogin()">&times;</span>
+            <h3>Panel de Administración</h3>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="adminEmail">Email</label>
+                    <input type="email" id="adminEmail" placeholder="adminraell@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="adminPassword">Contraseña</label>
+                    <input type="password" id="adminPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="admin-btn">Iniciar Sesión</button>
+                <div id="adminError" style="color: red; margin-top: 10px; text-align: center;"></div>
+            </form>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -707,6 +806,46 @@
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
         );
 
+        // Admin login functions
+        function openAdminLogin() {
+            document.getElementById('adminModal').style.display = 'flex';
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('adminModal').style.display = 'none';
+            document.getElementById('adminError').textContent = '';
+        }
+
+        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            const errorDiv = document.getElementById('adminError');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) {
+                    errorDiv.textContent = 'Error: ' + error.message;
+                    return;
+                }
+                
+                // Cerrar modal y mostrar mensaje de éxito
+                closeAdminLogin();
+                alert('¡Inicio de sesión exitoso como administrador!');
+                
+                // Aquí podrías redirigir a un panel de control más completo
+                // o mostrar opciones de administración en la misma página
+                
+            } catch (error) {
+                errorDiv.textContent = 'Error inesperado: ' + error.message;
+            }
+        });
+
         // Generate tracking code
         function generateTrackingCode() {
             const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -831,7 +970,7 @@
                     const trackingCode = document.querySelector('#profileCode span').textContent;
                     
                     // Get project ID first
-                    const { data: projectData, error: projectError } = await supabase
+                    const {  projectData, error: projectError } = await supabase
                         .from('projects')
                         .select('id')
                         .eq('tracking_code', trackingCode)
@@ -898,10 +1037,15 @@
             });
         });
 
-        // Close modal when clicking outside
+        // Close modals when clicking outside
         window.addEventListener('click', function(e) {
-            const modal = document.getElementById('successModal');
-            if (e.target === modal) {
+            const adminModal = document.getElementById('adminModal');
+            const successModal = document.getElementById('successModal');
+            
+            if (e.target === adminModal) {
+                closeAdminLogin();
+            }
+            if (e.target === successModal) {
                 closeModal();
             }
         });
