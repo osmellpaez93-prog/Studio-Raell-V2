@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Sonidos de Recuerdos</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .project-card {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .status-select {
+            padding: 5px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Panel de Administración</h1>
+        <div id="login-section">
+            <h2>Iniciar Sesión</h2>
+            <input type="email" id="adminEmail" placeholder="Email" required>
+            <input type="password" id="adminPassword" placeholder="Contraseña" required>
+            <button onclick="loginAdmin()">Iniciar Sesión</button>
+        </div>
+        
+        <div id="admin-panel" style="display: none;">
+            <button onclick="logoutAdmin()">Cerrar Sesión</button>
+            <h2>Proyectos Activos</h2>
+            <div id="projects-list"></div>
+        </div>
+    </div>
+
+    <script>
+        const supabase = supabase.createClient(
+            'https://hpgzsbqfncyehjlizkoh.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
+        );
+
+        async function loginAdmin() {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+            
+            if (error) {
+                alert('Error al iniciar sesión: ' + error.message);
+                return;
+            }
+            
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+            loadProjects();
+        }
+
+        async function logoutAdmin() {
+            await supabase.auth.signOut();
+            document.getElementById('login-section').style.display = 'block';
+            document.getElementById('admin-panel').style.display = 'none';
+        }
+
+        async function loadProjects() {
+            const { data, error } = await supabase
+                .from('projects')
+                .select('*')
+                .order('created_at', { ascending: false });
+            
+            if (error) {
+                console.error('Error:', error);
+                return;
+            }
+            
+            const projectsList = document.getElementById('projects-list');
+            projectsList.innerHTML = '';
+            
+            data.forEach(project => {
+                const projectDiv = document.createElement('div');
+                projectDiv.className = 'project-card';
+                projectDiv.innerHTML = `
+                    <h3>${project.client_name} - ${project.tracking_code}</h3>
+                    <p><strong>Email:</strong> ${project.client_email}</p>
+                    <p><strong>Idea:</strong> ${project.idea_description}</p>
+                    <p><strong>Estado actual:</strong> ${project.status}</p>
+                    <select class="status-select" onchange="updateStatus('${project.id}', this.value)">
+                        <option value="pending" ${project.status === 'pending' ? 'selected' : ''}>Pendiente</option>
+                        <option value="in_progress" ${project.status === 'in_progress' ? 'selected' : ''}>En progreso</option>
+                        <option value="lyrics_ready" ${project.status === 'lyrics_ready' ? 'selected' : ''}>Letra lista</option>
+                        <option value="demo_ready" ${project.status === 'demo_ready' ? 'selected' : ''}>Demo lista</option>
+                        <option value="completed" ${project.status === 'completed' ? 'selected' : ''}>Completado</option>
+                    </select>
+                    <button class="btn" onclick="openChat('${project.id}')">Chat</button>
+                    <button class="btn" onclick="addDemo('${project.id}')">Añadir Demo</button>
+                `;
+                projectsList.appendChild(projectDiv);
+            });
+        }
+
+        async function updateStatus(projectId, newStatus) {
+            const { error } = await supabase
+                .from('projects')
+                .update({ status: newStatus })
+                .eq('id', projectId);
+            
+            if (error) {
+                alert('Error al actualizar estado: ' + error.message);
+                return;
+            }
+            
+            // Añadir registro de actualización
+            await supabase
+                .from('project_updates')
+                .insert({
+                    project_id: projectId,
+                    update_type: 'status_change',
+                    content: `Estado actualizado a: ${newStatus}`
+                });
+            
+            alert('Estado actualizado correctamente');
+        }
+
+        async function openChat(projectId) {
+            // Aquí implementarías un chat más completo
+            const message = prompt('Escribe tu mensaje al cliente:');
+            if (message) {
+                const { error } = await supabase
+                    .from('chat_messages')
+                    .insert({
+                        project_id: projectId,
+                        sender: 'admin',
+                        message: message
+                    });
+                
+                if (error) {
+                    alert('Error al enviar mensaje: ' + error.message);
+                } else {
+                    alert('Mensaje enviado correctamente');
+                }
+            }
+        }
+
+        async function addDemo(projectId) {
+            const demoUrl = prompt('URL del archivo de audio:');
+            if (demoUrl) {
+                const { error } = await supabase
+                    .from('audio_demos')
+                    .insert({
+                        project_id: projectId,
+                        file_path: demoUrl,
+                        file_name: 'demo-' + Date.now() + '.mp3',
+                        description: 'Demo actualizada'
+                    });
+                
+                if (error) {
+                    alert('Error al añadir demo: ' + error.message);
+                } else {
+                    // Actualizar estado del proyecto
+                    await supabase
+                        .from('projects')
+                        .update({ status: 'demo_ready' })
+                        .eq('id', projectId);
+                    alert('Demo añadida correctamente');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
