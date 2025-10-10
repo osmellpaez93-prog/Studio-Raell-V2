@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Proyecto - Sonidos de Recuerdos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        /* Edit Project Section */
+        .edit-project-section {
+            padding: 3rem 0;
+            background: white;
+        }
+
+        .edit-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .edit-header h2 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .project-info {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .project-info p {
+            margin: 0.5rem 0;
+            color: var(--gray);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .demo-upload {
+            background: #f1f5f9;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .demo-upload h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .upload-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .upload-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .chat-container {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .message.admin {
+            background: #dbeafe;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message.client {
+            background: #f0fdf4;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+        }
+
+        .chat-input button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .user-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .user-action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .user-action-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container navbar">
+            <div class="logo">
+                <i class="fas fa-music"></i>
+                <span>Sonidos de Recuerdos</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="admin.html">Admin</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Edit Project Section -->
+    <section class="edit-project-section">
+        <div class="container">
+            <div class="edit-header">
+                <h2>Editar Proyecto</h2>
+                <p id="projectCode">Código: <span></span></p>
+            </div>
+            
+            <div class="project-info">
+                <h3>Información del Proyecto</h3>
+                <p><strong>Cliente:</strong> <span id="clientName">Cargando...</span></p>
+                <p><strong>Email:</strong> <span id="clientEmail">Cargando...</span></p>
+                <p><strong>Idea:</strong> <span id="ideaDescription">Cargando...</span></p>
+                <p><strong>Estado:</strong> <span id="projectStatus">Cargando...</span></p>
+                <p><strong>Fecha de entrega:</strong> <span id="deliveryDate">Cargando...</span></p>
+            </div>
+
+            <div class="form-group">
+                <label for="newIdea">Actualizar Idea o Descripción</label>
+                <textarea id="newIdea" placeholder="Actualiza la descripción de la idea..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="newReferences">Actualizar Referencias Musicales</label>
+                <input type="text" id="newReferences" placeholder="Artistas, géneros o canciones que te inspiran">
+            </div>
+
+            <div class="demo-upload">
+                <h3>Subir Demo de Audio</h3>
+                <p>Selecciona un archivo de audio para subir como demo del proyecto.</p>
+                <input type="file" id="demoFile" accept="audio/*">
+                <button class="upload-btn" onclick="uploadDemo()">Subir Demo</button>
+                <div id="demoStatus" style="margin-top: 1rem; color: var(--gray);"></div>
+            </div>
+
+            <div class="chat-container">
+                <h3>Chat con el Cliente</h3>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message admin">
+                        <strong>Compositor:</strong><br>
+                        Cargando mensajes...
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
+                    <button id="sendChat">Enviar</button>
+                </div>
+            </div>
+
+            <div class="user-actions">
+                <button class="user-action-btn" onclick="goBackToAdmin()">Volver al Panel</button>
+                <button class="user-action-btn" onclick="saveChanges()">Guardar Cambios</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2024 Sonidos de Recuerdos. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Inicializar todo después de que el DOM esté cargado
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar que la librería de Supabase esté cargada
+            if (typeof window.supabase === 'undefined') {
+                console.error('Supabase library not loaded');
+                return;
+            }
+
+            // Inicializar Supabase client
+            const supabase = window.supabase.createClient(
+                'https://hpgzsbqfncyehjlizkoh.supabase.co',
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
+            );
+
+            // Get project ID from URL
+            function getProjectId() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('projectId');
+            }
+
+            // Load project data
+            async function loadProjectData() {
+                const projectId = getProjectId();
+                
+                if (!projectId) {
+                    alert('ID de proyecto no válido. Redirigiendo al panel...');
+                    window.location.href = 'admin.html';
+                    return;
+                }
+                
+                try {
+                    const { data, error } = await supabase
+                        .from('projects')
+                        .select('*')
+                        .eq('id', projectId)
+                        .single();
+                    
+                    if (error || !data) {
+                        alert('Proyecto no encontrado. Por favor verifica el ID.');
+                        window.location.href = 'admin.html';
+                        return;
+                    }
+                    
+                    // Fill project data
+                    document.querySelector('#projectCode span').textContent = data.tracking_code;
+                    document.getElementById('clientName').textContent = data.client_name;
+                    document.getElementById('clientEmail').textContent = data.client_email;
+                    document.getElementById('ideaDescription').textContent = data.idea_description;
+                    document.getElementById('projectStatus').textContent = data.status || 'En progreso';
+                    document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
+                    
+                    // Load chat messages
+                    await loadChatMessages(projectId);
+                    
+                } catch (error) {
+                    console.error('Error loading project:', error);
+                    alert('Error al cargar el proyecto. Por favor intenta nuevamente.');
+                    window.location.href = 'admin.html';
+                }
+            }
+
+            // Load chat messages
+            async function loadChatMessages(projectId) {
+                try {
+                    const { data, error } = await supabase
+                        .from('chat_messages')
+                        .select('*')
+                        .eq('project_id', projectId)
+                        .order('created_at', { ascending: true });
+                    
+                    if (error) throw error;
+                    
+                    const chatMessages = document.getElementById('chatMessages');
+                    chatMessages.innerHTML = '';
+                    
+                    if (data && data.length > 0) {
+                        data.forEach(message => {
+                            const messageDiv = document.createElement('div');
+                            messageDiv.className = message.sender === 'admin' ? 'message admin' : 'message client';
+                            messageDiv.innerHTML = `<strong>${message.sender === 'admin' ? 'Compositor' : 'Tú'}:</strong><br>${message.message}`;
+                            chatMessages.appendChild(messageDiv);
+                        });
+                    } else {
+                        const welcomeMessage = document.createElement('div');
+                        welcomeMessage.className = 'message admin';
+                        welcomeMessage.innerHTML = `<strong>Compositor:</strong><br>¡Hola! Bienvenido a tu espacio de seguimiento. Estoy trabajando en tu composición.`;
+                        chatMessages.appendChild(welcomeMessage);
+                    }
+                    
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                } catch (error) {
+                    console.error('Error loading chat:', error);
+                }
+            }
+
+            // Send chat message
+            document.getElementById('sendChat').addEventListener('click', async function() {
+                const chatInput = document.getElementById('chatInput');
+                const message = chatInput.value.trim();
+                
+                if (message) {
+                    try {
+                        const projectId = getProjectId();
+                        
+                        const { error } = await supabase
+                            .from('chat_messages')
+                            .insert({
+                                project_id: projectId,
+                                sender: 'admin',
+                                message: message
+                            });
+                        
+                        if (error) throw error;
+                        
+                        // Add message to UI
+                        const chatMessages = document.getElementById('chatMessages');
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = 'message admin';
+                        messageDiv.innerHTML = `<strong>Compositor:</strong><br>${message}`;
+                        chatMessages.appendChild(messageDiv);
+                        chatInput.value = '';
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                        alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
+                    }
+                }
+            });
+
+            // Allow Enter key to send chat message
+            document.getElementById('chatInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('sendChat').click();
+                }
+            });
+
+            // Upload demo
+            async function uploadDemo() {
+                const fileInput = document.getElementById('demoFile');
+                const demoStatus = document.getElementById('demoStatus');
+                const projectId = getProjectId();
+                
+                if (!fileInput.files || fileInput.files.length === 0) {
+                    demoStatus.textContent = 'Por favor selecciona un archivo de audio.';
+                    demoStatus.style.color = 'red';
+                    return;
+                }
+                
+                const file = fileInput.files[0];
+                
+                try {
+                    // Subir archivo a Supabase Storage
+                    const { data, error } = await supabase.storage
+                        .from('audio-demos')
+                        .upload(`${projectId}/${file.name}`, file, {
+                            cacheControl: '3600',
+                            upsert: true
+                        });
+                    
+                    if (error) throw error;
+                    
+                    // Actualizar estado del proyecto a "demo_ready"
+                    const { error: updateError } = await supabase
+                        .from('projects')
+                        .update({ status: 'demo_ready' })
+                        .eq('id', projectId);
+                    
+                    if (updateError) throw updateError;
+                    
+                    demoStatus.textContent = 'Demo subido exitosamente!';
+                    demoStatus.style.color = 'green';
+                    
+                    // Actualizar información del proyecto
+                    loadProjectData();
+                    
+                } catch (error) {
+                    console.error('Error uploading demo:', error);
+                    demoStatus.textContent = 'Error al subir el demo. Por favor intenta nuevamente.';
+                    demoStatus.style.color = 'red';
+                }
+            }
+
+            // Save changes
+            async function saveChanges() {
+                const projectId = getProjectId();
+                const newIdea = document.getElementById('newIdea').value;
+                const newReferences = document.getElementById('newReferences').value;
+                
+                if (!projectId) {
+                    alert('ID de proyecto no válido.');
+                    return;
+                }
+                
+                try {
+                    const { error } = await supabase
+                        .from('projects')
+                        .update({
+                            idea_description: newIdea || undefined,
+                            musical_references: newReferences || undefined
+                        })
+                        .eq('id', projectId);
+                    
+                    if (error) throw error;
+                    
+                    alert('Cambios guardados exitosamente!');
+                    loadProjectData();
+                    
+                } catch (error) {
+                    console.error('Error saving changes:', error);
+                    alert('Error al guardar los cambios. Por favor intenta nuevamente.');
+                }
+            }
+
+            // Go back to admin panel
+            function goBackToAdmin() {
+                window.location.href = 'admin.html';
+            }
+
+            // Load project when page loads
+            loadProjectData();
+        });
+    </script>
+</body>
+</html>
