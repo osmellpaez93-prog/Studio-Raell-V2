@@ -590,9 +590,9 @@
                 <span>Sonidos de Recuerdos</span>
             </div>
             <ul class="nav-links">
-                <li><a href="#como-funciona">Cómo funciona</a></li>
-                <li><a href="#enviar-idea">Envía tu idea</a></li>
-                <li><a href="#iniciar-sesion">Iniciar sesión</a></li>
+                <li><a href="#como-funciona" onclick="scrollToSection('como-funciona')">Cómo funciona</a></li>
+                <li><a href="#enviar-idea" onclick="scrollToSection('enviar-idea')">Envía tu idea</a></li>
+                <li><a href="#iniciar-sesion" onclick="scrollToSection('iniciar-sesion')">Iniciar sesión</a></li>
                 <li><a href="#" onclick="openAdminLogin()">Admin</a></li>
             </ul>
         </div>
@@ -624,8 +624,8 @@
             <h1>Transforma tus recuerdos en melodías únicas</h1>
             <p>Comparte tus ideas, emociones o momentos especiales y los convertiré en composiciones musicales originales solo para ti.</p>
             <div class="hero-buttons">
-                <a href="#enviar-idea" class="btn">Comienza ahora</a>
-                <a href="#como-funciona" class="btn btn-secondary">Descubre cómo</a>
+                <a href="#enviar-idea" onclick="scrollToSection('enviar-idea')" class="btn">Comienza ahora</a>
+                <a href="#como-funciona" onclick="scrollToSection('como-funciona')" class="btn btn-secondary">Descubre cómo</a>
             </div>
         </div>
     </section>
@@ -787,9 +787,9 @@
                 </div>
                 <div class="footer-column">
                     <h3>Enlaces rápidos</h3>
-                    <a href="#como-funciona">Cómo funciona</a><br>
-                    <a href="#enviar-idea">Envía tu idea</a><br>
-                    <a href="#iniciar-sesion">Iniciar sesión</a><br>
+                    <a href="#como-funciona" onclick="scrollToSection('como-funciona')">Cómo funciona</a><br>
+                    <a href="#enviar-idea" onclick="scrollToSection('enviar-idea')">Envía tu idea</a><br>
+                    <a href="#iniciar-sesion" onclick="scrollToSection('iniciar-sesion')">Iniciar sesión</a><br>
                     <a href="#">Términos y condiciones</a>
                 </div>
             </div>
@@ -800,7 +800,7 @@
     </footer>
 
     <script>
-        // Funciones de administración (disponibles inmediatamente)
+        // Funciones globales
         function openAdminLogin() {
             document.getElementById('adminModal').style.display = 'flex';
         }
@@ -812,6 +812,13 @@
 
         function closeModal() {
             document.getElementById('successModal').style.display = 'none';
+        }
+
+        function scrollToSection(sectionId) {
+            const target = document.getElementById(sectionId);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         // Inicializar todo después de que el DOM esté cargado
@@ -1015,40 +1022,6 @@
                 if (e.key === 'Enter') {
                     document.getElementById('sendChat').click();
                 }
-            });
-
-            // Smooth scrolling for anchor links with error handling
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    
-                    // Verificar que el selector no sea solo "#" o vacío
-                    if (!targetId || targetId === '#' || targetId === '') {
-                        console.warn('Invalid selector:', targetId);
-                        return;
-                    }
-                    
-                    const target = document.querySelector(targetId);
-                    
-                    if (target) {
-                        // Hide other sections if going to login
-                        if (targetId === '#iniciar-sesion') {
-                            document.querySelector('.hero').style.display = 'none';
-                            document.querySelector('.how-it-works').style.display = 'none';
-                            document.getElementById('enviar-idea').style.display = 'none';
-                            document.querySelector('footer').style.display = 'none';
-                            document.getElementById('iniciar-sesion').style.display = 'block';
-                        }
-                        
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    } else {
-                        console.warn('Target element not found:', targetId);
-                    }
-                });
             });
 
             // Close modals when clicking outside
