@@ -800,13 +800,7 @@
     </footer>
 
     <script>
-        // Supabase client with your credentials
-        const supabase = supabase.createClient(
-            'https://hpgzsbqfncyehjlizkoh.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
-        );
-
-        // Admin login functions
+        // Funciones de administración (disponibles inmediatamente)
         function openAdminLogin() {
             document.getElementById('adminModal').style.display = 'flex';
         }
@@ -816,238 +810,250 @@
             document.getElementById('adminError').textContent = '';
         }
 
-        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('adminEmail').value;
-            const password = document.getElementById('adminPassword').value;
-            const errorDiv = document.getElementById('adminError');
-            
-            try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-                
-                if (error) {
-                    errorDiv.textContent = 'Error: ' + error.message;
-                    return;
-                }
-                
-                // Cerrar modal y mostrar mensaje de éxito
-                closeAdminLogin();
-                alert('¡Inicio de sesión exitoso como administrador!');
-                
-                // Aquí podrías redirigir a un panel de control más completo
-                // o mostrar opciones de administración en la misma página
-                
-            } catch (error) {
-                errorDiv.textContent = 'Error inesperado: ' + error.message;
-            }
-        });
-
-        // Generate tracking code
-        function generateTrackingCode() {
-            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            const numbers = '0123456789';
-            let code = 'R';
-            
-            // Add 4 random numbers
-            for (let i = 0; i < 4; i++) {
-                code += numbers.charAt(Math.floor(Math.random() * numbers.length));
-            }
-            
-            // Add 2 random letters
-            for (let i = 0; i < 2; i++) {
-                code += letters.charAt(Math.floor(Math.random() * letters.length));
-            }
-            
-            return code;
-        }
-
-        // Form submission handling with Supabase
-        document.getElementById('ideaForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            try {
-                // Get form data
-                const formData = new FormData(this);
-                const name = formData.get('name');
-                const email = formData.get('email');
-                const idea = formData.get('idea');
-                const reference = formData.get('reference');
-                
-                // Generate tracking code
-                const trackingCode = generateTrackingCode();
-                
-                // Send to Supabase
-                const { data, error } = await supabase
-                    .from('projects')
-                    .insert({
-                        tracking_code: trackingCode,
-                        client_name: name,
-                        client_email: email,
-                        idea_description: idea,
-                        musical_references: reference
-                    })
-                    .select();
-                
-                if (error) throw error;
-                
-                // Show success modal
-                document.getElementById('generatedCode').textContent = trackingCode;
-                document.getElementById('successModal').style.display = 'flex';
-                
-                // Reset form
-                this.reset();
-                
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Hubo un error al enviar tu idea. Por favor intenta nuevamente.');
-            }
-        });
-
-        // Close modal
         function closeModal() {
             document.getElementById('successModal').style.display = 'none';
         }
 
-        // Login form handling with Supabase
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            try {
-                const trackingCode = document.getElementById('trackingCode').value.toUpperCase();
+        // Inicializar todo después de que el DOM esté cargado
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar que la librería de Supabase esté cargada
+            if (typeof window.supabase === 'undefined') {
+                console.error('Supabase library not loaded');
+                return;
+            }
+
+            // Inicializar Supabase client
+            const supabaseClient = window.supabase.createClient(
+                'https://hpgzsbqfncyehjlizkoh.supabase.co',
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
+            );
+
+            // Admin login form handling
+            document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
                 
-                const { data, error } = await supabase
-                    .from('projects')
-                    .select('*')
-                    .eq('tracking_code', trackingCode)
-                    .single();
+                const email = document.getElementById('adminEmail').value;
+                const password = document.getElementById('adminPassword').value;
+                const errorDiv = document.getElementById('adminError');
                 
-                if (error) throw error;
-                
-                if (data) {
-                    // Show profile section
-                    document.getElementById('enviar-idea').style.display = 'none';
-                    document.getElementById('iniciar-sesion').style.display = 'none';
-                    document.querySelector('.hero').style.display = 'none';
-                    document.querySelector('.how-it-works').style.display = 'none';
-                    document.querySelector('footer').style.display = 'none';
-                    document.getElementById('perfil').style.display = 'block';
+                try {
+                    const { data, error } = await supabaseClient.auth.signInWithPassword({
+                        email: email,
+                        password: password
+                    });
                     
-                    // Fill profile data
-                    document.querySelector('#profileCode span').textContent = data.tracking_code;
-                    document.getElementById('projectStatus').textContent = data.status;
-                    document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
-                    document.getElementById('lyricsStatus').textContent = data.status === 'lyrics_ready' ? 'Lista' : 'Pendiente';
-                    
-                    // Show demo if available (this would be dynamic in real implementation)
-                    if (data.status === 'demo_ready') {
-                        document.getElementById('demoStatus').textContent = '¡Disponible!';
-                        document.getElementById('demoAudio').style.display = 'block';
+                    if (error) {
+                        errorDiv.textContent = 'Error: ' + error.message;
+                        return;
                     }
                     
-                    // Scroll to profile
-                    document.getElementById('perfil').scrollIntoView({ behavior: 'smooth' });
-                } else {
-                    alert('Código de seguimiento no válido. Por favor verifica e intenta nuevamente.');
+                    // Cerrar modal y mostrar mensaje de éxito
+                    closeAdminLogin();
+                    alert('¡Inicio de sesión exitoso como administrador!');
+                    
+                } catch (error) {
+                    errorDiv.textContent = 'Error inesperado: ' + error.message;
+                }
+            });
+
+            // Generate tracking code
+            function generateTrackingCode() {
+                const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                const numbers = '0123456789';
+                let code = 'R';
+                
+                // Add 4 random numbers
+                for (let i = 0; i < 4; i++) {
+                    code += numbers.charAt(Math.floor(Math.random() * numbers.length));
                 }
                 
-            } catch (error) {
-                console.error('Error login:', error);
-                alert('Error al iniciar sesión. Por favor intenta nuevamente.');
+                // Add 2 random letters
+                for (let i = 0; i < 2; i++) {
+                    code += letters.charAt(Math.floor(Math.random() * letters.length));
+                }
+                
+                return code;
             }
-        });
 
-        // Chat functionality with Supabase
-        document.getElementById('sendChat').addEventListener('click', async function() {
-            const chatInput = document.getElementById('chatInput');
-            const message = chatInput.value.trim();
-            
-            if (message) {
+            // Form submission handling with Supabase
+            document.getElementById('ideaForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
                 try {
-                    const trackingCode = document.querySelector('#profileCode span').textContent;
+                    // Get form data
+                    const formData = new FormData(this);
+                    const name = formData.get('name');
+                    const email = formData.get('email');
+                    const idea = formData.get('idea');
+                    const reference = formData.get('reference');
                     
-                    // Get project ID first
-                    const {  projectData, error: projectError } = await supabase
+                    // Generate tracking code
+                    const trackingCode = generateTrackingCode();
+                    
+                    // Send to Supabase
+                    const { data, error } = await supabaseClient
                         .from('projects')
-                        .select('id')
+                        .insert({
+                            tracking_code: trackingCode,
+                            client_name: name,
+                            client_email: email,
+                            idea_description: idea,
+                            musical_references: reference
+                        })
+                        .select();
+                    
+                    if (error) throw error;
+                    
+                    // Show success modal
+                    document.getElementById('generatedCode').textContent = trackingCode;
+                    document.getElementById('successModal').style.display = 'flex';
+                    
+                    // Reset form
+                    this.reset();
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Hubo un error al enviar tu idea. Por favor intenta nuevamente.');
+                }
+            });
+
+            // Login form handling with Supabase
+            document.getElementById('loginForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                try {
+                    const trackingCode = document.getElementById('trackingCode').value.toUpperCase();
+                    
+                    const { data, error } = await supabaseClient
+                        .from('projects')
+                        .select('*')
                         .eq('tracking_code', trackingCode)
                         .single();
                     
-                    if (projectError) throw projectError;
+                    if (error) throw error;
                     
-                    // Send message to Supabase
-                    const { error: messageError } = await supabase
-                        .from('chat_messages')
-                        .insert({
-                            project_id: projectData.id,
-                            sender: 'client',
-                            message: message
-                        });
-                    
-                    if (messageError) throw messageError;
-                    
-                    // Add message to UI
-                    const chatMessages = document.getElementById('chatMessages');
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = 'message client';
-                    messageDiv.innerHTML = `<strong>Tú:</strong><br>${message}`;
-                    chatMessages.appendChild(messageDiv);
-                    chatInput.value = '';
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                    
-                } catch (error) {
-                    console.error('Error enviar mensaje:', error);
-                    alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
-                }
-            }
-        });
-
-        // Allow Enter key to send chat message
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('sendChat').click();
-            }
-        });
-
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const target = document.querySelector(targetId);
-                
-                if (target) {
-                    // Hide other sections if going to login
-                    if (targetId === '#iniciar-sesion') {
+                    if (data) {
+                        // Show profile section
+                        document.getElementById('enviar-idea').style.display = 'none';
+                        document.getElementById('iniciar-sesion').style.display = 'none';
                         document.querySelector('.hero').style.display = 'none';
                         document.querySelector('.how-it-works').style.display = 'none';
-                        document.getElementById('enviar-idea').style.display = 'none';
                         document.querySelector('footer').style.display = 'none';
-                        document.getElementById('iniciar-sesion').style.display = 'block';
+                        document.getElementById('perfil').style.display = 'block';
+                        
+                        // Fill profile data
+                        document.querySelector('#profileCode span').textContent = data.tracking_code;
+                        document.getElementById('projectStatus').textContent = data.status;
+                        document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
+                        document.getElementById('lyricsStatus').textContent = data.status === 'lyrics_ready' ? 'Lista' : 'Pendiente';
+                        
+                        // Show demo if available (this would be dynamic in real implementation)
+                        if (data.status === 'demo_ready') {
+                            document.getElementById('demoStatus').textContent = '¡Disponible!';
+                            document.getElementById('demoAudio').style.display = 'block';
+                        }
+                        
+                        // Scroll to profile
+                        document.getElementById('perfil').scrollIntoView({ behavior: 'smooth' });
+                    } else {
+                        alert('Código de seguimiento no válido. Por favor verifica e intenta nuevamente.');
                     }
                     
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                } catch (error) {
+                    console.error('Error login:', error);
+                    alert('Error al iniciar sesión. Por favor intenta nuevamente.');
                 }
             });
-        });
 
-        // Close modals when clicking outside
-        window.addEventListener('click', function(e) {
-            const adminModal = document.getElementById('adminModal');
-            const successModal = document.getElementById('successModal');
-            
-            if (e.target === adminModal) {
-                closeAdminLogin();
-            }
-            if (e.target === successModal) {
-                closeModal();
-            }
+            // Chat functionality with Supabase
+            document.getElementById('sendChat').addEventListener('click', async function() {
+                const chatInput = document.getElementById('chatInput');
+                const message = chatInput.value.trim();
+                
+                if (message) {
+                    try {
+                        const trackingCode = document.querySelector('#profileCode span').textContent;
+                        
+                        // Get project ID first
+                        const {  projectData, error: projectError } = await supabaseClient
+                            .from('projects')
+                            .select('id')
+                            .eq('tracking_code', trackingCode)
+                            .single();
+                        
+                        if (projectError) throw projectError;
+                        
+                        // Send message to Supabase
+                        const { error: messageError } = await supabaseClient
+                            .from('chat_messages')
+                            .insert({
+                                project_id: projectData.id,
+                                sender: 'client',
+                                message: message
+                            });
+                        
+                        if (messageError) throw messageError;
+                        
+                        // Add message to UI
+                        const chatMessages = document.getElementById('chatMessages');
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = 'message client';
+                        messageDiv.innerHTML = `<strong>Tú:</strong><br>${message}`;
+                        chatMessages.appendChild(messageDiv);
+                        chatInput.value = '';
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        
+                    } catch (error) {
+                        console.error('Error enviar mensaje:', error);
+                        alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
+                    }
+                }
+            });
+
+            // Allow Enter key to send chat message
+            document.getElementById('chatInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('sendChat').click();
+                }
+            });
+
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const target = document.querySelector(targetId);
+                    
+                    if (target) {
+                        // Hide other sections if going to login
+                        if (targetId === '#iniciar-sesion') {
+                            document.querySelector('.hero').style.display = 'none';
+                            document.querySelector('.how-it-works').style.display = 'none';
+                            document.getElementById('enviar-idea').style.display = 'none';
+                            document.querySelector('footer').style.display = 'none';
+                            document.getElementById('iniciar-sesion').style.display = 'block';
+                        }
+                        
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                const adminModal = document.getElementById('adminModal');
+                const successModal = document.getElementById('successModal');
+                
+                if (e.target === adminModal) {
+                    closeAdminLogin();
+                }
+                if (e.target === successModal) {
+                    closeModal();
+                }
+            });
         });
     </script>
 </body>
