@@ -306,149 +306,158 @@
     </footer>
 
     <script>
-        // Supabase client
-        const supabase = supabase.createClient(
-            'https://hpgzsbqfncyehjlizkoh.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
-        );
-
-        // Get tracking code from URL
-        function getTrackingCode() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('code');
-        }
-
-        // Load project data
-        async function loadProjectData() {
-            const trackingCode = getTrackingCode();
-            
-            if (!trackingCode) {
-                alert('Código de seguimiento no válido. Redirigiendo al inicio...');
-                window.location.href = 'index.html';
+        // Inicializar todo después de que el DOM esté cargado
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar que la librería de Supabase esté cargada
+            if (typeof window.supabase === 'undefined') {
+                console.error('Supabase library not loaded');
                 return;
             }
-            
-            try {
-                const { data, error } = await supabase
-                    .from('projects')
-                    .select('*')
-                    .eq('tracking_code', trackingCode.toUpperCase())
-                    .single();
+
+            // Inicializar Supabase client
+            const supabase = window.supabase.createClient(
+                'https://hpgzsbqfncyehjlizkoh.supabase.co',
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
+            );
+
+            // Get tracking code from URL
+            function getTrackingCode() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('code');
+            }
+
+            // Load project data
+            async function loadProjectData() {
+                const trackingCode = getTrackingCode();
                 
-                if (error || !data) {
-                    alert('Proyecto no encontrado. Por favor verifica tu código.');
+                if (!trackingCode) {
+                    alert('Código de seguimiento no válido. Redirigiendo al inicio...');
                     window.location.href = 'index.html';
                     return;
                 }
                 
-                // Fill profile data
-                document.querySelector('#profileCode span').textContent = data.tracking_code;
-                document.getElementById('projectStatus').textContent = data.status || 'En progreso';
-                document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
-                document.getElementById('lyricsStatus').textContent = data.status === 'lyrics_ready' ? 'Lista' : 'Pendiente';
-                
-                if (data.status === 'demo_ready') {
-                    document.getElementById('demoStatus').textContent = '¡Disponible!';
-                    document.getElementById('demoAudio').style.display = 'block';
-                } else {
-                    document.getElementById('demoStatus').textContent = 'Aún no hay demo disponible';
-                }
-                
-                // Load chat messages
-                await loadChatMessages(data.id);
-                
-            } catch (error) {
-                console.error('Error loading project:', error);
-                alert('Error al cargar el proyecto. Por favor intenta nuevamente.');
-                window.location.href = 'index.html';
-            }
-        }
-
-        // Load chat messages
-        async function loadChatMessages(projectId) {
-            try {
-                const { data, error } = await supabase
-                    .from('chat_messages')
-                    .select('*')
-                    .eq('project_id', projectId)
-                    .order('created_at', { ascending: true });
-                
-                if (error) throw error;
-                
-                const chatMessages = document.getElementById('chatMessages');
-                chatMessages.innerHTML = '';
-                
-                if (data && data.length > 0) {
-                    data.forEach(message => {
-                        const messageDiv = document.createElement('div');
-                        messageDiv.className = message.sender === 'admin' ? 'message admin' : 'message client';
-                        messageDiv.innerHTML = `<strong>${message.sender === 'admin' ? 'Compositor' : 'Tú'}:</strong><br>${message.message}`;
-                        chatMessages.appendChild(messageDiv);
-                    });
-                } else {
-                    const welcomeMessage = document.createElement('div');
-                    welcomeMessage.className = 'message admin';
-                    welcomeMessage.innerHTML = `<strong>Compositor:</strong><br>¡Hola! Bienvenido a tu espacio de seguimiento. Estoy trabajando en tu composición.`;
-                    chatMessages.appendChild(welcomeMessage);
-                }
-                
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            } catch (error) {
-                console.error('Error loading chat:', error);
-            }
-        }
-
-        // Send chat message
-        document.getElementById('sendChat').addEventListener('click', async function() {
-            const chatInput = document.getElementById('chatInput');
-            const message = chatInput.value.trim();
-            
-            if (message) {
                 try {
-                    const trackingCode = getTrackingCode();
-                    const { projectData, error: projectError } = await supabase
+                    const { data, error } = await supabase
                         .from('projects')
-                        .select('id')
+                        .select('*')
                         .eq('tracking_code', trackingCode.toUpperCase())
                         .single();
                     
-                    if (projectError) throw projectError;
+                    if (error || !data) {
+                        alert('Proyecto no encontrado. Por favor verifica tu código.');
+                        window.location.href = 'index.html';
+                        return;
+                    }
                     
-                    const { error: messageError } = await supabase
-                        .from('chat_messages')
-                        .insert({
-                            project_id: projectData.id,
-                            sender: 'client',
-                            message: message
-                        });
+                    // Fill profile data
+                    document.querySelector('#profileCode span').textContent = data.tracking_code;
+                    document.getElementById('projectStatus').textContent = data.status || 'En progreso';
+                    document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
+                    document.getElementById('lyricsStatus').textContent = data.status === 'lyrics_ready' ? 'Lista' : 'Pendiente';
                     
-                    if (messageError) throw messageError;
+                    if (data.status === 'demo_ready') {
+                        document.getElementById('demoStatus').textContent = '¡Disponible!';
+                        document.getElementById('demoAudio').style.display = 'block';
+                    } else {
+                        document.getElementById('demoStatus').textContent = 'Aún no hay demo disponible';
+                    }
                     
-                    // Add message to UI
-                    const chatMessages = document.getElementById('chatMessages');
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = 'message client';
-                    messageDiv.innerHTML = `<strong>Tú:</strong><br>${message}`;
-                    chatMessages.appendChild(messageDiv);
-                    chatInput.value = '';
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    // Load chat messages
+                    await loadChatMessages(data.id);
                     
                 } catch (error) {
-                    console.error('Error sending message:', error);
-                    alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
+                    console.error('Error loading project:', error);
+                    alert('Error al cargar el proyecto. Por favor intenta nuevamente.');
+                    window.location.href = 'index.html';
                 }
             }
-        });
 
-        // Allow Enter key to send chat message
-        document.getElementById('chatInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                document.getElementById('sendChat').click();
+            // Load chat messages
+            async function loadChatMessages(projectId) {
+                try {
+                    const { data, error } = await supabase
+                        .from('chat_messages')
+                        .select('*')
+                        .eq('project_id', projectId)
+                        .order('created_at', { ascending: true });
+                    
+                    if (error) throw error;
+                    
+                    const chatMessages = document.getElementById('chatMessages');
+                    chatMessages.innerHTML = '';
+                    
+                    if (data && data.length > 0) {
+                        data.forEach(message => {
+                            const messageDiv = document.createElement('div');
+                            messageDiv.className = message.sender === 'admin' ? 'message admin' : 'message client';
+                            messageDiv.innerHTML = `<strong>${message.sender === 'admin' ? 'Compositor' : 'Tú'}:</strong><br>${message.message}`;
+                            chatMessages.appendChild(messageDiv);
+                        });
+                    } else {
+                        const welcomeMessage = document.createElement('div');
+                        welcomeMessage.className = 'message admin';
+                        welcomeMessage.innerHTML = `<strong>Compositor:</strong><br>¡Hola! Bienvenido a tu espacio de seguimiento. Estoy trabajando en tu composición.`;
+                        chatMessages.appendChild(welcomeMessage);
+                    }
+                    
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                } catch (error) {
+                    console.error('Error loading chat:', error);
+                }
             }
-        });
 
-        // Load project when page loads
-        document.addEventListener('DOMContentLoaded', loadProjectData);
+            // Send chat message
+            document.getElementById('sendChat').addEventListener('click', async function() {
+                const chatInput = document.getElementById('chatInput');
+                const message = chatInput.value.trim();
+                
+                if (message) {
+                    try {
+                        const trackingCode = getTrackingCode();
+                        const { projectData, error: projectError } = await supabase
+                            .from('projects')
+                            .select('id')
+                            .eq('tracking_code', trackingCode.toUpperCase())
+                            .single();
+                        
+                        if (projectError) throw projectError;
+                        
+                        const { error: messageError } = await supabase
+                            .from('chat_messages')
+                            .insert({
+                                project_id: projectData.id,
+                                sender: 'client',
+                                message: message
+                            });
+                        
+                        if (messageError) throw messageError;
+                        
+                        // Add message to UI
+                        const chatMessages = document.getElementById('chatMessages');
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = 'message client';
+                        messageDiv.innerHTML = `<strong>Tú:</strong><br>${message}`;
+                        chatMessages.appendChild(messageDiv);
+                        chatInput.value = '';
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                        
+                    } catch (error) {
+                        console.error('Error sending message:', error);
+                        alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
+                    }
+                }
+            });
+
+            // Allow Enter key to send chat message
+            document.getElementById('chatInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('sendChat').click();
+                }
+            });
+
+            // Load project when page loads
+            loadProjectData();
+        });
     </script>
 </body>
 </html>
