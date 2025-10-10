@@ -310,7 +310,7 @@
                 <h3>Subir Demo de Audio</h3>
                 <p>Selecciona un archivo de audio para subir como demo del proyecto.</p>
                 <input type="file" id="demoFile" accept="audio/*">
-                <button class="upload-btn" onclick="uploadDemo()">Subir Demo</button>
+                <button class="upload-btn" id="uploadDemoButton">Subir Demo</button>
                 <div id="demoStatus" style="margin-top: 1rem; color: var(--gray);"></div>
             </div>
 
@@ -329,8 +329,8 @@
             </div>
 
             <div class="user-actions">
-                <button class="user-action-btn" onclick="goBackToAdmin()">Volver al Panel</button>
-                <button class="user-action-btn" onclick="saveChanges()">Guardar Cambios</button>
+                <button class="user-action-btn" id="backToAdminButton">Volver al Panel</button>
+                <button class="user-action-btn" id="saveChangesButton">Guardar Cambios</button>
             </div>
         </div>
     </section>
@@ -563,6 +563,11 @@
             function goBackToAdmin() {
                 window.location.href = 'admin.html';
             }
+
+            // Asignar eventos a los botones
+            document.getElementById('uploadDemoButton').addEventListener('click', uploadDemo);
+            document.getElementById('saveChangesButton').addEventListener('click', saveChanges);
+            document.getElementById('backToAdminButton').addEventListener('click', goBackToAdmin);
 
             // Load project when page loads
             loadProjectData();
