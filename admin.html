@@ -4,18 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración - Sonidos de Recuerdos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
-            padding: 20px;
-            background: #f5f5f5;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+
         .container {
+            width: 90%;
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 15px;
         }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        /* Admin Login Form */
         .login-form {
             background: white;
             padding: 30px;
@@ -24,14 +93,17 @@
             max-width: 400px;
             margin: 50px auto;
         }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         .form-group label {
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
         }
+
         .form-group input {
             width: 100%;
             padding: 10px;
@@ -39,8 +111,9 @@
             border-radius: 5px;
             font-size: 16px;
         }
+
         .btn {
-            background: #6366f1;
+            background: var(--primary);
             color: white;
             border: none;
             padding: 12px 24px;
@@ -49,34 +122,207 @@
             font-size: 16px;
             width: 100%;
         }
+
         .btn:hover {
-            background: #4f46e5;
+            background: var(--primary-dark);
+        }
+
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
+            padding: 2rem;
+            background: white;
+            margin: 2rem auto;
+            max-width: 1000px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .admin-header h2 {
+            color: var(--dark);
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .admin-action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .admin-action-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .projects-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .project-card {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            transition: var(--transition);
+        }
+
+        .project-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .project-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .project-card p {
+            margin: 0.5rem 0;
+            color: var(--gray);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-in-progress {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            margin-top: 0.5rem;
+        }
+
+        .action-button {
+            background: transparent;
+            border: 1px solid var(--gray);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .action-button:hover {
+            background: var(--gray);
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="login-form">
-            <h2>Iniciar Sesión - Admin</h2>
-            <div class="form-group">
-                <label for="adminEmail">Email</label>
-                <input type="email" id="adminEmail" placeholder="tu-email@gmail.com" required>
+    <!-- Header -->
+    <header>
+        <div class="container navbar">
+            <div class="logo">
+                <i class="fas fa-music"></i>
+                <span>Sonidos de Recuerdos</span>
             </div>
-            <div class="form-group">
-                <label for="adminPassword">Contraseña</label>
-                <input type="password" id="adminPassword" placeholder="••••••••" required>
-            </div>
-            <button class="btn" onclick="loginAdmin()">Iniciar Sesión</button>
-            <div id="error-message" style="color: red; margin-top: 10px;"></div>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Login Form (shown by default) -->
+    <div class="login-form" id="loginFormContainer">
+        <h2>Iniciar Sesión - Admin</h2>
+        <div class="form-group">
+            <label for="adminEmail">Email</label>
+            <input type="email" id="adminEmail" placeholder="adminraell@gmail.com" required>
+        </div>
+        <div class="form-group">
+            <label for="adminPassword">Contraseña</label>
+            <input type="password" id="adminPassword" placeholder="••••••••" required>
+        </div>
+        <button class="btn" onclick="loginAdmin()">Iniciar Sesión</button>
+        <div id="error-message" style="color: red; margin-top: 10px;"></div>
+    </div>
+
+    <!-- Admin Panel (hidden by default) -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-header">
+            <h2>Panel de Administración</h2>
+            <button class="admin-action-btn" onclick="logoutAdmin()">Cerrar Sesión</button>
+        </div>
+        
+        <div class="admin-actions">
+            <button class="admin-action-btn" onclick="loadProjects()">Cargar Proyectos</button>
+            <button class="admin-action-btn" onclick="showAddProjectForm()">Agregar Proyecto</button>
+        </div>
+        
+        <div id="adminContent">
+            <p>Bienvenido al panel de administración. Haz clic en "Cargar Proyectos" para ver todos los proyectos activos.</p>
         </div>
     </div>
 
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2024 Sonidos de Recuerdos. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
+        // Supabase client
         const supabase = supabase.createClient(
             'https://hpgzsbqfncyehjlizkoh.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
         );
 
+        // Login function
         async function loginAdmin() {
             const email = document.getElementById('adminEmail').value;
             const password = document.getElementById('adminPassword').value;
@@ -98,16 +344,237 @@
                     return;
                 }
                 
-                // Redirigir a panel de admin (o mostrar mensaje de éxito)
-                alert('¡Inicio de sesión exitoso!');
-                console.log('Usuario autenticado:', data.user);
-                
-                // Aquí podrías redirigir a una página de panel de control
-                // window.location.href = 'admin-panel.html';
+                // Show admin panel
+                document.getElementById('loginFormContainer').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadProjects(); // Load projects automatically
                 
             } catch (error) {
                 errorDiv.textContent = 'Error inesperado: ' + error.message;
             }
+        }
+
+        // Logout function
+        async function logoutAdmin() {
+            await supabase.auth.signOut();
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('loginFormContainer').style.display = 'block';
+            document.getElementById('adminEmail').value = '';
+            document.getElementById('adminPassword').value = '';
+        }
+
+        // Load projects
+        async function loadProjects() {
+            try {
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                if (data && data.length > 0) {
+                    let projectsHTML = '<h3>Proyectos Activos</h3>';
+                    projectsHTML += '<div class="projects-list">';
+                    
+                    data.forEach(project => {
+                        const statusClass = project.status === 'pending' ? 'status-pending' : 
+                                          project.status === 'in_progress' ? 'status-in-progress' : 'status-completed';
+                        
+                        projectsHTML += `
+                            <div class="project-card">
+                                <h3>${project.client_name} (${project.tracking_code})</h3>
+                                <p><strong>Email:</strong> ${project.client_email}</p>
+                                <p><strong>Idea:</strong> ${project.idea_description.substring(0, 50)}${project.idea_description.length > 50 ? '...' : ''}</p>
+                                <p><strong>Estado:</strong> <span class="status-badge ${statusClass}">${project.status}</span></p>
+                                <p><strong>Fecha:</strong> ${new Date(project.created_at).toLocaleDateString()}</p>
+                                <div class="action-buttons">
+                                    <button class="action-button" onclick="updateProjectStatus('${project.id}', 'pending')">Pendiente</button>
+                                    <button class="action-button" onclick="updateProjectStatus('${project.id}', 'in_progress')">En Progreso</button>
+                                    <button class="action-button" onclick="updateProjectStatus('${project.id}', 'demo_ready')">Demo Lista</button>
+                                    <button class="action-button" onclick="updateProjectStatus('${project.id}', 'completed')">Completado</button>
+                                    <button class="action-button" onclick="viewProjectDetails('${project.id}')">Detalles</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    projectsHTML += '</div>';
+                    document.getElementById('adminContent').innerHTML = projectsHTML;
+                } else {
+                    document.getElementById('adminContent').innerHTML = '<p>No hay proyectos registrados.</p>';
+                }
+            } catch (error) {
+                console.error('Error al cargar proyectos:', error);
+                document.getElementById('adminContent').innerHTML = '<p>Error al cargar proyectos. Por favor intenta nuevamente.</p>';
+            }
+        }
+
+        // Update project status
+        async function updateProjectStatus(projectId, newStatus) {
+            try {
+                const { error } = await supabase
+                    .from('projects')
+                    .update({ status: newStatus })
+                    .eq('id', projectId);
+                
+                if (error) throw error;
+                
+                alert('Estado actualizado correctamente');
+                loadProjects();
+                
+                // Add update record
+                await supabase
+                    .from('project_updates')
+                    .insert({
+                        project_id: projectId,
+                        update_type: 'status_change',
+                        content: `Estado actualizado a: ${newStatus}`
+                    });
+            } catch (error) {
+                console.error('Error al actualizar estado:', error);
+                alert('Error al actualizar estado. Por favor intenta nuevamente.');
+            }
+        }
+
+        // View project details
+        async function viewProjectDetails(projectId) {
+            try {
+                const { data, error } = await supabase
+                    .from('projects')
+                    .select('*')
+                    .eq('id', projectId)
+                    .single();
+                
+                if (error) throw error;
+                
+                const detailsHTML = `
+                    <h3>Detalles del Proyecto</h3>
+                    <p><strong>Código:</strong> ${data.tracking_code}</p>
+                    <p><strong>Cliente:</strong> ${data.client_name}</p>
+                    <p><strong>Email:</strong> ${data.client_email}</p>
+                    <p><strong>Idea:</strong> ${data.idea_description}</p>
+                    <p><strong>Referencias:</strong> ${data.musical_references || 'No especificadas'}</p>
+                    <p><strong>Estado:</strong> ${data.status}</p>
+                    <p><strong>Fecha de creación:</strong> ${new Date(data.created_at).toLocaleString()}</p>
+                    <p><strong>Fecha de entrega:</strong> ${data.delivery_date || 'No establecida'}</p>
+                    <div class="action-buttons">
+                        <button class="action-button" onclick="loadProjects()">Cerrar</button>
+                        <button class="action-button" onclick="sendMessageToClient('${projectId}')">Enviar Mensaje</button>
+                    </div>
+                `;
+                
+                document.getElementById('adminContent').innerHTML = detailsHTML;
+            } catch (error) {
+                console.error('Error al cargar detalles:', error);
+                alert('Error al cargar detalles del proyecto. Por favor intenta nuevamente.');
+            }
+        }
+
+        // Send message to client
+        async function sendMessageToClient(projectId) {
+            const message = prompt('Escribe tu mensaje al cliente:');
+            if (!message) return;
+            
+            try {
+                const { error } = await supabase
+                    .from('chat_messages')
+                    .insert({
+                        project_id: projectId,
+                        sender: 'admin',
+                        message: message
+                    });
+                
+                if (error) throw error;
+                
+                alert('Mensaje enviado correctamente');
+                viewProjectDetails(projectId);
+            } catch (error) {
+                console.error('Error al enviar mensaje:', error);
+                alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
+            }
+        }
+
+        // Show add project form
+        function showAddProjectForm() {
+            const addProjectForm = `
+                <h3>Agregar Nuevo Proyecto</h3>
+                <form id="addProjectForm">
+                    <div class="form-group">
+                        <label for="clientName">Nombre del Cliente</label>
+                        <input type="text" id="clientName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientEmail">Email del Cliente</label>
+                        <input type="email" id="clientEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectIdea">Descripción de la Idea</label>
+                        <textarea id="projectIdea" required style="height: 100px; width: 100%;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="references">Referencias Musicales</label>
+                        <input type="text" id="references">
+                    </div>
+                    <div class="form-group">
+                        <label for="projectStatus">Estado Inicial</label>
+                        <select id="projectStatus" required>
+                            <option value="pending">Pendiente</option>
+                            <option value="in_progress">En Progreso</option>
+                            <option value="demo_ready">Demo Lista</option>
+                            <option value="completed">Completado</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Crear Proyecto</button>
+                    <button type="button" class="btn" style="background: #64748b;" onclick="loadProjects()">Cancelar</button>
+                </form>
+            `;
+            
+            document.getElementById('adminContent').innerHTML = addProjectForm;
+            
+            document.getElementById('addProjectForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const clientName = document.getElementById('clientName').value;
+                const clientEmail = document.getElementById('clientEmail').value;
+                const projectIdea = document.getElementById('projectIdea').value;
+                const references = document.getElementById('references').value;
+                const projectStatus = document.getElementById('projectStatus').value;
+                
+                try {
+                    // Generate tracking code
+                    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                    const numbers = '0123456789';
+                    let code = 'R';
+                    for (let i = 0; i < 4; i++) {
+                        code += numbers.charAt(Math.floor(Math.random() * numbers.length));
+                    }
+                    for (let i = 0; i < 2; i++) {
+                        code += letters.charAt(Math.floor(Math.random() * letters.length));
+                    }
+                    
+                    // Create project
+                    const { data, error } = await supabase
+                        .from('projects')
+                        .insert({
+                            tracking_code: code,
+                            client_name: clientName,
+                            client_email: clientEmail,
+                            idea_description: projectIdea,
+                            musical_references: references,
+                            status: projectStatus
+                        })
+                        .select();
+                    
+                    if (error) throw error;
+                    
+                    alert(`Proyecto creado con éxito. Código: ${code}`);
+                    loadProjects();
+                } catch (error) {
+                    console.error('Error al crear proyecto:', error);
+                    alert('Error al crear proyecto. Por favor intenta nuevamente.');
+                }
+            });
         }
     </script>
 </body>
