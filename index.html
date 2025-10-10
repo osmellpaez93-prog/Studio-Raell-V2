@@ -162,37 +162,123 @@
             color: var(--gray);
         }
 
-        /* Admin Panel */
-        .admin-panel {
-            display: none;
-            padding: 2rem;
+        /* User Profile Section */
+        .user-profile-section {
+            padding: 3rem 0;
             background: white;
-            margin: 2rem auto;
-            max-width: 1000px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
         }
 
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .profile-header {
+            text-align: center;
             margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--primary);
         }
 
-        .admin-header h2 {
+        .profile-header h2 {
             color: var(--dark);
+            margin-bottom: 0.5rem;
         }
 
-        .admin-actions {
+        .profile-code {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 0.5rem 0;
+        }
+
+        .project-status {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .status-item i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .demo-audio {
+            background: #f1f5f9;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .chat-container {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .chat-messages {
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .message.admin {
+            background: #dbeafe;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message.client {
+            background: #f0fdf4;
+        }
+
+        .chat-input {
             display: flex;
             gap: 1rem;
-            margin-bottom: 2rem;
         }
 
-        .admin-action-btn {
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+        }
+
+        .chat-input button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .user-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .user-action-btn {
             background: var(--primary);
             color: white;
             border: none;
@@ -202,39 +288,11 @@
             transition: var(--transition);
         }
 
-        .admin-action-btn:hover {
+        .user-action-btn:hover {
             background: var(--primary-dark);
         }
 
-        .projects-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-        }
-
-        .project-card {
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            transition: var(--transition);
-        }
-
-        .project-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .project-card h3 {
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-        }
-
-        .project-card p {
-            margin: 0.5rem 0;
-            color: var(--gray);
-        }
-
+        /* Status Badges */
         .status-badge {
             display: inline-block;
             padding: 2px 8px;
@@ -257,27 +315,6 @@
         .status-completed {
             background: #dcfce7;
             color: #16a34a;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 5px;
-            margin-top: 0.5rem;
-        }
-
-        .action-button {
-            background: transparent;
-            border: 1px solid var(--gray);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .action-button:hover {
-            background: var(--gray);
-            color: white;
         }
 
         /* Hero Section */
@@ -517,100 +554,6 @@
             color: var(--dark);
         }
 
-        /* Profile Section */
-        .profile-section {
-            padding: 5rem 0;
-            background: white;
-            display: none;
-        }
-
-        .profile-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .project-status {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
-
-        .status-item {
-            text-align: center;
-            padding: 1rem;
-        }
-
-        .status-item i {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .demo-audio {
-            background: #f1f5f9;
-            padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-        }
-
-        .chat-container {
-            background: #f8fafc;
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .chat-messages {
-            height: 300px;
-            overflow-y: auto;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background: white;
-            border-radius: 10px;
-        }
-
-        .message {
-            margin-bottom: 1rem;
-            padding: 0.75rem;
-            border-radius: 10px;
-            max-width: 80%;
-        }
-
-        .message.admin {
-            background: #dbeafe;
-            margin-left: auto;
-            text-align: right;
-        }
-
-        .message.client {
-            background: #f0fdf4;
-        }
-
-        .chat-input {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .chat-input input {
-            flex: 1;
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1rem;
-        }
-
-        .chat-input button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0 24px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
         /* Footer */
         footer {
             background: var(--dark);
@@ -697,13 +640,12 @@
                 gap: 1rem;
             }
             
-            .admin-panel {
-                margin: 1rem;
-                padding: 1rem;
+            .user-profile-section {
+                padding: 2rem 0;
             }
             
-            .projects-list {
-                grid-template-columns: 1fr;
+            .chat-messages {
+                height: 200px;
             }
         }
     </style>
@@ -745,22 +687,60 @@
         </div>
     </div>
 
-    <!-- Admin Panel (hidden by default) -->
-    <div class="admin-panel" id="adminPanel">
-        <div class="admin-header">
-            <h2>Panel de Administración</h2>
-            <button class="admin-action-btn" onclick="logoutAdmin()">Cerrar Sesión</button>
+    <!-- User Profile Section -->
+    <section id="user-profile" class="user-profile-section">
+        <div class="container">
+            <div class="profile-header">
+                <h2>Mi Proyecto Musical</h2>
+                <div class="profile-code" id="profileCode">Código: <span></span></div>
+            </div>
+            
+            <div class="project-status">
+                <div class="status-item">
+                    <i class="fas fa-pen"></i>
+                    <h4>Estado</h4>
+                    <p id="projectStatus">En progreso</p>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-calendar"></i>
+                    <h4>Fecha de entrega</h4>
+                    <p id="deliveryDate">15/12/2024</p>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-file-alt"></i>
+                    <h4>Letra</h4>
+                    <p id="lyricsStatus">Pendiente</p>
+                </div>
+            </div>
+
+            <div class="demo-audio">
+                <h3>Demo de Audio</h3>
+                <p id="demoStatus">Aún no hay demo disponible</p>
+                <audio id="demoAudio" controls style="display: none; width: 100%; margin-top: 1rem;">
+                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <div class="chat-container">
+                <h3>Chat con el compositor</h3>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message admin">
+                        <strong>Compositor:</strong><br>
+                        ¡Hola! Bienvenido a tu espacio de seguimiento. Estoy trabajando en tu composición.
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
+                    <button id="sendChat">Enviar</button>
+                </div>
+            </div>
+
+            <div class="user-actions">
+                <button class="user-action-btn" onclick="goBackToHome()">Volver al inicio</button>
+                <button class="user-action-btn" onclick="logoutUser()">Cerrar sesión</button>
+            </div>
         </div>
-        
-        <div class="admin-actions">
-            <button class="admin-action-btn" onclick="loadProjects()">Cargar Proyectos</button>
-            <button class="admin-action-btn" onclick="showAddProjectForm()">Agregar Proyecto</button>
-        </div>
-        
-        <div id="adminContent">
-            <p>Bienvenido al panel de administración. Haz clic en "Cargar Proyectos" para ver todos los proyectos activos.</p>
-        </div>
-    </div>
+    </section>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -849,56 +829,6 @@
         </div>
     </section>
 
-    <!-- Profile Section -->
-    <section id="perfil" class="profile-section">
-        <div class="container">
-            <div class="profile-header">
-                <h2>Mi Proyecto Musical</h2>
-                <p id="profileCode">Código: <span></span></p>
-            </div>
-            
-            <div class="project-status">
-                <div class="status-item">
-                    <i class="fas fa-pen"></i>
-                    <h4>Estado</h4>
-                    <p id="projectStatus">En progreso</p>
-                </div>
-                <div class="status-item">
-                    <i class="fas fa-calendar"></i>
-                    <h4>Fecha de entrega</h4>
-                    <p id="deliveryDate">15/12/2024</p>
-                </div>
-                <div class="status-item">
-                    <i class="fas fa-file-alt"></i>
-                    <h4>Letra</h4>
-                    <p id="lyricsStatus">Pendiente</p>
-                </div>
-            </div>
-
-            <div class="demo-audio">
-                <h3>Demo de Audio</h3>
-                <p id="demoStatus">Aún no hay demo disponible</p>
-                <audio id="demoAudio" controls style="display: none; width: 100%; margin-top: 1rem;">
-                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-                </audio>
-            </div>
-
-            <div class="chat-container">
-                <h3>Chat con el compositor</h3>
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message admin">
-                        <strong>Compositor:</strong><br>
-                        ¡Hola! Bienvenido a tu espacio de seguimiento. Estoy trabajando en tu composición.
-                    </div>
-                </div>
-                <div class="chat-input">
-                    <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
-                    <button id="sendChat">Enviar</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Success Modal -->
     <div class="modal" id="successModal">
         <div class="modal-content">
@@ -965,8 +895,26 @@
             }
         }
 
-        // Variables globales
-        let isAdminLoggedIn = false;
+        function goBackToHome() {
+            // Mostrar sección principal
+            document.getElementById('user-profile').style.display = 'none';
+            document.querySelector('.hero').style.display = 'block';
+            document.querySelector('.how-it-works').style.display = 'block';
+            document.querySelector('footer').style.display = 'block';
+        }
+
+        function logoutUser() {
+            // Cerrar sesión
+            const supabaseClient = window.supabase.createClient(
+                'https://hpgzsbqfncyehjlizkoh.supabase.co',
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
+            );
+            
+            supabaseClient.auth.signOut().then(() => {
+                goBackToHome();
+                alert('Has cerrado sesión correctamente');
+            });
+        }
 
         // Inicializar todo después de que el DOM esté cargado
         document.addEventListener('DOMContentLoaded', function() {
@@ -1088,13 +1036,13 @@
                     if (error) throw error;
                     
                     if (data) {
-                        // Show profile section
+                        // Show user profile section
                         document.getElementById('enviar-idea').style.display = 'none';
                         document.getElementById('iniciar-sesion').style.display = 'none';
                         document.querySelector('.hero').style.display = 'none';
                         document.querySelector('.how-it-works').style.display = 'none';
                         document.querySelector('footer').style.display = 'none';
-                        document.getElementById('perfil').style.display = 'block';
+                        document.getElementById('user-profile').style.display = 'block';
                         
                         // Fill profile data
                         document.querySelector('#profileCode span').textContent = data.tracking_code;
@@ -1108,8 +1056,11 @@
                             document.getElementById('demoAudio').style.display = 'block';
                         }
                         
+                        // Load chat messages
+                        loadChatMessages(data.id);
+                        
                         // Scroll to profile
-                        document.getElementById('perfil').scrollIntoView({ behavior: 'smooth' });
+                        document.getElementById('user-profile').scrollIntoView({ behavior: 'smooth' });
                     } else {
                         alert('Código de seguimiento no válido. Por favor verifica e intenta nuevamente.');
                     }
@@ -1184,6 +1135,41 @@
                     closeModal();
                 }
             });
+
+            // Load chat messages
+            async function loadChatMessages(projectId) {
+                try {
+                    const { data, error } = await supabaseClient
+                        .from('chat_messages')
+                        .select('*')
+                        .eq('project_id', projectId)
+                        .order('created_at', { ascending: true });
+                    
+                    if (error) throw error;
+                    
+                    const chatMessages = document.getElementById('chatMessages');
+                    chatMessages.innerHTML = '';
+                    
+                    if (data && data.length > 0) {
+                        data.forEach(message => {
+                            const messageDiv = document.createElement('div');
+                            messageDiv.className = message.sender === 'admin' ? 'message admin' : 'message client';
+                            messageDiv.innerHTML = `<strong>${message.sender === 'admin' ? 'Compositor' : 'Tú'}:</strong><br>${message.message}`;
+                            chatMessages.appendChild(messageDiv);
+                        });
+                    } else {
+                        const welcomeMessage = document.createElement('div');
+                        welcomeMessage.className = 'message admin';
+                        welcomeMessage.innerHTML = `<strong>Compositor:</strong><br>¡Hola! Bienvenido a tu espacio de seguimiento. Estoy trabajando en tu composición.`;
+                        chatMessages.appendChild(welcomeMessage);
+                    }
+                    
+                    // Scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                } catch (error) {
+                    console.error('Error al cargar mensajes:', error);
+                }
+            }
         });
 
         // Admin Panel Functions
@@ -1194,7 +1180,7 @@
             document.querySelector('.hero').style.display = 'none';
             document.querySelector('.how-it-works').style.display = 'none';
             document.querySelector('footer').style.display = 'none';
-            document.getElementById('perfil').style.display = 'none';
+            document.getElementById('user-profile').style.display = 'none';
             
             // Mostrar panel de admin
             document.getElementById('adminPanel').style.display = 'block';
@@ -1211,19 +1197,6 @@
             document.querySelector('.hero').style.display = 'block';
             document.querySelector('.how-it-works').style.display = 'block';
             document.querySelector('footer').style.display = 'block';
-        }
-
-        function logoutAdmin() {
-            // Cerrar sesión
-            const supabaseClient = window.supabase.createClient(
-                'https://hpgzsbqfncyehjlizkoh.supabase.co',
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
-            );
-            
-            supabaseClient.auth.signOut().then(() => {
-                hideAdminPanel();
-                alert('Has cerrado sesión correctamente');
-            });
         }
 
         async function loadProjects() {
@@ -1380,97 +1353,6 @@
                 console.error('Error al enviar mensaje:', error);
                 alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
             }
-        }
-
-        function showAddProjectForm() {
-            const addProjectForm = `
-                <h3>Agregar Nuevo Proyecto</h3>
-                <form id="addProjectForm">
-                    <div class="form-group">
-                        <label for="clientName">Nombre del Cliente</label>
-                        <input type="text" id="clientName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="clientEmail">Email del Cliente</label>
-                        <input type="email" id="clientEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="projectIdea">Descripción de la Idea</label>
-                        <textarea id="projectIdea" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="references">Referencias Musicales</label>
-                        <input type="text" id="references">
-                    </div>
-                    <div class="form-group">
-                        <label for="projectStatus">Estado Inicial</label>
-                        <select id="projectStatus" required>
-                            <option value="pending">Pendiente</option>
-                            <option value="in_progress">En Progreso</option>
-                            <option value="demo_ready">Demo Lista</option>
-                            <option value="completed">Completado</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="admin-btn">Crear Proyecto</button>
-                    <button type="button" class="admin-btn" onclick="cancelAddProject()">Cancelar</button>
-                </form>
-            `;
-            
-            document.getElementById('adminContent').innerHTML = addProjectForm;
-            
-            // Manejar envío del formulario
-            document.getElementById('addProjectForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const clientName = document.getElementById('clientName').value;
-                const clientEmail = document.getElementById('clientEmail').value;
-                const projectIdea = document.getElementById('projectIdea').value;
-                const references = document.getElementById('references').value;
-                const projectStatus = document.getElementById('projectStatus').value;
-                
-                const supabaseClient = window.supabase.createClient(
-                    'https://hpgzsbqfncyehjlizkoh.supabase.co',
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
-                );
-                
-                try {
-                    // Generar código de seguimiento
-                    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                    const numbers = '0123456789';
-                    let code = 'R';
-                    for (let i = 0; i < 4; i++) {
-                        code += numbers.charAt(Math.floor(Math.random() * numbers.length));
-                    }
-                    for (let i = 0; i < 2; i++) {
-                        code += letters.charAt(Math.floor(Math.random() * letters.length));
-                    }
-                    
-                    // Crear proyecto
-                    const { data, error } = await supabaseClient
-                        .from('projects')
-                        .insert({
-                            tracking_code: code,
-                            client_name: clientName,
-                            client_email: clientEmail,
-                            idea_description: projectIdea,
-                            musical_references: references,
-                            status: projectStatus
-                        })
-                        .select();
-                    
-                    if (error) throw error;
-                    
-                    alert(`Proyecto creado con éxito. Código: ${code}`);
-                    loadProjects(); // Recargar proyectos
-                } catch (error) {
-                    console.error('Error al crear proyecto:', error);
-                    alert('Error al crear proyecto. Por favor intenta nuevamente.');
-                }
-            });
-        }
-
-        function cancelAddProject() {
-            loadProjects(); // Volver a la lista de proyectos
         }
     </script>
 </body>
