@@ -1017,11 +1017,18 @@
                 }
             });
 
-            // Smooth scrolling for anchor links
+            // Smooth scrolling for anchor links with error handling
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     const targetId = this.getAttribute('href');
+                    
+                    // Verificar que el selector no sea solo "#" o vacío
+                    if (!targetId || targetId === '#' || targetId === '') {
+                        console.warn('Invalid selector:', targetId);
+                        return;
+                    }
+                    
                     const target = document.querySelector(targetId);
                     
                     if (target) {
@@ -1038,6 +1045,8 @@
                             behavior: 'smooth',
                             block: 'start'
                         });
+                    } else {
+                        console.warn('Target element not found:', targetId);
                     }
                 });
             });
