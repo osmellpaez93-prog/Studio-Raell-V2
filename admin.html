@@ -383,26 +383,26 @@
                     
                     if (data && data.length > 0) {
                         let projectsHTML = '<h3>Proyectos Activos</h3>';
-                        projectsHTML += '<div class="projects-list">';
+                        projectsHTML += '<div class="projects-list" id="projectsList">';
                         
                         data.forEach(project => {
                             const statusClass = project.status === 'pending' ? 'status-pending' : 
                                               project.status === 'in_progress' ? 'status-in-progress' : 'status-completed';
                             
                             projectsHTML += `
-                                <div class="project-card">
+                                <div class="project-card" data-project-id="${project.id}">
                                     <h3>${project.client_name} (${project.tracking_code})</h3>
                                     <p><strong>Email:</strong> ${project.client_email}</p>
                                     <p><strong>Idea:</strong> ${project.idea_description.substring(0, 50)}${project.idea_description.length > 50 ? '...' : ''}</p>
                                     <p><strong>Estado:</strong> <span class="status-badge ${statusClass}">${project.status}</span></p>
                                     <p><strong>Fecha:</strong> ${new Date(project.created_at).toLocaleDateString()}</p>
                                     <div class="action-buttons">
-                                        <button class="action-button" onclick="updateProjectStatus('${project.id}', 'pending')">Pendiente</button>
-                                        <button class="action-button" onclick="updateProjectStatus('${project.id}', 'in_progress')">En Progreso</button>
-                                        <button class="action-button" onclick="updateProjectStatus('${project.id}', 'demo_ready')">Demo Lista</button>
-                                        <button class="action-button" onclick="updateProjectStatus('${project.id}', 'completed')">Completado</button>
-                                        <button class="action-button" onclick="viewProjectDetails('${project.id}')">Detalles</button>
-                                        <button class="action-button" onclick="editProject('${project.id}')">Editar</button>
+                                        <button class="action-button update-status" data-status="pending">Pendiente</button>
+                                        <button class="action-button update-status" data-status="in_progress">En Progreso</button>
+                                        <button class="action-button update-status" data-status="demo_ready">Demo Lista</button>
+                                        <button class="action-button update-status" data-status="completed">Completado</button>
+                                        <button class="action-button view-details">Detalles</button>
+                                        <button class="action-button edit-project">Editar</button>
                                     </div>
                                 </div>
                             `;
@@ -410,6 +410,9 @@
                         
                         projectsHTML += '</div>';
                         document.getElementById('adminContent').innerHTML = projectsHTML;
+                        
+                        // Asignar eventos a los botones generados dinámicamente
+                        setupEventListeners();
                     } else {
                         document.getElementById('adminContent').innerHTML = '<p>No hay proyectos registrados.</p>';
                     }
@@ -417,6 +420,36 @@
                     console.error('Error al cargar proyectos:', error);
                     document.getElementById('adminContent').innerHTML = '<p>Error al cargar proyectos. Por favor intenta nuevamente.</p>';
                 }
+            }
+
+            // Setup event listeners for dynamically generated buttons
+            function setupEventListeners() {
+                const projectsList = document.getElementById('projectsList');
+                
+                // Event delegation for update status buttons
+                projectsList.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('update-status')) {
+                        const projectId = e.target.closest('.project-card').dataset.projectId;
+                        const newStatus = e.target.dataset.status;
+                        updateProjectStatus(projectId, newStatus);
+                    }
+                });
+                
+                // Event delegation for view details button
+                projectsList.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('view-details')) {
+                        const projectId = e.target.closest('.project-card').dataset.projectId;
+                        viewProjectDetails(projectId);
+                    }
+                });
+                
+                // Event delegation for edit project button
+                projectsList.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('edit-project')) {
+                        const projectId = e.target.closest('.project-card').dataset.projectId;
+                        editProject(projectId);
+                    }
+                });
             }
 
             // Update project status
@@ -468,12 +501,21 @@
                         <p><strong>Fecha de creación:</strong> ${new Date(data.created_at).toLocaleString()}</p>
                         <p><strong>Fecha de entrega:</strong> ${data.delivery_date || 'No establecida'}</p>
                         <div class="action-buttons">
-                            <button class="action-button" onclick="loadProjects()">Cerrar</button>
-                            <button class="action-button" onclick="sendMessageToClient('${projectId}')">Enviar Mensaje</button>
+                            <button class="action-button" id="closeDetails">Cerrar</button>
+                            <button class="action-button" id="sendMessageBtn" data-project-id="${projectId}">Enviar Mensaje</button>
                         </div>
                     `;
                     
                     document.getElementById('adminContent').innerHTML = detailsHTML;
+                    
+                    // Asignar evento al botón de cerrar
+                    document.getElementById('closeDetails').addEventListener('click', loadProjects);
+                    
+                    // Asignar evento al botón de enviar mensaje
+                    document.getElementById('sendMessageBtn').addEventListener('click', function() {
+                        const projectId = this.dataset.projectId;
+                        sendMessageToClient(projectId);
+                    });
                 } catch (error) {
                     console.error('Error al cargar detalles:', error);
                     alert('Error al cargar detalles del proyecto. Por favor intenta nuevamente.');
@@ -540,12 +582,13 @@
                             </select>
                         </div>
                         <button type="submit" class="btn">Crear Proyecto</button>
-                        <button type="button" class="btn" style="background: #64748b;" onclick="loadProjects()">Cancelar</button>
+                        <button type="button" class="btn" style="background: #64748b;" id="cancelAddProject">Cancelar</button>
                     </form>
                 `;
                 
                 document.getElementById('adminContent').innerHTML = addProjectForm;
                 
+                // Asignar evento al formulario
                 document.getElementById('addProjectForm').addEventListener('submit', async function(e) {
                     e.preventDefault();
                     
@@ -589,9 +632,12 @@
                         alert('Error al crear proyecto. Por favor intenta nuevamente.');
                     }
                 });
+                
+                // Asignar evento al botón de cancelar
+                document.getElementById('cancelAddProject').addEventListener('click', loadProjects);
             }
 
-            // Asignar eventos a los botones
+            // Asignar eventos a los botones principales
             document.getElementById('loginButton').addEventListener('click', loginAdmin);
             document.getElementById('logoutButton').addEventListener('click', logoutAdmin);
             document.getElementById('loadProjectsButton').addEventListener('click', loadProjects);
