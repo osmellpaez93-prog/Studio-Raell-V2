@@ -400,11 +400,6 @@
             .btn-secondary {
                 margin-left: 0;
             }
-            
-            .project-status {
-                flex-direction: column;
-                gap: 1rem;
-            }
         }
     </style>
 </head>
@@ -420,7 +415,6 @@
                 <li><a href="#como-funciona">Cómo funciona</a></li>
                 <li><a href="#enviar-idea">Envía tu idea</a></li>
                 <li><a href="#iniciar-sesion">Iniciar sesión</a></li>
-                <li><a href="admin.html">Admin</a></li>
             </ul>
         </div>
     </header>
@@ -581,17 +575,12 @@
                 const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
                 const numbers = '0123456789';
                 let code = 'R';
-                
-                // Add 4 random numbers
                 for (let i = 0; i < 4; i++) {
                     code += numbers.charAt(Math.floor(Math.random() * numbers.length));
                 }
-                
-                // Add 2 random letters
                 for (let i = 0; i < 2; i++) {
                     code += letters.charAt(Math.floor(Math.random() * letters.length));
                 }
-                
                 return code;
             }
 
