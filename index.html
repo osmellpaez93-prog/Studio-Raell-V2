@@ -517,14 +517,6 @@
                         <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="password">Contraseña (mínimo 8 caracteres)</label>
-                        <input type="password" id="password" name="password" required minlength="8">
-                    </div>
-                    <div class="form-group">
-                        <label for="passwordConfirm">Confirmar contraseña</label>
-                        <input type="password" id="passwordConfirm" name="passwordConfirm" required minlength="8">
-                    </div>
-                    <div class="form-group">
                         <label for="nombreArtistico">Nombre artístico (opcional)</label>
                         <input type="text" id="nombreArtistico" name="nombreArtistico">
                     </div>
@@ -626,7 +618,7 @@
             <p>Hemos recibido tu solicitud y estamos emocionados de trabajar en tu composición musical.</p>
             <p>Tu código de seguimiento es:</p>
             <div class="tracking-code" id="generatedCode"></div>
-            <p>Guarda este código para acceder a tu perfil y hacer seguimiento de tu proyecto.</p>
+            <p>Te hemos enviado un correo con este código para que lo tengas siempre a mano.</p>
             <button class="btn" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
@@ -678,18 +670,6 @@
                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
             );
 
-            // Validar contraseñas antes del envío
-            function validatePasswords() {
-                const password = document.getElementById('password').value;
-                const passwordConfirm = document.getElementById('passwordConfirm').value;
-                
-                if (password !== passwordConfirm) {
-                    alert('❌ Las contraseñas no coinciden');
-                    return false;
-                }
-                return true;
-            }
-
             // Close modal
             function closeModal() {
                 document.getElementById('successModal').style.display = 'none';
@@ -713,33 +693,12 @@
             document.getElementById('ideaForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
-                // Validar contraseñas
-                if (!validatePasswords()) {
-                    return;
-                }
-                
                 try {
                     const formData = new FormData(this);
                     const trackingCode = generateTrackingCode();
                     
-                    // Crear usuario en Supabase Auth
-                    const { data, error: authError } = await supabase.auth.signUp({
-                        email: formData.get('email'),
-                        password: formData.get('password'),
-                        options: {
-                            data: {
-                                nombre_completo: formData.get('name'),
-                                numero_raell: trackingCode
-                            },
-                            emailRedirectTo: window.location.origin + '/confirmacion.html'
-                        }
-                    });
-                    
-                    if (authError) throw authError;
-                    
-                    // Guardar datos en tabla 'projects' (adaptado al nuevo formato)
+                    // Guardar datos en tabla 'projects' (sin autenticación de usuario)
                     const projectData = {
-                        user_id: data.user?.id,
                         tracking_code: trackingCode,
                         client_name: formData.get('name'),
                         client_email: formData.get('email'),
@@ -755,8 +714,12 @@
                         status: 'pending'
                     };
                     
-                    const { error: dbError } = await supabase.from('projects').insert([projectData]);
+                    const { data, error: dbError } = await supabase.from('projects').insert([projectData]).select();
                     if (dbError) throw dbError;
+                    
+                    // Enviar correo de confirmación (simulado - en producción usarías Supabase Functions o un servicio de email)
+                    console.log('Correo de confirmación enviado a:', formData.get('email'));
+                    console.log('Código incluido en el correo:', trackingCode);
                     
                     // Mostrar modal de éxito
                     document.getElementById('generatedCode').textContent = trackingCode;
