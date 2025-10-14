@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparte tu idea - Sonidos de Recuerdos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+
+        /* Content Section */
+        .content-section {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .content-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .content-header h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .content-header p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .content-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .content-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .content-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .content-card p {
+            color: var(--gray);
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 2rem;
+            transition: var(--transition);
+        }
+
+        .back-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container navbar">
+            <div class="logo">
+                <i class="fas fa-music"></i>
+                <span>Sonidos de Recuerdos</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Content Section -->
+    <section class="content-section">
+        <div class="container">
+            <div class="content-header">
+                <h1>Comparte tu idea</h1>
+                <p>Esta es la parte más importante del proceso. Cuéntanos todo lo que quieras sobre tu historia, emoción o momento especial que deseas transformar en música.</p>
+            </div>
+            
+            <div class="content-grid">
+                <div class="content-card">
+                    <i class="fas fa-heart"></i>
+                    <h3>Historias personales</h3>
+                    <p>Recuerdos de amor, amistad, familia, logros personales o momentos que marcaron tu vida.</p>
+                </div>
+                <div class="content-card">
+                    <i class="fas fa-music"></i>
+                    <h3>Inspiración musical</h3>
+                    <p>Artistas, canciones o géneros que te inspiran y que te gustaría que influyan en tu composición.</p>
+                </div>
+                <div class="content-card">
+                    <i class="fas fa-palette"></i>
+                    <h3>Emociones y sentimientos</h3>
+                    <p>Describe las emociones que quieres transmitir: alegría, nostalgia, esperanza, pasión, etc.</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 3rem;">
+                <h2>Consejos para describir tu idea:</h2>
+                <ul style="text-align: left; max-width: 600px; margin: 2rem auto; line-height: 1.8;">
+                    <li><strong>Sé específico:</strong> Cuantos más detalles proporciones, mejor podré capturar la esencia de tu historia.</li>
+                    <li><strong>Incluye referencias:</strong> Menciona canciones, artistas o estilos que te gusten.</li>
+                    <li><strong>Describe emociones:</strong> ¿Qué sentimientos quieres que evoque la música?</li>
+                    <li><strong>Piensa en el propósito:</strong> ¿Para qué ocasión será esta canción?</li>
+                </ul>
+                <a href="index.html#enviar-idea" class="back-btn">Ir al formulario</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2024 Sonidos de Recuerdos. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

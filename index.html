@@ -214,6 +214,26 @@
 
         .step-card p {
             color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .more-info-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .more-info-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
         }
 
         /* Form Section */
@@ -243,7 +263,8 @@
         }
 
         .form-group input,
-        .form-group textarea {
+        .form-group textarea,
+        .form-group select {
             width: 100%;
             padding: 12px 16px;
             border: 2px solid #e2e8f0;
@@ -253,7 +274,8 @@
         }
 
         .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group textarea:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
@@ -262,6 +284,18 @@
         .form-group textarea {
             min-height: 150px;
             resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-group input {
+            width: auto;
+            margin: 0;
         }
 
         /* Success Modal */
@@ -400,6 +434,10 @@
             .btn-secondary {
                 margin-left: 0;
             }
+            
+            .steps {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -443,16 +481,19 @@
                     <div class="step-number">1</div>
                     <h3>Comparte tu idea</h3>
                     <p>Describe tu recuerdo, emoción o concepto que quieres transformar en música.</p>
+                    <a href="comparte-idea.html" class="more-info-btn">Más información</a>
                 </div>
                 <div class="step-card">
                     <div class="step-number">2</div>
                     <h3>Obtén tu código</h3>
                     <p>Recibirás un código único para hacer seguimiento a tu proyecto musical.</p>
+                    <a href="obten-codigo.html" class="more-info-btn">Más información</a>
                 </div>
                 <div class="step-card">
                     <div class="step-number">3</div>
                     <h3>Seguimiento y entrega</h3>
                     <p>Accede a tu perfil para ver el progreso, escuchar demos y comunicarte directamente.</p>
+                    <a href="seguimiento-entrega.html" class="more-info-btn">Más información</a>
                 </div>
             </div>
         </div>
@@ -476,12 +517,84 @@
                         <input type="email" id="email" name="email" required>
                     </div>
                     <div class="form-group">
-                        <label for="idea">Describe tu idea o recuerdo</label>
-                        <textarea id="idea" name="idea" placeholder="Cuéntame sobre el momento, emoción o idea que quieres transformar en música..." required></textarea>
+                        <label for="password">Contraseña (mínimo 8 caracteres)</label>
+                        <input type="password" id="password" name="password" required minlength="8">
+                    </div>
+                    <div class="form-group">
+                        <label for="passwordConfirm">Confirmar contraseña</label>
+                        <input type="password" id="passwordConfirm" name="passwordConfirm" required minlength="8">
+                    </div>
+                    <div class="form-group">
+                        <label for="nombreArtistico">Nombre artístico (opcional)</label>
+                        <input type="text" id="nombreArtistico" name="nombreArtistico">
+                    </div>
+                    <div class="form-group">
+                        <label for="cantante">¿Quién cantará?</label>
+                        <select id="cantante" name="cantante" required>
+                            <option value="">Selecciona</option>
+                            <option value="IA">IA</option>
+                            <option value="Yo">Yo</option>
+                            <option value="Raell Studio">Raell Studio</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="genero">¿Qué género musical te representa?</label>
+                        <select id="genero" name="genero" required>
+                            <option value="">Selecciona</option>
+                            <option value="pop">Pop</option>
+                            <option value="balada">Balada</option>
+                            <option value="rock">Rock</option>
+                            <option value="electronica">Electrónica</option>
+                            <option value="clasica">Clásica</option>
+                            <option value="urbana">Urbana (Reggaetón, Trap)</option>
+                            <option value="folklore">Folklore/Regional</option>
+                            <option value="otros">Otros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="ocasion">¿Para qué ocasión es esta canción?</label>
+                        <select id="ocasion" name="ocasion">
+                            <option value="">Selecciona</option>
+                            <option value="boda">Boda</option>
+                            <option value="aniversario">Aniversario</option>
+                            <option value="nacimiento">Nacimiento</option>
+                            <option value="duelo">Homenaje / Duelo</option>
+                            <option value="lanzamiento">Lanzamiento artístico</option>
+                            <option value="regalo">Regalo</option>
+                            <option value="otros">Otros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="idioma">¿En qué idioma quieres la canción?</label>
+                        <select id="idioma" name="idioma" required>
+                            <option value="">Selecciona</option>
+                            <option value="espanol">Español</option>
+                            <option value="ingles">Inglés</option>
+                            <option value="portugues">Portugués</option>
+                            <option value="frances">Francés</option>
+                            <option value="italiano">Italiano</option>
+                            <option value="otros">Otros</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="reference">Referencias musicales (opcional)</label>
                         <input type="text" id="reference" name="reference" placeholder="Artistas, géneros o canciones que te inspiran">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="demo" name="demo">
+                                <span>Sí, quiero escuchar un demo antes de la versión final</span>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaEntrega">Fecha de entrega (opcional)</label>
+                        <input type="date" id="fechaEntrega" name="fechaEntrega">
+                    </div>
+                    <div class="form-group">
+                        <label for="idea">Describe tu idea o recuerdo</label>
+                        <textarea id="idea" name="idea" placeholder="Cuéntame sobre el momento, emoción o idea que quieres transformar en música..." required></textarea>
                     </div>
                     <button type="submit" class="btn" style="width: 100%;">Enviar mi idea</button>
                 </form>
@@ -565,6 +678,18 @@
                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
             );
 
+            // Validar contraseñas antes del envío
+            function validatePasswords() {
+                const password = document.getElementById('password').value;
+                const passwordConfirm = document.getElementById('passwordConfirm').value;
+                
+                if (password !== passwordConfirm) {
+                    alert('❌ Las contraseñas no coinciden');
+                    return false;
+                }
+                return true;
+            }
+
             // Close modal
             function closeModal() {
                 document.getElementById('successModal').style.display = 'none';
@@ -588,23 +713,52 @@
             document.getElementById('ideaForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 
+                // Validar contraseñas
+                if (!validatePasswords()) {
+                    return;
+                }
+                
                 try {
                     const formData = new FormData(this);
                     const trackingCode = generateTrackingCode();
                     
-                    const { data, error } = await supabase
-                        .from('projects')
-                        .insert({
-                            tracking_code: trackingCode,
-                            client_name: formData.get('name'),
-                            client_email: formData.get('email'),
-                            idea_description: formData.get('idea'),
-                            musical_references: formData.get('reference')
-                        })
-                        .select();
+                    // Crear usuario en Supabase Auth
+                    const { data, error: authError } = await supabase.auth.signUp({
+                        email: formData.get('email'),
+                        password: formData.get('password'),
+                        options: {
+                            data: {
+                                nombre_completo: formData.get('name'),
+                                numero_raell: trackingCode
+                            },
+                            emailRedirectTo: window.location.origin + '/confirmacion.html'
+                        }
+                    });
                     
-                    if (error) throw error;
+                    if (authError) throw authError;
                     
+                    // Guardar datos en tabla 'projects' (adaptado al nuevo formato)
+                    const projectData = {
+                        user_id: data.user?.id,
+                        tracking_code: trackingCode,
+                        client_name: formData.get('name'),
+                        client_email: formData.get('email'),
+                        nombre_artistico: formData.get('nombreArtistico') || null,
+                        cantante: formData.get('cantante'),
+                        genero: formData.get('genero'),
+                        ocasion: formData.get('ocasion') || null,
+                        idioma: formData.get('idioma'),
+                        musical_references: formData.get('reference') || null,
+                        demo_requested: formData.get('demo') === 'on',
+                        delivery_date: formData.get('fechaEntrega') || null,
+                        idea_description: formData.get('idea'),
+                        status: 'pending'
+                    };
+                    
+                    const { error: dbError } = await supabase.from('projects').insert([projectData]);
+                    if (dbError) throw dbError;
+                    
+                    // Mostrar modal de éxito
                     document.getElementById('generatedCode').textContent = trackingCode;
                     document.getElementById('successModal').style.display = 'flex';
                     this.reset();
