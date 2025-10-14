@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación - Raell Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem;
+            border-radius: 20px 20px 0 0;
+            margin: -2rem -2rem 2rem -2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content {
+            padding: 2rem;
+            text-align: left;
+        }
+
+        .content h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .content p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1.5rem 0;
+            border: 1px solid #e2e8f0;
+        }
+
+        .info-box h3 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .info-box p {
+            margin: 0.5rem 0;
+        }
+
+        .highlight {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        .steps {
+            margin: 2rem 0;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h4 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .step-content p {
+            color: var(--gray);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 32px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-top: 2rem;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+            border-top: 1px solid #e2e8f0;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>¡Bienvenido a Raell Studio!</h1>
+        </div>
+        
+        <div class="content">
+            <h2>Gracias por registrarte</h2>
+            <p>Te hemos enviado un correo de confirmación a tu dirección de email. Por favor, revisa tu bandeja de entrada (y también la carpeta de spam) para confirmar tu cuenta.</p>
+            
+            <div class="info-box">
+                <h3>Detalles de tu registro</h3>
+                <p><strong>Nombre:</strong> <span id="clientName">Cargando...</span></p>
+                <p><strong>Número Raell:</strong> <span id="raellNumber">Cargando...</span></p>
+                <p><strong>Correo:</strong> <span id="clientEmail">Cargando...</span></p>
+            </div>
+            
+            <h2>¿Qué sigue?</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Revisa tu correo</h4>
+                        <p>Busca en tu bandeja de entrada (y spam) un correo de <strong>hola@sonidosderecuerdos.com</strong> con el asunto "Confirma tu cuenta en Raell Studio". Haz clic en el botón de confirmación.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Inicia sesión</h4>
+                        <p>Una vez confirmada tu cuenta, podrás iniciar sesión con tu email y contraseña en <a href="index.html">nuestra página principal</a>.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Comienza tu proyecto</h4>
+                        <p>Te contactaremos pronto para comenzar a transformar tu historia en música. ¡Estamos emocionados de trabajar contigo!</p>
+                    </div>
+                </div>
+            </div>
+            
+            <p>Si no recibes el correo en los próximos minutos, puedes <a href="index.html">volver a enviarlo</a> o contactarnos directamente en <a href="mailto:hola@sonidosderecuerdos.com">hola@sonidosderecuerdos.com</a>.</p>
+            
+            <a href="index.html" class="btn">Ir a iniciar sesión</a>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2024 Raell Studio. Todos los derechos reservados.</p>
+        </div>
+    </div>
+
+    <script>
+        // Obtener datos del localStorage (si están disponibles)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simular datos (en producción, estos vendrían de Supabase)
+            const clientName = localStorage.getItem('nombreUsuario') || 'Juan Pérez';
+            const raellNumber = localStorage.getItem('numeroRaellUsuario') || 'R1234LL';
+            const clientEmail = localStorage.getItem('emailUsuario') || 'usuario@example.com';
+            
+            document.getElementById('clientName').textContent = clientName;
+            document.getElementById('raellNumber').textContent = raellNumber;
+            document.getElementById('clientEmail').textContent = clientEmail;
+        });
+    </script>
+</body>
+</html>

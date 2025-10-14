@@ -214,7 +214,6 @@
 
         .step-card p {
             color: var(--gray);
-            margin-bottom: 1rem;
         }
 
         .more-info-btn {
@@ -333,6 +332,12 @@
             letter-spacing: 2px;
         }
 
+        .email-sent {
+            color: var(--secondary);
+            font-weight: 600;
+            margin: 0.5rem 0;
+        }
+
         /* Login Section */
         .login-section {
             padding: 5rem 0;
@@ -419,22 +424,22 @@
             .hero h1 {
                 font-size: 2.5rem;
             }
-            
+
             .nav-links {
                 display: none;
             }
-            
+
             .hero-buttons {
                 display: flex;
                 flex-direction: column;
                 gap: 1rem;
                 align-items: center;
             }
-            
+
             .btn-secondary {
                 margin-left: 0;
             }
-            
+
             .steps {
                 grid-template-columns: 1fr;
             }
@@ -618,7 +623,8 @@
             <p>Hemos recibido tu solicitud y estamos emocionados de trabajar en tu composición musical.</p>
             <p>Tu código de seguimiento es:</p>
             <div class="tracking-code" id="generatedCode"></div>
-            <p>Te hemos enviado un correo con este código para que lo tengas siempre a mano.</p>
+            <p class="email-sent">Te hemos enviado un correo con este código a <span id="emailSent"></span></p>
+            <p>Guarda este código para acceder a tu perfil y hacer seguimiento de tu proyecto.</p>
             <button class="btn" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
@@ -638,7 +644,7 @@
                 </div>
                 <div class="footer-column">
                     <h3>Contacto</h3>
-                    <p><i class="fas fa-envelope"></i> hola@sonidosderecuerdos.com</p>
+                    <p><i class="fas fa-envelope"></i> infostudioraell@gmail.com</p>
                     <p><i class="fas fa-phone"></i> +123 456 7890</p>
                 </div>
                 <div class="footer-column">
@@ -670,10 +676,13 @@
                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
             );
 
-            // Close modal
+            // Función para cerrar el modal
             function closeModal() {
                 document.getElementById('successModal').style.display = 'none';
             }
+
+            // Make closeModal globally accessible for the onclick in the modal button
+            window.closeModal = closeModal;
 
             // Generate tracking code
             function generateTrackingCode() {
@@ -692,12 +701,12 @@
             // Form submission
             document.getElementById('ideaForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
-                
+
                 try {
                     const formData = new FormData(this);
                     const trackingCode = generateTrackingCode();
-                    
-                    // Guardar datos en tabla 'projects' (sin autenticación de usuario)
+
+                    // Guardar datos en tabla 'projects'
                     const projectData = {
                         tracking_code: trackingCode,
                         client_name: formData.get('name'),
@@ -713,19 +722,39 @@
                         idea_description: formData.get('idea'),
                         status: 'pending'
                     };
-                    
+
                     const { data, error: dbError } = await supabase.from('projects').insert([projectData]).select();
                     if (dbError) throw dbError;
-                    
-                    // Enviar correo de confirmación (simulado - en producción usarías Supabase Functions o un servicio de email)
-                    console.log('Correo de confirmación enviado a:', formData.get('email'));
-                    console.log('Código incluido en el correo:', trackingCode);
-                    
+
+                    // --- Enviar correo de confirmación usando la función de Supabase ---
+                    try {
+                        const { data: emailResponse, error: emailError } = await supabase.functions.invoke('send-confirmation-email', {
+                            body: JSON.stringify({
+                                email: formData.get('email'),
+                                trackingCode: trackingCode,
+                                clientName: formData.get('name')
+                            })
+                        });
+
+                        if (emailError) {
+                            console.error('Error calling send-confirmation-email function:', emailError);
+                            // Opcional: Mostrar un mensaje al usuario si falla el envío
+                            // alert('Tu proyecto fue creado, pero hubo un problema al enviar el correo. Tu código es: ' + trackingCode);
+                        } else {
+                            console.log('Confirmation email function invoked successfully:', emailResponse);
+                        }
+                    } catch (invokeError) {
+                        console.error('Unexpected error invoking send-confirmation-email function:', invokeError);
+                        // Manejar errores en la invocación de la función
+                    }
+                    // --- Fin del envío de correo ---
+
                     // Mostrar modal de éxito
                     document.getElementById('generatedCode').textContent = trackingCode;
+                    document.getElementById('emailSent').textContent = formData.get('email');
                     document.getElementById('successModal').style.display = 'flex';
                     this.reset();
-                    
+
                 } catch (error) {
                     console.error('Error:', error);
                     alert('Hubo un error al enviar tu idea. Por favor intenta nuevamente.');
@@ -735,7 +764,7 @@
             // Login form - redirect to perfil.html
             document.getElementById('loginForm').addEventListener('submit', function(e) {
                 e.preventDefault();
-                
+
                 const trackingCode = document.getElementById('trackingCode').value.toUpperCase();
                 if (trackingCode) {
                     // Redirect to perfil.html with tracking code as URL parameter
