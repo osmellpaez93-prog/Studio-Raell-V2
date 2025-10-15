@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Proyecto - Raell Studio</title>
+    <title>Mi Proyecto - Sonidos de Recuerdos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -136,13 +136,6 @@
             margin: 2rem 0;
         }
 
-        .lyrics-section {
-            background: #f8fafc;
-            padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-        }
-
         .chat-container {
             background: #f8fafc;
             border-radius: 15px;
@@ -234,92 +227,29 @@
             color: #94a3b8;
         }
 
-        /* Estilos adicionales */
-        .section-title {
-            font-size: 1.5rem;
-            color: var(--dark);
-            margin-bottom: 1rem;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 0.5rem;
-        }
-
-        .lyrics-content {
-            background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            min-height: 100px;
-            white-space: pre-line;
-            font-family: 'Courier New', Courier, monospace;
-            line-height: 1.6;
-        }
-
-        .audio-player {
-            width: 100%;
-            margin-top: 1rem;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-right: 5px;
-        }
-
-        .status-pending {
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .status-in-progress {
-            background: #dbeafe;
-            color: #2563eb;
-        }
-
-        .status-completed {
-            background: #dcfce7;
-            color: #16a34a;
-        }
-
-        .action-buttons {
-            display: flex;
-            gap: 5px;
-            margin-top: 0.5rem;
-        }
-
-        .action-button {
-            background: transparent;
-            border: 1px solid var(--gray);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .action-button:hover {
-            background: var(--gray);
-            color: white;
-        }
-
-        /* Mensajes de error */
-        .error-message {
-            background: #fee2e2;
-            color: #dc2626;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-            border: 1px solid #fecaca;
-        }
-
-        .success-message {
-            background: #dcfce7;
-            color: #16a34a;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-            border: 1px solid #bbf7d0;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .project-status {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .chat-input {
+                flex-direction: column;
+            }
+            
+            .chat-input button {
+                padding: 12px 24px;
+            }
+            
+            .user-actions {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .user-action-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -329,7 +259,7 @@
         <div class="container navbar">
             <div class="logo">
                 <i class="fas fa-music"></i>
-                <span>Raell Studio</span>
+                <span>Sonidos de Recuerdos</span>
             </div>
             <ul class="nav-links">
                 <li><a href="index.html">Inicio</a></li>
@@ -363,32 +293,16 @@
                 </div>
             </div>
 
-            <!-- Sección de Letra -->
-            <div class="lyrics-section">
-                <h3 class="section-title">Letra de la Canción</h3>
-                <div class="lyrics-content" id="lyricsContent">
-                    Cargando letra...
-                </div>
-                <div id="lyricsMessage" style="margin-top: 1rem; color: var(--gray);">
-                    La letra será enviada por el compositor cuando esté lista.
-                </div>
-            </div>
-
-            <!-- Sección de Demo -->
             <div class="demo-audio">
-                <h3 class="section-title">Demo de Audio</h3>
+                <h3>Demo de Audio</h3>
                 <p id="demoStatus">Cargando...</p>
-                <audio id="demoAudio" controls class="audio-player" style="display: none;">
+                <audio id="demoAudio" controls style="display: none; width: 100%; margin-top: 1rem;">
                     <source src="" type="audio/mpeg">
                 </audio>
-                <div id="demoMessage" style="margin-top: 1rem; color: var(--gray);">
-                    El demo será enviado por el compositor cuando esté listo.
-                </div>
             </div>
 
-            <!-- Chat con el Compositor -->
             <div class="chat-container">
-                <h3 class="section-title">Chat con el Compositor</h3>
+                <h3>Chat con el compositor</h3>
                 <div class="chat-messages" id="chatMessages">
                     <div class="message admin">
                         <strong>Compositor:</strong><br>
@@ -398,12 +312,6 @@
                 <div class="chat-input">
                     <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
                     <button id="sendChat">Enviar</button>
-                </div>
-                <div id="chatError" class="error-message" style="display: none;">
-                    Error al enviar el mensaje. Por favor, verifica que el código de seguimiento sea correcto.
-                </div>
-                <div id="chatSuccess" class="success-message" style="display: none;">
-                    ¡Mensaje enviado correctamente!
                 </div>
             </div>
 
@@ -417,7 +325,7 @@
     <footer>
         <div class="container">
             <div class="copyright">
-                <p>&copy; 2024 Raell Studio. Todos los derechos reservados.</p>
+                <p>&copy; 2024 Sonidos de Recuerdos. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
@@ -461,12 +369,6 @@
                         .single();
                     
                     if (error || !data) {
-                        // Mostrar mensaje de error en la interfaz
-                        document.getElementById('chatError').textContent = 'Proyecto no encontrado. Por favor, verifica que el código de seguimiento sea correcto.';
-                        document.getElementById('chatError').style.display = 'block';
-                        document.getElementById('chatSuccess').style.display = 'none';
-                        
-                        // También mostrar alerta
                         alert('Proyecto no encontrado. Por favor verifica tu código.');
                         window.location.href = 'index.html';
                         return;
@@ -474,29 +376,24 @@
                     
                     // Fill profile data
                     document.querySelector('#profileCode span').textContent = data.tracking_code;
-                    document.getElementById('projectStatus').textContent = data.status || 'En progreso';
+                    document.getElementById('projectStatus').textContent = data.status || 'pending';
                     document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
-                    document.getElementById('lyricsStatus').textContent = data.status === 'lyrics_ready' ? 'Lista' : 'Pendiente';
+                    
+                    // Verificar si la letra está lista
+                    if (data.lyrics && data.lyrics.trim() !== '') {
+                        document.getElementById('lyricsStatus').textContent = 'Lista';
+                    } else {
+                        document.getElementById('lyricsStatus').textContent = 'Pendiente';
+                    }
                     
                     // Show demo if available
-                    if (data.status === 'demo_ready') {
+                    if (data.demo_url && data.demo_url.trim() !== '') {
                         document.getElementById('demoStatus').textContent = '¡Disponible!';
+                        document.getElementById('demoAudio').src = data.demo_url;
                         document.getElementById('demoAudio').style.display = 'block';
-                        document.getElementById('demoAudio').src = data.demo_url || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-                        document.getElementById('demoMessage').style.display = 'none';
                     } else {
                         document.getElementById('demoStatus').textContent = 'Aún no hay demo disponible';
                         document.getElementById('demoAudio').style.display = 'none';
-                        document.getElementById('demoMessage').style.display = 'block';
-                    }
-                    
-                    // Show lyrics if available
-                    if (data.status === 'lyrics_ready') {
-                        document.getElementById('lyricsContent').textContent = data.lyrics || 'La letra está lista pero aún no ha sido cargada.';
-                        document.getElementById('lyricsMessage').style.display = 'none';
-                    } else {
-                        document.getElementById('lyricsContent').textContent = 'La letra será enviada por el compositor cuando esté lista.';
-                        document.getElementById('lyricsMessage').style.display = 'block';
                     }
                     
                     // Load chat messages
@@ -504,11 +401,6 @@
                     
                 } catch (error) {
                     console.error('Error loading project:', error);
-                    // Mostrar mensaje de error en la interfaz
-                    document.getElementById('chatError').textContent = 'Error al cargar el proyecto. Por favor, inténtalo nuevamente.';
-                    document.getElementById('chatError').style.display = 'block';
-                    document.getElementById('chatSuccess').style.display = 'none';
-                    
                     alert('Error al cargar el proyecto. Por favor intenta nuevamente.');
                     window.location.href = 'index.html';
                 }
@@ -562,25 +454,7 @@
                             .eq('tracking_code', trackingCode.toUpperCase())
                             .single();
                         
-                        if (projectError) {
-                            // Mostrar mensaje de error en la interfaz
-                            document.getElementById('chatError').textContent = 'Proyecto no encontrado. Por favor, verifica que el código de seguimiento sea correcto.';
-                            document.getElementById('chatError').style.display = 'block';
-                            document.getElementById('chatSuccess').style.display = 'none';
-                            
-                            // También mostrar alerta
-                            alert('Proyecto no encontrado. Por favor verifica tu código.');
-                            return;
-                        }
-                        
-                        // Verificar que projectData no sea null o undefined
-                        if (!projectData) {
-                            document.getElementById('chatError').textContent = 'No se pudo encontrar el proyecto. Por favor, verifica el código de seguimiento.';
-                            document.getElementById('chatError').style.display = 'block';
-                            document.getElementById('chatSuccess').style.display = 'none';
-                            alert('No se pudo encontrar el proyecto. Por favor, verifica el código de seguimiento.');
-                            return;
-                        }
+                        if (projectError) throw projectError;
                         
                         const { error: messageError } = await supabase
                             .from('chat_messages')
@@ -601,18 +475,8 @@
                         chatInput.value = '';
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                         
-                        // Mostrar mensaje de éxito
-                        document.getElementById('chatSuccess').textContent = '¡Mensaje enviado correctamente!';
-                        document.getElementById('chatSuccess').style.display = 'block';
-                        document.getElementById('chatError').style.display = 'none';
-                        
                     } catch (error) {
                         console.error('Error enviar mensaje:', error);
-                        // Mostrar mensaje de error en la interfaz
-                        document.getElementById('chatError').textContent = 'Error al enviar el mensaje. Por favor, inténtalo nuevamente.';
-                        document.getElementById('chatError').style.display = 'block';
-                        document.getElementById('chatSuccess').style.display = 'none';
-                        
                         alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
                     }
                 }
@@ -622,6 +486,14 @@
             document.getElementById('chatInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     document.getElementById('sendChat').click();
+                }
+            });
+
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                const successModal = document.getElementById('successModal');
+                if (e.target === successModal) {
+                    closeModal();
                 }
             });
 
