@@ -556,7 +556,7 @@
                 if (message) {
                     try {
                         const trackingCode = getTrackingCode();
-                        const { projectData, error: projectError } = await supabase
+                        const { data: projectData, error: projectError } = await supabase
                             .from('projects')
                             .select('id')
                             .eq('tracking_code', trackingCode.toUpperCase())
@@ -570,6 +570,15 @@
                             
                             // También mostrar alerta
                             alert('Proyecto no encontrado. Por favor verifica tu código.');
+                            return;
+                        }
+                        
+                        // Verificar que projectData no sea null o undefined
+                        if (!projectData) {
+                            document.getElementById('chatError').textContent = 'No se pudo encontrar el proyecto. Por favor, verifica el código de seguimiento.';
+                            document.getElementById('chatError').style.display = 'block';
+                            document.getElementById('chatSuccess').style.display = 'none';
+                            alert('No se pudo encontrar el proyecto. Por favor, verifica el código de seguimiento.');
                             return;
                         }
                         
