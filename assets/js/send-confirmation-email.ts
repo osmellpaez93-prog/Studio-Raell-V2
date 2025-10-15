@@ -175,7 +175,7 @@ Deno.serve(async (req: Request) => {
                  </ul>
 
                  <p style="text-align: center;">
-                     <a href="https://studio-raell.vercel.app/perfil.html?code=${trackingCode}" class="cta-button">Ir a Mi Proyecto</a>
+                     <a href="https://studio-raell-v2.vercel.app/perfil.html?code=${trackingCode}" class="cta-button">Ir a Mi Proyecto</a>
                  </p>
 
                  <p>Estamos emocionados de comenzar este viaje creativo contigo. Pronto recibirás novedades sobre el avance de tu canción.</p>
