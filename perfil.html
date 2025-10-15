@@ -136,6 +136,13 @@
             margin: 2rem 0;
         }
 
+        .lyrics-section {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
         .chat-container {
             background: #f8fafc;
             border-radius: 15px;
@@ -293,6 +300,18 @@
                 </div>
             </div>
 
+            <!-- Sección de Letra -->
+            <div class="lyrics-section">
+                <h3>Letra de la Canción</h3>
+                <div class="lyrics-content" id="lyricsContent">
+                    Cargando letra...
+                </div>
+                <div id="lyricsMessage" style="margin-top: 1rem; color: var(--gray);">
+                    La letra será enviada por el compositor cuando esté lista.
+                </div>
+            </div>
+
+            <!-- Sección de Demo -->
             <div class="demo-audio">
                 <h3>Demo de Audio</h3>
                 <p id="demoStatus">Cargando...</p>
@@ -301,6 +320,7 @@
                 </audio>
             </div>
 
+            <!-- Chat con el Compositor -->
             <div class="chat-container">
                 <h3>Chat con el compositor</h3>
                 <div class="chat-messages" id="chatMessages">
@@ -362,37 +382,46 @@
                 }
                 
                 try {
-                    // Buscar proyecto por tracking_code
-                    const { data: projectData, error: projectError } = await supabase
+                    const { data, error } = await supabase
                         .from('projects')
                         .select('*')
                         .eq('tracking_code', trackingCode.toUpperCase())
                         .single();
                     
-                    if (projectError || !projectData) {
+                    if (error || !data) {
                         alert('Proyecto no encontrado. Por favor verifica tu código.');
                         window.location.href = 'index.html';
                         return;
                     }
                     
                     // Fill profile data
-                    document.querySelector('#profileCode span').textContent = projectData.tracking_code;
-                    document.getElementById('projectStatus').textContent = projectData.status || 'pending';
-                    document.getElementById('deliveryDate').textContent = projectData.delivery_date || 'Próximamente';
-                    document.getElementById('lyricsStatus').textContent = projectData.lyrics ? 'Lista' : 'Pendiente';
+                    document.querySelector('#profileCode span').textContent = data.tracking_code;
+                    document.getElementById('projectStatus').textContent = data.status || 'pending';
+                    document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
+                    
+                    // Verificar si la letra está lista
+                    if (data.lyrics && data.lyrics.trim() !== '') {
+                        document.getElementById('lyricsStatus').textContent = 'Lista';
+                        document.getElementById('lyricsContent').textContent = data.lyrics;
+                        document.getElementById('lyricsMessage').style.display = 'none';
+                    } else {
+                        document.getElementById('lyricsStatus').textContent = 'Pendiente';
+                        document.getElementById('lyricsContent').textContent = 'La letra será enviada por el compositor cuando esté lista.';
+                        document.getElementById('lyricsMessage').style.display = 'block';
+                    }
                     
                     // Show demo if available
-                    if (projectData.demo_url) {
+                    if (data.demo_url && data.demo_url.trim() !== '') {
                         document.getElementById('demoStatus').textContent = '¡Disponible!';
-                        document.getElementById('demoAudio').src = projectData.demo_url;
+                        document.getElementById('demoAudio').src = data.demo_url;
                         document.getElementById('demoAudio').style.display = 'block';
                     } else {
                         document.getElementById('demoStatus').textContent = 'Aún no hay demo disponible';
                         document.getElementById('demoAudio').style.display = 'none';
                     }
                     
-                    // Load chat messages using the project's 'id' field
-                    await loadChatMessages(projectData.id);
+                    // Load chat messages
+                    await loadChatMessages(data.id);
                     
                 } catch (error) {
                     console.error('Error loading project:', error);
@@ -404,19 +433,19 @@
             // Load chat messages
             async function loadChatMessages(projectId) {
                 try {
-                    const { data: chatData, error: chatError } = await supabase
+                    const { data, error } = await supabase
                         .from('chat_messages')
                         .select('*')
-                        .eq('project_id', projectId)  // Usar 'project_id' que referencia el campo 'id' de projects
+                        .eq('project_id', projectId)
                         .order('created_at', { ascending: true });
                     
-                    if (chatError) throw chatError;
+                    if (error) throw error;
                     
                     const chatMessages = document.getElementById('chatMessages');
                     chatMessages.innerHTML = '';
                     
-                    if (chatData && chatData.length > 0) {
-                        chatData.forEach(message => {
+                    if (data && data.length > 0) {
+                        data.forEach(message => {
                             const messageDiv = document.createElement('div');
                             messageDiv.className = message.sender === 'admin' ? 'message admin' : 'message client';
                             messageDiv.innerHTML = `<strong>${message.sender === 'admin' ? 'Compositor' : 'Tú'}:</strong><br>${message.message}`;
@@ -443,21 +472,18 @@
                 if (message) {
                     try {
                         const trackingCode = getTrackingCode();
-                        
-                        // Get project ID first using tracking code
                         const { data: projectData, error: projectError } = await supabase
                             .from('projects')
-                            .select('id')  // Solo necesitamos el 'id'
+                            .select('id')
                             .eq('tracking_code', trackingCode.toUpperCase())
                             .single();
                         
-                        if (projectError || !projectData) throw projectError;
+                        if (projectError) throw projectError;
                         
-                        // Send message using the project's 'id'
                         const { error: messageError } = await supabase
                             .from('chat_messages')
                             .insert({
-                                project_id: projectData.id,  // Usar el campo 'id' del proyecto
+                                project_id: projectData.id,
                                 sender: 'client',
                                 message: message
                             });
