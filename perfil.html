@@ -526,9 +526,6 @@
             <button class="user-action-btn" onclick="window.location.href='index.html'">
                 <i class="fas fa-home"></i> Volver al inicio
             </button>
-            <button class="user-action-btn secondary" onclick="refreshProject()">
-                <i class="fas fa-sync"></i> Actualizar
-            </button>
         </div>
     </div>
 
@@ -585,11 +582,6 @@
             function getTrackingCode() {
                 const urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get('code');
-            }
-
-            // Refresh project data
-            window.refreshProject = async function() {
-                await loadProjectData();
             }
 
             // Load project data
