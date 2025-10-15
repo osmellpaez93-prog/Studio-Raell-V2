@@ -1,38 +1,51 @@
+// send-confirmation-email.ts
 // Setup type definitions for built-in Supabase Runtime APIs
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
-// 1. Obtener la clave API desde las variables de entorno de Supabase
+// 1. Configuración de CORS - MUY IMPORTANTE
+export const corsHeaders = {
+  'Access-Control-Allow-Origin': '*', // Permite todos los orígenes (para producción, limita a tu dominio)
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+};
+
+// 2. Obtener la clave API desde las variables de entorno de Supabase
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 
 console.log("Function started. RESEND_API_KEY present:", !!RESEND_API_KEY);
 
-// 2. Definir la función manejadora de la solicitud
+// 3. Definir la función manejadora de la solicitud
 Deno.serve(async (req: Request) => {
-  // 3. Verificar el método HTTP
+  // 4. Manejar solicitud OPTIONS (preflight)
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders });
+  }
+
+  // 5. Verificar el método HTTP
   if (req.method !== "POST") {
     console.warn("Invalid method:", req.method);
     return new Response(
       JSON.stringify({ error: "Method not allowed. Use POST." }),
       {
         status: 405,
-        headers: { "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       },
     );
   }
 
   try {
-    // 4. Parsear el cuerpo de la solicitud JSON
+    // 6. Parsear el cuerpo de la solicitud JSON
     const { email, trackingCode, clientName } = await req.json();
     console.log("Received data:", { email, trackingCode, clientName });
 
-    // 5. Validar datos obligatorios
+    // 7. Validar datos obligatorios
     if (!email || !trackingCode || !clientName) {
       console.warn("Missing required fields");
       return new Response(
         JSON.stringify({ error: "Missing required fields: 'email', 'trackingCode', 'clientName'" }),
         {
           status: 400, // Bad Request
-          headers: { "Content-Type": "application/json" },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
@@ -188,21 +201,21 @@ Deno.serve(async (req: Request) => {
     `;
     // --- Fin de la Plantilla HTML Profesional ---
 
-    // 6. Verificar que la clave API esté presente ANTES de usarla
+    // 8. Verificar que la clave API esté presente ANTES de usarla
     if (!RESEND_API_KEY) {
-        console.error("RESEND_API_KEY is missing after initialization.");
-        return new Response(
-            JSON.stringify({ error: "Server configuration error: Missing API key" }),
-            {
-            status: 500, // Internal Server Error
-            headers: { "Content-Type": "application/json" },
-            },
-        );
+      console.error("RESEND_API_KEY is missing after initialization.");
+      return new Response(
+        JSON.stringify({ error: "Server configuration error: Missing API key" }),
+        {
+          status: 500, // Internal Server Error
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        },
+      );
     }
 
-    // 7. Preparar datos para la llamada a la API de Resend
+    // 9. Preparar datos para la llamada a la API de Resend
     const resendPayload = {
-      from: 'Raell Studio <raellstudio@resend.dev>', // CAMBIADO AQUI
+      from: 'Raell Studio <raellstudio@resend.dev>',
       to: [email],
       subject: `¡Tu Código de Seguimiento - Raell Studio! (${trackingCode})`,
       html: emailHtmlContent,
@@ -210,7 +223,7 @@ Deno.serve(async (req: Request) => {
 
     console.log("Sending email with payload...");
 
-    // 8. Enviar el correo usando la API de Resend
+    // 10. Enviar el correo usando la API de Resend
     const resendResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -220,40 +233,40 @@ Deno.serve(async (req: Request) => {
       body: JSON.stringify(resendPayload),
     });
 
-    // 9. Obtener la respuesta de Resend
+    // 11. Obtener la respuesta de Resend
     const resendData = await resendResponse.json();
 
-    // 10. Manejar la respuesta de Resend
+    // 12. Manejar la respuesta de Resend
     if (!resendResponse.ok) {
       console.error("Resend API error response:", resendData);
       return new Response(
         JSON.stringify({ error: "Failed to send email via Resend", details: resendData }),
         {
           status: resendResponse.status,
-          headers: { "Content-Type": "application/json" },
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
       );
     }
 
-    // 11. Éxito: Devolver la respuesta de Resend
+    // 13. Éxito: Devolver la respuesta de Resend con CORS headers
     console.log("Email sent successfully via Resend. ID:", resendData.id);
     return new Response(
       JSON.stringify({ message: "Email sent successfully", resendData }),
       {
         status: 200,
-        headers: { "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       },
     );
 
 
   } catch (error) {
-    // 12. Manejo global de errores inesperados
+    // 14. Manejo global de errores inesperados
     console.error("Unexpected error in send-email function:", error);
     return new Response(
       JSON.stringify({ error: "An unexpected error occurred", details: error.message }),
       {
         status: 500, // Internal Server Error
-        headers: { "Content-Type": "application/json" },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       },
     );
   }
