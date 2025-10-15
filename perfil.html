@@ -302,6 +302,25 @@
             background: var(--gray);
             color: white;
         }
+
+        /* Mensajes de error */
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid #fecaca;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #16a34a;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 1px solid #bbf7d0;
+        }
     </style>
 </head>
 <body>
@@ -380,6 +399,12 @@
                     <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
                     <button id="sendChat">Enviar</button>
                 </div>
+                <div id="chatError" class="error-message" style="display: none;">
+                    Error al enviar el mensaje. Por favor, verifica que el código de seguimiento sea correcto.
+                </div>
+                <div id="chatSuccess" class="success-message" style="display: none;">
+                    ¡Mensaje enviado correctamente!
+                </div>
             </div>
 
             <div class="user-actions">
@@ -436,6 +461,12 @@
                         .single();
                     
                     if (error || !data) {
+                        // Mostrar mensaje de error en la interfaz
+                        document.getElementById('chatError').textContent = 'Proyecto no encontrado. Por favor, verifica que el código de seguimiento sea correcto.';
+                        document.getElementById('chatError').style.display = 'block';
+                        document.getElementById('chatSuccess').style.display = 'none';
+                        
+                        // También mostrar alerta
                         alert('Proyecto no encontrado. Por favor verifica tu código.');
                         window.location.href = 'index.html';
                         return;
@@ -473,6 +504,11 @@
                     
                 } catch (error) {
                     console.error('Error loading project:', error);
+                    // Mostrar mensaje de error en la interfaz
+                    document.getElementById('chatError').textContent = 'Error al cargar el proyecto. Por favor, inténtalo nuevamente.';
+                    document.getElementById('chatError').style.display = 'block';
+                    document.getElementById('chatSuccess').style.display = 'none';
+                    
                     alert('Error al cargar el proyecto. Por favor intenta nuevamente.');
                     window.location.href = 'index.html';
                 }
@@ -526,7 +562,16 @@
                             .eq('tracking_code', trackingCode.toUpperCase())
                             .single();
                         
-                        if (projectError) throw projectError;
+                        if (projectError) {
+                            // Mostrar mensaje de error en la interfaz
+                            document.getElementById('chatError').textContent = 'Proyecto no encontrado. Por favor, verifica que el código de seguimiento sea correcto.';
+                            document.getElementById('chatError').style.display = 'block';
+                            document.getElementById('chatSuccess').style.display = 'none';
+                            
+                            // También mostrar alerta
+                            alert('Proyecto no encontrado. Por favor verifica tu código.');
+                            return;
+                        }
                         
                         const { error: messageError } = await supabase
                             .from('chat_messages')
@@ -547,8 +592,18 @@
                         chatInput.value = '';
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                         
+                        // Mostrar mensaje de éxito
+                        document.getElementById('chatSuccess').textContent = '¡Mensaje enviado correctamente!';
+                        document.getElementById('chatSuccess').style.display = 'block';
+                        document.getElementById('chatError').style.display = 'none';
+                        
                     } catch (error) {
                         console.error('Error enviar mensaje:', error);
+                        // Mostrar mensaje de error en la interfaz
+                        document.getElementById('chatError').textContent = 'Error al enviar el mensaje. Por favor, inténtalo nuevamente.';
+                        document.getElementById('chatError').style.display = 'block';
+                        document.getElementById('chatSuccess').style.display = 'none';
+                        
                         alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
                     }
                 }
