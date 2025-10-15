@@ -17,9 +17,13 @@
             --primary: #6366f1;
             --primary-dark: #4f46e5;
             --secondary: #10b981;
+            --accent: #f59e0b;
             --dark: #1e293b;
             --light: #f8fafc;
             --gray: #64748b;
+            --red: #ef4444;
+            --green: #10b981;
+            --blue: #3b82f6;
             --transition: all 0.3s ease;
         }
 
@@ -27,7 +31,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: var(--dark);
-            background-color: var(--light);
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
             overflow-x: hidden;
         }
 
@@ -84,96 +88,198 @@
             color: var(--secondary);
         }
 
-        /* Profile Section */
-        .profile-section {
-            padding: 3rem 0;
-            background: white;
-        }
-
+        /* Profile Header */
         .profile-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            margin: 2rem 0;
             text-align: center;
-            margin-bottom: 2rem;
         }
 
-        .profile-header h2 {
+        .profile-header h1 {
             color: var(--dark);
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
         }
 
         .profile-code {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
             font-weight: bold;
             display: inline-block;
-            margin: 0.5rem 0;
+            margin: 1rem 0;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
         }
 
-        .project-status {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
-
-        .status-item {
-            text-align: center;
-            padding: 1rem;
-        }
-
-        .status-item i {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .demo-audio {
-            background: #f1f5f9;
-            padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-        }
-
-        .lyrics-section {
-            background: #f8fafc;
-            padding: 2rem;
-            border-radius: 15px;
-            margin: 2rem 0;
-        }
-
-        .chat-container {
-            background: #f8fafc;
-            border-radius: 15px;
-            padding: 1.5rem;
+        .project-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
             margin-top: 2rem;
         }
 
+        .info-card {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .info-card i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card.status-pending i {
+            color: var(--accent);
+        }
+
+        .info-card.status-in-progress i {
+            color: var(--blue);
+        }
+
+        .info-card.status-demo-ready i {
+            color: var(--green);
+        }
+
+        .info-card.status-completed i {
+            color: var(--secondary);
+        }
+
+        .info-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+            font-size: 1.1rem;
+        }
+
+        .info-card p {
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        /* Main Content Grid */
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .content-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: var(--transition);
+        }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .content-card h2 {
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-card h2 i {
+            color: var(--primary);
+        }
+
+        /* Lyrics Section */
+        .lyrics-content {
+            background: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 15px;
+            min-height: 200px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-line;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.8;
+        }
+
+        .lyrics-placeholder {
+            color: var(--gray);
+            font-style: italic;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Audio Section */
+        .audio-player {
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .audio-placeholder {
+            background: #f1f5f9;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            color: var(--gray);
+        }
+
+        .audio-placeholder i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Chat Section */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 400px;
+        }
+
         .chat-messages {
-            height: 300px;
+            flex: 1;
             overflow-y: auto;
             margin-bottom: 1rem;
             padding: 1rem;
-            background: white;
-            border-radius: 10px;
+            background: #f8fafc;
+            border-radius: 15px;
         }
 
         .message {
             margin-bottom: 1rem;
-            padding: 0.75rem;
-            border-radius: 10px;
+            padding: 1rem;
+            border-radius: 12px;
             max-width: 80%;
         }
 
         .message.admin {
-            background: #dbeafe;
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
             margin-left: auto;
             text-align: right;
         }
 
         .message.client {
-            background: #f0fdf4;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+
+        .message strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
         }
 
         .chat-input {
@@ -197,27 +303,47 @@
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
+            transition: var(--transition);
         }
 
+        .chat-input button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* User Actions */
         .user-actions {
             display: flex;
             justify-content: center;
             gap: 1rem;
             margin: 2rem 0;
+            flex-wrap: wrap;
         }
 
         .user-action-btn {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
+            padding: 12px 24px;
+            border-radius: 50px;
             cursor: pointer;
             transition: var(--transition);
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
         }
 
         .user-action-btn:hover {
             background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .user-action-btn.secondary {
+            background: var(--gray);
+        }
+
+        .user-action-btn.secondary:hover {
+            background: #475569;
         }
 
         /* Footer */
@@ -225,6 +351,53 @@
             background: var(--dark);
             color: white;
             padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-column p,
+        .footer-column a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #334155;
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
         }
 
         .copyright {
@@ -236,17 +409,16 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .project-status {
-                flex-direction: column;
-                gap: 1rem;
+            .main-content {
+                grid-template-columns: 1fr;
             }
             
-            .chat-input {
-                flex-direction: column;
+            .project-info-grid {
+                grid-template-columns: 1fr;
             }
             
-            .chat-input button {
-                padding: 12px 24px;
+            .chat-container {
+                height: 300px;
             }
             
             .user-actions {
@@ -274,76 +446,116 @@
         </div>
     </header>
 
-    <!-- Profile Section -->
-    <section class="profile-section">
-        <div class="container">
-            <div class="profile-header">
-                <h2>Mi Proyecto Musical</h2>
-                <div class="profile-code" id="profileCode">Código: <span></span></div>
-            </div>
+    <!-- Profile Header -->
+    <div class="container">
+        <div class="profile-header">
+            <h1>Mi Proyecto Musical</h1>
+            <div class="profile-code" id="profileCode">Código: <span></span></div>
             
-            <div class="project-status">
-                <div class="status-item">
+            <div class="project-info-grid">
+                <div class="info-card status-pending">
                     <i class="fas fa-pen"></i>
-                    <h4>Estado</h4>
+                    <h3>Estado</h3>
                     <p id="projectStatus">Cargando...</p>
                 </div>
-                <div class="status-item">
+                <div class="info-card">
                     <i class="fas fa-calendar"></i>
-                    <h4>Fecha de entrega</h4>
+                    <h3>Fecha de entrega</h3>
                     <p id="deliveryDate">Cargando...</p>
                 </div>
-                <div class="status-item">
+                <div class="info-card">
                     <i class="fas fa-file-alt"></i>
-                    <h4>Letra</h4>
+                    <h3>Letra</h3>
                     <p id="lyricsStatus">Cargando...</p>
                 </div>
+                <div class="info-card">
+                    <i class="fas fa-headphones"></i>
+                    <h3>Demo</h3>
+                    <p id="demoStatus">Cargando...</p>
+                </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Sección de Letra -->
-            <div class="lyrics-section">
-                <h3>Letra de la Canción</h3>
+    <!-- Main Content Grid -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Lyrics Card -->
+            <div class="content-card">
+                <h2><i class="fas fa-file-alt"></i> Letra de la Canción</h2>
                 <div class="lyrics-content" id="lyricsContent">
-                    Cargando letra...
-                </div>
-                <div id="lyricsMessage" style="margin-top: 1rem; color: var(--gray);">
-                    La letra será enviada por el compositor cuando esté lista.
+                    <div class="lyrics-placeholder">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Cargando letra...</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Sección de Demo -->
-            <div class="demo-audio">
-                <h3>Demo de Audio</h3>
-                <p id="demoStatus">Cargando...</p>
-                <audio id="demoAudio" controls style="display: none; width: 100%; margin-top: 1rem;">
+            <!-- Audio Card -->
+            <div class="content-card">
+                <h2><i class="fas fa-music"></i> Demo de Audio</h2>
+                <div class="audio-placeholder" id="audioPlaceholder">
+                    <i class="fas fa-headphones"></i>
+                    <p>Cargando demo de audio...</p>
+                </div>
+                <audio id="demoAudio" controls class="audio-player" style="display: none;">
                     <source src="" type="audio/mpeg">
                 </audio>
             </div>
 
-            <!-- Chat con el Compositor -->
-            <div class="chat-container">
-                <h3>Chat con el compositor</h3>
-                <div class="chat-messages" id="chatMessages">
-                    <div class="message admin">
-                        <strong>Compositor:</strong><br>
-                        Cargando mensajes...
+            <!-- Chat Card -->
+            <div class="content-card">
+                <h2><i class="fas fa-comments"></i> Chat con el Compositor</h2>
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message admin">
+                            <strong>Compositor:</strong>
+                            Cargando mensajes...
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
+                        <button id="sendChat">Enviar</button>
                     </div>
                 </div>
-                <div class="chat-input">
-                    <input type="text" id="chatInput" placeholder="Escribe tu mensaje...">
-                    <button id="sendChat">Enviar</button>
-                </div>
-            </div>
-
-            <div class="user-actions">
-                <button class="user-action-btn" onclick="window.location.href='index.html'">Volver al inicio</button>
             </div>
         </div>
-    </section>
+
+        <!-- User Actions -->
+        <div class="user-actions">
+            <button class="user-action-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-home"></i> Volver al inicio
+            </button>
+            <button class="user-action-btn secondary" onclick="refreshProject()">
+                <i class="fas fa-sync"></i> Actualizar
+            </button>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
         <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Sonidos de Recuerdos</h3>
+                    <p>Transformando momentos especiales en composiciones musicales únicas desde el corazón.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-spotify"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-envelope"></i> hola@sonidosderecuerdos.com</p>
+                    <p><i class="fas fa-phone"></i> +123 456 7890</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Enlaces rápidos</h3>
+                    <a href="index.html">Inicio</a><br>
+                    <a href="#">Términos y condiciones</a>
+                </div>
+            </div>
             <div class="copyright">
                 <p>&copy; 2024 Sonidos de Recuerdos. Todos los derechos reservados.</p>
             </div>
@@ -351,6 +563,10 @@
     </footer>
 
     <script>
+        // Variables globales
+        let currentProjectId = null;
+        let projectData = null;
+
         // Inicializar todo después de que el DOM esté cargado
         document.addEventListener('DOMContentLoaded', function() {
             // Verificar que la librería de Supabase esté cargada
@@ -369,6 +585,11 @@
             function getTrackingCode() {
                 const urlParams = new URLSearchParams(window.location.search);
                 return urlParams.get('code');
+            }
+
+            // Refresh project data
+            window.refreshProject = async function() {
+                await loadProjectData();
             }
 
             // Load project data
@@ -394,30 +615,58 @@
                         return;
                     }
                     
-                    // Fill profile data
+                    // Guardar datos del proyecto
+                    projectData = data;
+                    currentProjectId = data.id;
+                    
+                    // Fill profile header data
                     document.querySelector('#profileCode span').textContent = data.tracking_code;
                     document.getElementById('projectStatus').textContent = data.status || 'pending';
                     document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
+                    document.getElementById('lyricsStatus').textContent = data.lyrics ? 'Lista' : 'Pendiente';
+                    document.getElementById('demoStatus').textContent = data.demo_url ? 'Disponible' : 'Pendiente';
                     
-                    // Verificar si la letra está lista
+                    // Update status card icon color
+                    const statusCard = document.querySelector('.info-card.status-pending');
+                    statusCard.className = 'info-card';
+                    if (data.status === 'pending') {
+                        statusCard.classList.add('status-pending');
+                    } else if (data.status === 'in_progress') {
+                        statusCard.classList.add('status-in-progress');
+                    } else if (data.status === 'demo_ready') {
+                        statusCard.classList.add('status-demo-ready');
+                    } else if (data.status === 'completed') {
+                        statusCard.classList.add('status-completed');
+                    }
+                    
+                    // Fill lyrics content
+                    const lyricsContent = document.getElementById('lyricsContent');
                     if (data.lyrics && data.lyrics.trim() !== '') {
-                        document.getElementById('lyricsStatus').textContent = 'Lista';
-                        document.getElementById('lyricsContent').textContent = data.lyrics;
-                        document.getElementById('lyricsMessage').style.display = 'none';
+                        lyricsContent.innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit;">${data.lyrics}</pre>`;
                     } else {
-                        document.getElementById('lyricsStatus').textContent = 'Pendiente';
-                        document.getElementById('lyricsContent').textContent = 'La letra será enviada por el compositor cuando esté lista.';
-                        document.getElementById('lyricsMessage').style.display = 'block';
+                        lyricsContent.innerHTML = `
+                            <div class="lyrics-placeholder">
+                                <i class="fas fa-file-alt"></i>
+                                <p>La letra será enviada por el compositor cuando esté lista.</p>
+                            </div>
+                        `;
                     }
                     
                     // Show demo if available
+                    const audioPlaceholder = document.getElementById('audioPlaceholder');
+                    const demoAudio = document.getElementById('demoAudio');
+                    
                     if (data.demo_url && data.demo_url.trim() !== '') {
-                        document.getElementById('demoStatus').textContent = '¡Disponible!';
-                        document.getElementById('demoAudio').src = data.demo_url;
-                        document.getElementById('demoAudio').style.display = 'block';
+                        audioPlaceholder.style.display = 'none';
+                        demoAudio.src = data.demo_url;
+                        demoAudio.style.display = 'block';
                     } else {
-                        document.getElementById('demoStatus').textContent = 'Aún no hay demo disponible';
-                        document.getElementById('demoAudio').style.display = 'none';
+                        audioPlaceholder.innerHTML = `
+                            <i class="fas fa-headphones"></i>
+                            <p>El demo será enviado por el compositor cuando esté listo.</p>
+                        `;
+                        audioPlaceholder.style.display = 'block';
+                        demoAudio.style.display = 'none';
                     }
                     
                     // Load chat messages
@@ -448,13 +697,19 @@
                         data.forEach(message => {
                             const messageDiv = document.createElement('div');
                             messageDiv.className = message.sender === 'admin' ? 'message admin' : 'message client';
-                            messageDiv.innerHTML = `<strong>${message.sender === 'admin' ? 'Compositor' : 'Tú'}:</strong><br>${message.message}`;
+                            messageDiv.innerHTML = `
+                                <strong>${message.sender === 'admin' ? 'Compositor' : 'Tú'}:</strong>
+                                <br>${message.message}
+                            `;
                             chatMessages.appendChild(messageDiv);
                         });
                     } else {
                         const welcomeMessage = document.createElement('div');
                         welcomeMessage.className = 'message admin';
-                        welcomeMessage.innerHTML = `<strong>Compositor:</strong><br>¡Hola! Bienvenido a tu espacio de seguimiento. Estoy trabajando en tu composición.`;
+                        welcomeMessage.innerHTML = `
+                            <strong>Compositor:</strong>
+                            <br>¡Hola! Bienvenido a tu espacio de seguimiento. Estoy trabajando en tu composición.
+                        `;
                         chatMessages.appendChild(welcomeMessage);
                     }
                     
@@ -471,19 +726,10 @@
                 
                 if (message) {
                     try {
-                        const trackingCode = getTrackingCode();
-                        const { data: projectData, error: projectError } = await supabase
-                            .from('projects')
-                            .select('id')
-                            .eq('tracking_code', trackingCode.toUpperCase())
-                            .single();
-                        
-                        if (projectError) throw projectError;
-                        
                         const { error: messageError } = await supabase
                             .from('chat_messages')
                             .insert({
-                                project_id: projectData.id,
+                                project_id: currentProjectId,
                                 sender: 'client',
                                 message: message
                             });
@@ -494,7 +740,10 @@
                         const chatMessages = document.getElementById('chatMessages');
                         const messageDiv = document.createElement('div');
                         messageDiv.className = 'message client';
-                        messageDiv.innerHTML = `<strong>Tú:</strong><br>${message}`;
+                        messageDiv.innerHTML = `
+                            <strong>Tú:</strong>
+                            <br>${message}
+                        `;
                         chatMessages.appendChild(messageDiv);
                         chatInput.value = '';
                         chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -510,14 +759,6 @@
             document.getElementById('chatInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     document.getElementById('sendChat').click();
-                }
-            });
-
-            // Close modals when clicking outside
-            window.addEventListener('click', function(e) {
-                const successModal = document.getElementById('successModal');
-                if (e.target === successModal) {
-                    closeModal();
                 }
             });
 
