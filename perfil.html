@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Proyecto - Sonidos de Recuerdos</title>
+    <title>Mi Proyecto - Raell Studio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -136,6 +136,13 @@
             margin: 2rem 0;
         }
 
+        .lyrics-section {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
         .chat-container {
             background: #f8fafc;
             border-radius: 15px;
@@ -226,6 +233,75 @@
             border-top: 1px solid #334155;
             color: #94a3b8;
         }
+
+        /* Estilos adicionales */
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .lyrics-content {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            min-height: 100px;
+            white-space: pre-line;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .status-in-progress {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            margin-top: 0.5rem;
+        }
+
+        .action-button {
+            background: transparent;
+            border: 1px solid var(--gray);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .action-button:hover {
+            background: var(--gray);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -234,7 +310,7 @@
         <div class="container navbar">
             <div class="logo">
                 <i class="fas fa-music"></i>
-                <span>Sonidos de Recuerdos</span>
+                <span>Raell Studio</span>
             </div>
             <ul class="nav-links">
                 <li><a href="index.html">Inicio</a></li>
@@ -268,16 +344,32 @@
                 </div>
             </div>
 
-            <div class="demo-audio">
-                <h3>Demo de Audio</h3>
-                <p id="demoStatus">Cargando...</p>
-                <audio id="demoAudio" controls style="display: none; width: 100%; margin-top: 1rem;">
-                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-                </audio>
+            <!-- Sección de Letra -->
+            <div class="lyrics-section">
+                <h3 class="section-title">Letra de la Canción</h3>
+                <div class="lyrics-content" id="lyricsContent">
+                    Cargando letra...
+                </div>
+                <div id="lyricsMessage" style="margin-top: 1rem; color: var(--gray);">
+                    La letra será enviada por el compositor cuando esté lista.
+                </div>
             </div>
 
+            <!-- Sección de Demo -->
+            <div class="demo-audio">
+                <h3 class="section-title">Demo de Audio</h3>
+                <p id="demoStatus">Cargando...</p>
+                <audio id="demoAudio" controls class="audio-player" style="display: none;">
+                    <source src="" type="audio/mpeg">
+                </audio>
+                <div id="demoMessage" style="margin-top: 1rem; color: var(--gray);">
+                    El demo será enviado por el compositor cuando esté listo.
+                </div>
+            </div>
+
+            <!-- Chat con el Compositor -->
             <div class="chat-container">
-                <h3>Chat con el compositor</h3>
+                <h3 class="section-title">Chat con el Compositor</h3>
                 <div class="chat-messages" id="chatMessages">
                     <div class="message admin">
                         <strong>Compositor:</strong><br>
@@ -300,7 +392,7 @@
     <footer>
         <div class="container">
             <div class="copyright">
-                <p>&copy; 2024 Sonidos de Recuerdos. Todos los derechos reservados.</p>
+                <p>&copy; 2024 Raell Studio. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
@@ -355,11 +447,25 @@
                     document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
                     document.getElementById('lyricsStatus').textContent = data.status === 'lyrics_ready' ? 'Lista' : 'Pendiente';
                     
+                    // Show demo if available
                     if (data.status === 'demo_ready') {
                         document.getElementById('demoStatus').textContent = '¡Disponible!';
                         document.getElementById('demoAudio').style.display = 'block';
+                        document.getElementById('demoAudio').src = data.demo_url || 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+                        document.getElementById('demoMessage').style.display = 'none';
                     } else {
                         document.getElementById('demoStatus').textContent = 'Aún no hay demo disponible';
+                        document.getElementById('demoAudio').style.display = 'none';
+                        document.getElementById('demoMessage').style.display = 'block';
+                    }
+                    
+                    // Show lyrics if available
+                    if (data.status === 'lyrics_ready') {
+                        document.getElementById('lyricsContent').textContent = data.lyrics || 'La letra está lista pero aún no ha sido cargada.';
+                        document.getElementById('lyricsMessage').style.display = 'none';
+                    } else {
+                        document.getElementById('lyricsContent').textContent = 'La letra será enviada por el compositor cuando esté lista.';
+                        document.getElementById('lyricsMessage').style.display = 'block';
                     }
                     
                     // Load chat messages
@@ -442,7 +548,7 @@
                         chatMessages.scrollTop = chatMessages.scrollHeight;
                         
                     } catch (error) {
-                        console.error('Error sending message:', error);
+                        console.error('Error enviar mensaje:', error);
                         alert('Error al enviar el mensaje. Por favor intenta nuevamente.');
                     }
                 }
