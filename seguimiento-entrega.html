@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seguimiento y entrega - Sonidos de Recuerdos</title>
+    <title>Seguimiento y entrega - Raell Studio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -102,114 +102,78 @@
 
         .content-header p {
             color: var(--gray);
-            max-width: 700px;
+            max-width: 600px;
             margin: 0 auto;
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .feature-card {
-            background: white;
+        .content-body {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 2rem;
+            background: #f8fafc;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            text-align: center;
         }
 
-        .feature-card i {
-            font-size: 2.5rem;
+        .content-body h2 {
             color: var(--primary);
             margin-bottom: 1.5rem;
         }
 
-        .feature-card h3 {
-            margin-bottom: 1rem;
-            color: var(--dark);
+        .content-body p {
+            margin-bottom: 1.5rem;
+            color: var(--gray);
         }
 
-        .feature-card p {
+        .content-body ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-body li {
+            margin-bottom: 0.5rem;
             color: var(--gray);
         }
 
         .process-steps {
-            background: #f8fafc;
-            padding: 3rem;
-            border-radius: 20px;
-            margin: 3rem 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
         }
 
-        .process-steps h2 {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: var(--dark);
-        }
-
-        .timeline {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--primary);
-            left: 50%;
-            margin-left: -2px;
-        }
-
-        .timeline-item {
-            position: relative;
-            margin-bottom: 2rem;
-            width: 100%;
-        }
-
-        .timeline-item:nth-child(odd) {
-            padding-right: calc(50% + 20px);
-        }
-
-        .timeline-item:nth-child(even) {
-            padding-left: calc(50% + 20px);
-        }
-
-        .timeline-content {
+        .step-card {
             background: white;
-            padding: 1.5rem;
+            padding: 2rem;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
-        .timeline-date {
+        .step-number {
+            width: 50px;
+            height: 50px;
             background: var(--primary);
             color: white;
-            width: 40px;
-            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: absolute;
-            top: 20px;
+            font-size: 1.2rem;
             font-weight: bold;
+            margin: 0 auto 1rem;
         }
 
-        .timeline-item:nth-child(odd) .timeline-date {
-            right: -20px;
+        .step-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
         }
 
-        .timeline-item:nth-child(even) .timeline-date {
-            left: -20px;
+        .step-card p {
+            color: var(--gray);
         }
 
-        .back-btn {
+        .btn {
             display: inline-block;
             background: var(--primary);
             color: white;
@@ -217,13 +181,26 @@
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
-            margin-top: 2rem;
             transition: var(--transition);
+            border: 2px solid var(--primary);
         }
 
-        .back-btn:hover {
-            background: var(--primary-dark);
+        .btn:hover {
+            background: transparent;
+            color: var(--primary);
             transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            margin-left: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
         }
 
         /* Footer */
@@ -233,6 +210,52 @@
             padding: 3rem 0 1.5rem;
         }
 
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-column p,
+        .footer-column a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #334155;
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
         .copyright {
             text-align: center;
             padding-top: 2rem;
@@ -240,21 +263,23 @@
             color: #94a3b8;
         }
 
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .timeline::before {
-                left: 31px;
+            .content-header h1 {
+                font-size: 2rem;
             }
             
-            .timeline-item:nth-child(odd),
-            .timeline-item:nth-child(even) {
-                padding-left: 70px;
-                padding-right: 0;
+            .nav-links {
+                display: none;
             }
             
-            .timeline-item:nth-child(odd) .timeline-date,
-            .timeline-item:nth-child(even) .timeline-date {
-                left: 0;
-                right: auto;
+            .btn-secondary {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+            
+            .process-steps {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -265,10 +290,12 @@
         <div class="container navbar">
             <div class="logo">
                 <i class="fas fa-music"></i>
-                <span>Sonidos de Recuerdos</span>
+                <span>Raell Studio</span>
             </div>
             <ul class="nav-links">
                 <li><a href="index.html">Inicio</a></li>
+                <li><a href="index.html#como-funciona">Cómo funciona</a></li>
+                <li><a href="index.html#enviar-idea">Envía tu idea</a></li>
             </ul>
         </div>
     </header>
@@ -278,70 +305,67 @@
         <div class="container">
             <div class="content-header">
                 <h1>Seguimiento y entrega</h1>
-                <p>Una vez que tengas tu código de seguimiento, podrás acceder a tu panel personal donde tendrás control total sobre el progreso de tu composición musical.</p>
+                <p>Una vez que tengas tu código de seguimiento, podrás acceder a tu perfil personalizado para hacer seguimiento de tu proyecto musical.</p>
             </div>
             
-            <div class="features-grid">
-                <div class="feature-card">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Seguimiento en tiempo real</h3>
-                    <p>Podrás ver el estado actual de tu proyecto: pendiente, en progreso, letra lista, demo disponible o completado.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-comments"></i>
-                    <h3>Chat directo</h3>
-                    <p>Comunícate directamente conmigo para dar feedback, hacer preguntas o compartir nuevas ideas sobre tu composición.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-headphones"></i>
-                    <h3>Demos de audio</h3>
-                    <p>Escucha las versiones preliminares de tu canción y proporciona feedback antes de la versión final.</p>
-                </div>
-            </div>
-            
-            <div class="process-steps">
+            <div class="content-body">
+                <h2>¿Qué puedes hacer en tu perfil?</h2>
+                <p>Tu perfil personalizado es tu espacio de control donde podrás:</p>
+                
+                <ul>
+                    <li><strong>Ver el estado actual</strong> de tu proyecto en tiempo real</li>
+                    <li><strong>Escuchar demos exclusivas</strong> de tu canción mientras se desarrolla</li>
+                    <li><strong>Comunicarte directamente</strong> con el compositor a través del chat integrado</li>
+                    <li><strong>Recibir actualizaciones</strong> automáticas sobre el progreso de tu composición</li>
+                    <li><strong>Acceder a tu letra personalizada</strong> cuando esté lista</li>
+                </ul>
+                
                 <h2>Proceso de seguimiento</h2>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <h3>Confirmación del proyecto</h3>
-                            <p>Recibirás confirmación de que tu idea ha sido recibida y se ha iniciado el proceso creativo.</p>
-                        </div>
-                        <div class="timeline-date">1</div>
+                <div class="process-steps">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>Pendiente</h3>
+                        <p>Tu idea ha sido recibida y está en cola para comenzar el proceso creativo.</p>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <h3>Desarrollo de la letra</h3>
-                            <p>Trabajaré en la letra basada en tu idea y te la compartiré para tu aprobación.</p>
-                        </div>
-                        <div class="timeline-date">2</div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>En Progreso</h3>
+                        <p>El compositor está trabajando activamente en tu proyecto musical.</p>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <h3>Creación de la melodía</h3>
-                            <p>Desarrollaré la melodía y arreglos musicales que complementen perfectamente tu historia.</p>
-                        </div>
-                        <div class="timeline-date">3</div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>Letra Lista</h3>
+                        <p>La letra de tu canción está terminada y lista para revisión.</p>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <h3>Demo de audio</h3>
-                            <p>Recibirás una demo preliminar para que puedas escuchar cómo suena tu composición.</p>
-                        </div>
-                        <div class="timeline-date">4</div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3>Demo Lista</h3>
+                        <p>Una demo preliminar de tu canción está disponible para escuchar.</p>
                     </div>
-                    <div class="timeline-item">
-                        <div class="timeline-content">
-                            <h3>Entrega final</h3>
-                            <p>Una vez aprobada la demo, recibirás la versión final de alta calidad de tu canción única.</p>
-                        </div>
-                        <div class="timeline-date">5</div>
+                    <div class="step-card">
+                        <div class="step-number">5</div>
+                        <h3>Completado</h3>
+                        <p>Tu canción final está lista y disponible para descarga.</p>
                     </div>
                 </div>
-            </div>
-            
-            <div style="text-align: center;">
-                <a href="index.html#iniciar-sesion" class="back-btn">Iniciar sesión</a>
+                
+                <h2>¿Cómo recibirás tu entrega final?</h2>
+                <p>Cuando tu proyecto esté completo:</p>
+                
+                <ul>
+                    <li>Recibirás una notificación en tu perfil</li>
+                    <li>Podrás descargar tu canción en formato MP3/WAV</li>
+                    <li>Recibirás un correo con el enlace de descarga</li>
+                    <li>Podrás solicitar revisiones si es necesario</li>
+                    <li>Tendrás acceso a la masterización final</li>
+                </ul>
+                
+                <p>El proceso completo suele tomar entre 7-14 días hábiles, dependiendo de la complejidad del proyecto.</p>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="index.html#enviar-idea" class="btn">Comienza ahora</a>
+                    <a href="index.html#iniciar-sesion" class="btn btn-secondary">Iniciar sesión</a>
+                </div>
             </div>
         </div>
     </section>
@@ -349,8 +373,31 @@
     <!-- Footer -->
     <footer>
         <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Raell Studio</h3>
+                    <p>Transformando momentos especiales en composiciones musicales únicas desde el corazón.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-spotify"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-envelope"></i> infostudioraell@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +123 456 7890</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Enlaces rápidos</h3>
+                    <a href="index.html">Inicio</a><br>
+                    <a href="index.html#como-funciona">Cómo funciona</a><br>
+                    <a href="index.html#enviar-idea">Envía tu idea</a><br>
+                    <a href="#">Términos y condiciones</a>
+                </div>
+            </div>
             <div class="copyright">
-                <p>&copy; 2024 Sonidos de Recuerdos. Todos los derechos reservados.</p>
+                <p>&copy; 2024 Raell Studio. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
