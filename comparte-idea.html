@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparte tu idea - Sonidos de Recuerdos</title>
+    <title>Comparte tu idea - Raell Studio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -102,41 +102,40 @@
 
         .content-header p {
             color: var(--gray);
-            max-width: 700px;
+            max-width: 600px;
             margin: 0 auto;
         }
 
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .content-card {
-            background: white;
+        .content-body {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 2rem;
+            background: #f8fafc;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            text-align: center;
         }
 
-        .content-card i {
-            font-size: 2.5rem;
+        .content-body h2 {
             color: var(--primary);
             margin-bottom: 1.5rem;
         }
 
-        .content-card h3 {
-            margin-bottom: 1rem;
-            color: var(--dark);
-        }
-
-        .content-card p {
+        .content-body p {
+            margin-bottom: 1.5rem;
             color: var(--gray);
         }
 
-        .back-btn {
+        .content-body ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-body li {
+            margin-bottom: 0.5rem;
+            color: var(--gray);
+        }
+
+        .btn {
             display: inline-block;
             background: var(--primary);
             color: white;
@@ -144,13 +143,26 @@
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
-            margin-top: 2rem;
             transition: var(--transition);
+            border: 2px solid var(--primary);
         }
 
-        .back-btn:hover {
-            background: var(--primary-dark);
+        .btn:hover {
+            background: transparent;
+            color: var(--primary);
             transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            margin-left: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
         }
 
         /* Footer */
@@ -160,11 +172,73 @@
             padding: 3rem 0 1.5rem;
         }
 
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-column p,
+        .footer-column a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #334155;
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
         .copyright {
             text-align: center;
             padding-top: 2rem;
             border-top: 1px solid #334155;
             color: #94a3b8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content-header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .btn-secondary {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
         }
     </style>
 </head>
@@ -174,10 +248,12 @@
         <div class="container navbar">
             <div class="logo">
                 <i class="fas fa-music"></i>
-                <span>Sonidos de Recuerdos</span>
+                <span>Raell Studio</span>
             </div>
             <ul class="nav-links">
                 <li><a href="index.html">Inicio</a></li>
+                <li><a href="index.html#como-funciona">Cómo funciona</a></li>
+                <li><a href="index.html#enviar-idea">Envía tu idea</a></li>
             </ul>
         </div>
     </header>
@@ -190,33 +266,35 @@
                 <p>Esta es la parte más importante del proceso. Cuéntanos todo lo que quieras sobre tu historia, emoción o momento especial que deseas transformar en música.</p>
             </div>
             
-            <div class="content-grid">
-                <div class="content-card">
-                    <i class="fas fa-heart"></i>
-                    <h3>Historias personales</h3>
-                    <p>Recuerdos de amor, amistad, familia, logros personales o momentos que marcaron tu vida.</p>
-                </div>
-                <div class="content-card">
-                    <i class="fas fa-music"></i>
-                    <h3>Inspiración musical</h3>
-                    <p>Artistas, canciones o géneros que te inspiran y que te gustaría que influyan en tu composición.</p>
-                </div>
-                <div class="content-card">
-                    <i class="fas fa-palette"></i>
-                    <h3>Emociones y sentimientos</h3>
-                    <p>Describe las emociones que quieres transmitir: alegría, nostalgia, esperanza, pasión, etc.</p>
-                </div>
-            </div>
-            
-            <div style="text-align: center; margin-top: 3rem;">
-                <h2>Consejos para describir tu idea:</h2>
-                <ul style="text-align: left; max-width: 600px; margin: 2rem auto; line-height: 1.8;">
-                    <li><strong>Sé específico:</strong> Cuantos más detalles proporciones, mejor podré capturar la esencia de tu historia.</li>
-                    <li><strong>Incluye referencias:</strong> Menciona canciones, artistas o estilos que te gusten.</li>
-                    <li><strong>Describe emociones:</strong> ¿Qué sentimientos quieres que evoque la música?</li>
-                    <li><strong>Piensa en el propósito:</strong> ¿Para qué ocasión será esta canción?</li>
+            <div class="content-body">
+                <h2>¿Qué debes contar?</h2>
+                <p>La magia de tu canción comienza con tu historia. Sé lo más descriptivo posible sobre:</p>
+                
+                <ul>
+                    <li><strong>El momento especial:</strong> Boda, aniversario, nacimiento, homenaje, etc.</li>
+                    <li><strong>Las emociones involucradas:</strong> Alegría, nostalgia, amor, esperanza, gratitud, etc.</li>
+                    <li><strong>Los personajes principales:</strong> Personas involucradas en la historia</li>
+                    <li><strong>Detalles específicos:</strong> Lugares, fechas, objetos significativos, etc.</li>
+                    <li><strong>El mensaje que quieres transmitir:</strong> Qué significa este momento para ti</li>
                 </ul>
-                <a href="index.html#enviar-idea" class="back-btn">Ir al formulario</a>
+                
+                <h2>Consejos para una descripción impactante</h2>
+                <p>Sigue estos consejos para ayudarnos a crear la canción perfecta:</p>
+                
+                <ul>
+                    <li><strong>Sé auténtico:</strong> Escribe desde el corazón, sin filtros</li>
+                    <li><strong>Incluye referencias:</strong> Menciona canciones, artistas o estilos que te inspiren</li>
+                    <li><strong>Describe sensaciones:</strong> ¿Qué sentías en ese momento? ¿Qué colores, olores, sonidos asocias?</li>
+                    <li><strong>Sé específico:</strong> Cuantos más detalles proporciones, mejor capturaremos la esencia</li>
+                    <li><strong>No te preocupes por la gramática:</strong> Solo concéntrate en contar tu historia</li>
+                </ul>
+                
+                <p>Recuerda, esta es tu oportunidad de compartir lo que hace única tu experiencia. ¡Estamos emocionados de escucharla!</p>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="index.html#enviar-idea" class="btn">Comienza ahora</a>
+                    <a href="index.html#como-funciona" class="btn btn-secondary">Descubre cómo</a>
+                </div>
             </div>
         </div>
     </section>
@@ -224,8 +302,31 @@
     <!-- Footer -->
     <footer>
         <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Raell Studio</h3>
+                    <p>Transformando momentos especiales en composiciones musicales únicas desde el corazón.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-spotify"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Contacto</h3>
+                    <p><i class="fas fa-envelope"></i> infostudioraell@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +123 456 7890</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Enlaces rápidos</h3>
+                    <a href="index.html">Inicio</a><br>
+                    <a href="index.html#como-funciona">Cómo funciona</a><br>
+                    <a href="index.html#enviar-idea">Envía tu idea</a><br>
+                    <a href="#">Términos y condiciones</a>
+                </div>
+            </div>
             <div class="copyright">
-                <p>&copy; 2024 Sonidos de Recuerdos. Todos los derechos reservados.</p>
+                <p>&copy; 2024 Raell Studio. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>

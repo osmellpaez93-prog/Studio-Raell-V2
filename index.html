@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenidos a Raell Studio | Transforma tus ideas en música</title>
+    <title>Bienvenidos a Raell Studio | Transforma tus ideas y recuerdos en música</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -20,6 +20,7 @@
             --dark: #1e293b;
             --light: #f8fafc;
             --gray: #64748b;
+            --red: #ef4444;
             --transition: all 0.3s ease;
         }
 
@@ -29,6 +30,10 @@
             color: var(--dark);
             background-color: var(--light);
             overflow-x: hidden;
+            background-image: url('fondo-personalizado.jpg'); /* ✅ FONDO PERSONALIZABLE */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
         }
 
         .container {
@@ -86,11 +91,12 @@
 
         /* Hero Section */
         .hero {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            background: rgba(240, 249, 255, 0.9); /* ✅ FONDO SEMITRANSPARENTE */
             padding: 5rem 0;
             text-align: center;
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px); /* ✅ EFECTO DE VIDRIO */
         }
 
         .hero::before {
@@ -216,6 +222,28 @@
             color: var(--gray);
         }
 
+        /* ✅ BOTONES "SABER MÁS" */
+        .more-info-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .more-info-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
         /* Form Section */
         .form-section {
             padding: 5rem 0;
@@ -311,12 +339,6 @@
             font-weight: bold;
             margin: 1.5rem 0;
             letter-spacing: 2px;
-        }
-
-        .email-sent {
-            color: var(--secondary);
-            font-weight: 600;
-            margin: 0.5rem 0;
         }
 
         /* Login Section */
@@ -467,16 +489,22 @@
                     <div class="step-number">1</div>
                     <h3>Comparte tu idea</h3>
                     <p>Describe tu recuerdo, emoción o concepto que quieres transformar en música.</p>
+                    <!-- ✅ BOTÓN "SABER MÁS" -->
+                    <a href="comparte-idea.html" class="more-info-btn">Saber más</a>
                 </div>
                 <div class="step-card">
                     <div class="step-number">2</div>
                     <h3>Obtén tu código</h3>
                     <p>Recibirás un código único para hacer seguimiento a tu proyecto musical.</p>
+                    <!-- ✅ BOTÓN "SABER MÁS" -->
+                    <a href="obten-codigo.html" class="more-info-btn">Saber más</a>
                 </div>
                 <div class="step-card">
                     <div class="step-number">3</div>
                     <h3>Seguimiento y entrega</h3>
                     <p>Accede a tu perfil para ver el progreso, escuchar demos y comunicarte directamente.</p>
+                    <!-- ✅ BOTÓN "SABER MÁS" -->
+                    <a href="seguimiento-entrega.html" class="more-info-btn">Saber más</a>
                 </div>
             </div>
         </div>
@@ -601,7 +629,7 @@
             <p>Hemos recibido tu solicitud y estamos emocionados de trabajar en tu composición musical.</p>
             <p>Tu código de seguimiento es:</p>
             <div class="tracking-code" id="generatedCode"></div>
-            <p class="email-sent">Te hemos enviado un correo con este código a <span id="emailSent"></span></p>
+            <p>Te hemos enviado un correo con este código a <span id="emailSent"></span></p>
             <p>Guarda este código para acceder a tu perfil y hacer seguimiento de tu proyecto.</p>
             <button class="btn" onclick="closeModal()">Cerrar</button>
         </div>
@@ -622,7 +650,7 @@
                 </div>
                 <div class="footer-column">
                     <h3>Contacto</h3>
-                    <p><i class="fas fa-envelope"></i> raellstudio@resend.dev</p>
+                    <p><i class="fas fa-envelope"></i> infostudioraell@gmail.com</p>
                     <p><i class="fas fa-phone"></i> +123 456 7890</p>
                 </div>
                 <div class="footer-column">
@@ -703,31 +731,6 @@
 
                     const { data, error: dbError } = await supabase.from('projects').insert([projectData]).select();
                     if (dbError) throw dbError;
-
-                    // --- Enviar correo de confirmación usando la función de Supabase ---
-                    try {
-                        console.log("Intentando invocar la función send-confirmation-email...");
-                        const { data: emailResponse, error: emailError } = await supabase.functions.invoke('send-confirmation-email', {
-                            body: JSON.stringify({
-                                email: formData.get('email'),
-                                trackingCode: trackingCode,
-                                clientName: formData.get('name')
-                            })
-                        });
-
-                        if (emailError) {
-                            console.error('❌ Error al llamar la función send-confirmation-email:', emailError);
-                            // Opcional: Mostrar un mensaje al usuario si falla el envío
-                            alert('⚠️ Tu proyecto fue creado, pero hubo un problema al enviar el correo de confirmación. Tu código es: ' + trackingCode + '. Guárdalo, recibirás novedades pronto.');
-                        } else {
-                            console.log('✅ Función send-confirmation-email invocada con éxito:', emailResponse);
-                        }
-                    } catch (invokeError) {
-                        console.error('💥 Error inesperado al invocar la función send-confirmation-email:', invokeError);
-                        // Manejar errores en la invocación de la función
-                        alert('⚠️ Tu proyecto fue creado, pero no pudimos enviar el correo de confirmación automáticamente. Tu código es: ' + trackingCode + '. Guárdalo, recibirás novedades pronto.');
-                    }
-                    // --- Fin del envío de correo ---
 
                     // Mostrar modal de éxito
                     document.getElementById('generatedCode').textContent = trackingCode;
