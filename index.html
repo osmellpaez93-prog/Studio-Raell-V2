@@ -30,7 +30,7 @@
             color: var(--dark);
             background-color: var(--light);
             overflow-x: hidden;
-            background-image: url('fondo-personalizado.jpg'); /* ✅ FONDO PERSONALIZABLE */
+            background-image: url('fondo-personalizado.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -91,12 +91,12 @@
 
         /* Hero Section */
         .hero {
-            background: rgba(240, 249, 255, 0.9); /* ✅ FONDO SEMITRANSPARENTE */
+            background: rgba(240, 249, 255, 0.9);
             padding: 5rem 0;
             text-align: center;
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(10px); /* ✅ EFECTO DE VIDRIO */
+            backdrop-filter: blur(10px);
         }
 
         .hero::before {
@@ -178,7 +178,6 @@
             margin: 0 auto;
         }
 
-        /* ✅ OPTIMIZADO PARA 4 COLUMNAS */
         .steps {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -188,7 +187,7 @@
 
         .step-card {
             background: white;
-            padding: 1.75rem 1.25rem; /* ✅ Reducido padding horizontal */
+            padding: 1.75rem 1.25rem;
             border-radius: 20px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.08);
@@ -226,7 +225,6 @@
             line-height: 1.5;
         }
 
-        /* ✅ BOTONES "SABER MÁS" */
         .more-info-btn {
             background: transparent;
             color: var(--primary);
@@ -432,42 +430,25 @@
             color: #94a3b8;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
             .hero-buttons {
                 display: flex;
                 flex-direction: column;
                 gap: 1rem;
                 align-items: center;
             }
-            
-            .btn-secondary {
-                margin-left: 0;
-            }
-            
-            .steps {
-                grid-template-columns: repeat(2, 1fr); /* Muestra 2 columnas en móviles */
-                gap: 1.25rem;
-            }
+            .btn-secondary { margin-left: 0; }
+            .steps { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
         }
 
         @media (max-width: 480px) {
-            .steps {
-                grid-template-columns: 1fr; /* Una sola columna en móviles muy pequeños */
-            }
+            .steps { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header>
         <div class="container navbar">
             <div class="logo">
@@ -482,7 +463,6 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <h1>Transforma tus recuerdos en melodías únicas</h1>
@@ -494,7 +474,6 @@
         </div>
     </section>
 
-    <!-- How it works -->
     <section id="como-funciona" class="how-it-works">
         <div class="container">
             <div class="section-title">
@@ -530,7 +509,6 @@
         </div>
     </section>
 
-    <!-- Form Section -->
     <section id="enviar-idea" class="form-section">
         <div class="container">
             <div class="section-title">
@@ -626,7 +604,6 @@
         </div>
     </section>
 
-    <!-- Login Section -->
     <section id="iniciar-sesion" class="login-section">
         <div class="container">
             <div class="login-container">
@@ -643,7 +620,6 @@
         </div>
     </section>
 
-    <!-- Success Modal -->
     <div class="modal" id="successModal">
         <div class="modal-content">
             <h2>¡Tu idea ha sido enviada!</h2>
@@ -656,7 +632,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
@@ -689,11 +664,9 @@
     </footer>
 
     <script>
-        // Función para cerrar el modal
         function closeModal() {
             document.getElementById('successModal').style.display = 'none';
         }
-
         window.closeModal = closeModal;
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -722,11 +695,9 @@
 
             document.getElementById('ideaForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
-
                 try {
                     const formData = new FormData(this);
                     const trackingCode = generateTrackingCode();
-
                     const projectData = {
                         tracking_code: trackingCode,
                         client_name: formData.get('name'),
@@ -754,7 +725,6 @@
                                 clientName: formData.get('name')
                             })
                         });
-
                         if (emailError) {
                             console.error('❌ Error al llamar la función send-confirmation-email:', emailError);
                             alert('⚠️ Tu proyecto fue creado, pero hubo un problema al enviar el correo de confirmación. Tu código es: ' + trackingCode + '. Guárdalo, recibirás novedades pronto.');
@@ -790,40 +760,15 @@
                     e.preventDefault();
                     const target = document.querySelector(this.getAttribute('href'));
                     if (target) {
-                        target.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                 });
             });
 
             window.addEventListener('click', function(e) {
                 const modal = document.getElementById('successModal');
-                if (e.target === modal) {
-                    closeModal();
-                }
+                if (e.target === modal) closeModal();
             });
-
-            // --- NUEVO: Rellenar automáticamente el campo "cantante" si viene en la URL ---
-            function setSingerFromURL() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const cantante = urlParams.get('cantante');
-                
-                if (cantante) {
-                    const selectElement = document.getElementById('cantante');
-                    if (selectElement) {
-                        for (let option of selectElement.options) {
-                            if (option.value === cantante) {
-                                selectElement.value = option.value;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            setSingerFromURL();
         });
     </script>
 </body>
