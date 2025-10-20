@@ -88,6 +88,24 @@
             color: var(--secondary);
         }
 
+        /* Hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            width: 30px;
+            height: 21px;
+            justify-content: space-between;
+        }
+
+        .hamburger span {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
         /* Profile Header */
         .profile-header {
             background: white;
@@ -346,6 +364,37 @@
             background: #475569;
         }
 
+        /* Mobile menu styles */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            flex-direction: column;
+            padding: 1rem 0;
+            box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+        }
+
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--secondary);
+            background: rgba(255,255,255,0.1);
+        }
+
         /* Footer */
         footer {
             background: var(--dark);
@@ -429,6 +478,9 @@
             .user-action-btn {
                 width: 100%;
             }
+            
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
         }
     </style>
 </head>
@@ -443,6 +495,14 @@
             <ul class="nav-links">
                 <li><a href="index.html">Inicio</a></li>
             </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="index.html">Inicio</a>
+            </div>
         </div>
     </header>
 
@@ -563,6 +623,28 @@
         // Variables globales
         let currentProjectId = null;
         let projectData = null;
+
+        // Mobile menu toggle
+        document.getElementById('hamburger').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.style.display = mobileMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobileMenu').style.display = 'none';
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (!hamburger.contains(event.target) && !mobileMenu.contains(event.target)) {
+                mobileMenu.style.display = 'none';
+            }
+        });
 
         // Inicializar todo después de que el DOM esté cargado
         document.addEventListener('DOMContentLoaded', function() {
