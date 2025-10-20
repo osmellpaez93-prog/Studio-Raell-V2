@@ -89,6 +89,24 @@
             color: var(--secondary);
         }
 
+        /* Hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            width: 30px;
+            height: 21px;
+            justify-content: space-between;
+        }
+
+        .hamburger span {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
         /* Hero Section */
         .hero {
             background: rgba(240, 249, 255, 0.9);
@@ -430,9 +448,41 @@
             color: #94a3b8;
         }
 
+        /* Mobile menu styles */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            flex-direction: column;
+            padding: 1rem 0;
+            box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+        }
+
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--secondary);
+            background: rgba(255,255,255,0.1);
+        }
+
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .nav-links { display: none; }
+            .hamburger { display: flex; }
             .hero-buttons {
                 display: flex;
                 flex-direction: column;
@@ -460,6 +510,16 @@
                 <li><a href="#enviar-idea">Envía tu idea</a></li>
                 <li><a href="#iniciar-sesion">Iniciar sesión</a></li>
             </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="#como-funciona">Cómo funciona</a>
+                <a href="#enviar-idea">Envía tu idea</a>
+                <a href="#iniciar-sesion">Iniciar sesión</a>
+            </div>
         </div>
     </header>
 
@@ -668,6 +728,28 @@
             document.getElementById('successModal').style.display = 'none';
         }
         window.closeModal = closeModal;
+
+        // Mobile menu toggle
+        document.getElementById('hamburger').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.style.display = mobileMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobileMenu').style.display = 'none';
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (!hamburger.contains(event.target) && !mobileMenu.contains(event.target)) {
+                mobileMenu.style.display = 'none';
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof window.supabase === 'undefined') {
