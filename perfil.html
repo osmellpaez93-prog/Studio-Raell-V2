@@ -613,7 +613,7 @@
                     
                     // Fill profile header data
                     document.querySelector('#profileCode span').textContent = data.tracking_code;
-                    document.getElementById('projectStatus').textContent = data.status || 'pending';
+                    document.getElementById('projectStatus').textContent = data.status || 'Pendiente';
                     document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
                     document.getElementById('lyricsStatus').textContent = data.lyrics ? 'Lista' : 'Pendiente';
                     document.getElementById('demoStatus').textContent = data.demo_url ? 'Disponible' : 'Pendiente';
@@ -621,13 +621,13 @@
                     // Update status card icon color
                     const statusCard = document.querySelector('.info-card.status-pending');
                     statusCard.className = 'info-card';
-                    if (data.status === 'pending') {
+                    if (data.status === 'Pendiente') {
                         statusCard.classList.add('status-pending');
-                    } else if (data.status === 'in_progress') {
+                    } else if (data.status === 'En progreso') {
                         statusCard.classList.add('status-in-progress');
-                    } else if (data.status === 'demo_ready') {
+                    } else if (data.status === 'Demo lista') {
                         statusCard.classList.add('status-demo-ready');
-                    } else if (data.status === 'completed') {
+                    } else if (data.status === 'Completedo') {
                         statusCard.classList.add('status-completed');
                     }
                     
