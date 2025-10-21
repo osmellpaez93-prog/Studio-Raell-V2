@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seguimiento y entrega - Raell Studio</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css   ">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -81,6 +81,24 @@
 
         .nav-links a:hover {
             color: var(--secondary);
+        }
+
+        /* Hamburger menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            width: 30px;
+            height: 21px;
+            justify-content: space-between;
+        }
+
+        .hamburger span {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 3px;
+            transition: var(--transition);
         }
 
         /* Content Section */
@@ -203,6 +221,37 @@
             color: white;
         }
 
+        /* Mobile menu styles */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            flex-direction: column;
+            padding: 1rem 0;
+            box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+        }
+
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--secondary);
+            background: rgba(255,255,255,0.1);
+        }
+
         /* Footer */
         footer {
             background: var(--dark);
@@ -273,6 +322,10 @@
                 display: none;
             }
             
+            .hamburger {
+                display: flex;
+            }
+            
             .btn-secondary {
                 margin-left: 0;
                 margin-top: 1rem;
@@ -298,6 +351,17 @@
                 <li><a href="index.html#enviar-idea">Envía tu idea</a></li>
                 <li><a href="index.html#iniciar-sesion">Iniciar Sesión</a></li>
             </ul>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="index.html">Inicio</a>
+                <a href="index.html#como-funciona">Cómo funciona</a>
+                <a href="index.html#enviar-idea">Envía tu idea</a>
+                <a href="index.html#iniciar-sesion">Iniciar Sesión</a>
+            </div>
         </div>
     </header>
 
@@ -401,5 +465,29 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('hamburger').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.style.display = mobileMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobileMenu').style.display = 'none';
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (!hamburger.contains(event.target) && !mobileMenu.contains(event.target)) {
+                mobileMenu.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>

@@ -47,11 +47,33 @@
             padding: 2rem;
             border-radius: 20px 20px 0 0;
             margin: -2rem -2rem 2rem -2rem;
+            position: relative;
         }
 
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 1rem;
+        }
+
+        /* Hamburger menu for consistency */
+        .hamburger {
+            display: none;
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            flex-direction: column;
+            cursor: pointer;
+            width: 30px;
+            height: 21px;
+            justify-content: space-between;
+        }
+
+        .hamburger span {
+            height: 3px;
+            width: 100%;
+            background-color: white;
+            border-radius: 3px;
+            transition: var(--transition);
         }
 
         .content {
@@ -160,12 +182,88 @@
             border-top: 1px solid #e2e8f0;
             margin-top: 2rem;
         }
+
+        /* Mobile menu styles */
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            flex-direction: column;
+            padding: 1rem 0;
+            box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+            border-radius: 0 0 15px 15px;
+            min-width: 200px;
+        }
+
+        .mobile-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .mobile-menu a:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--secondary);
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .header {
+                padding: 1.5rem;
+                margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .content {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .content h2 {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>¡Bienvenido a Raell Studio!</h1>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="index.html">Inicio</a>
+                <a href="comparte-idea.html">Comparte tu idea</a>
+                <a href="obten-codigo.html">Obtén tu código</a>
+                <a href="precios-pagos.html">Precios y pagos</a>
+                <a href="seguimiento-entrega.html">Seguimiento y entrega</a>
+            </div>
         </div>
         
         <div class="content">
@@ -215,6 +313,28 @@
     </div>
 
     <script>
+        // Mobile menu toggle
+        document.getElementById('hamburger').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.style.display = mobileMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('mobileMenu').style.display = 'none';
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (!hamburger.contains(event.target) && !mobileMenu.contains(event.target)) {
+                mobileMenu.style.display = 'none';
+            }
+        });
+
         // Obtener datos del localStorage (si están disponibles)
         document.addEventListener('DOMContentLoaded', function() {
             // Simular datos (en producción, estos vendrían de Supabase)
