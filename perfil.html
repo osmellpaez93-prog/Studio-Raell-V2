@@ -483,6 +483,43 @@
                 font-size: 1.5rem;
             }
         }
+        
+        /* Missing styles for content cards */
+        .main-content {
+            display: grid;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .content-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        .content-card h2 {
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .lyrics-placeholder, .audio-placeholder {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+        }
+        
+        .lyrics-placeholder i, .audio-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .audio-player {
+            width: 100%;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -718,7 +755,6 @@
                         document.getElementById('audioPlaceholder').style.display = 'none';
                         document.getElementById('demoAudio').src = data.demo_url;
                         document.getElementById('demoAudio').style.display = 'block';
-                        document.getElementById('demoStatus').textContent = '¡Disponible!';
                     } else {
                         document.getElementById('audioPlaceholder').innerHTML = `
                             <i class="fas fa-headphones"></i>
@@ -726,7 +762,6 @@
                         `;
                         document.getElementById('audioPlaceholder').style.display = 'block';
                         document.getElementById('demoAudio').style.display = 'none';
-                        document.getElementById('demoStatus').textContent = 'Aún no hay demo disponible';
                     }
                     
                     // Load chat messages
@@ -782,8 +817,8 @@
                     try {
                         const trackingCode = getTrackingCode();
                         
-                        // Get project ID first
-                        const {  projectData, error: projectError } = await supabase
+                        // Get project ID first - CORRECTED: use 'data' not 'projectData'
+                        const { data: projectDataResponse, error: projectError } = await supabase
                             .from('projects')
                             .select('id')
                             .eq('tracking_code', trackingCode.toUpperCase())
@@ -795,7 +830,7 @@
                         const { error: messageError } = await supabase
                             .from('chat_messages')
                             .insert({
-                                project_id: projectData.id,
+                                project_id: projectDataResponse.id,
                                 sender: 'client',
                                 message: message
                             });
@@ -904,8 +939,8 @@
                     
                     const trackingCode = getTrackingCode();
                     
-                    // Get project data
-                    const {  projectData, error: projectError } = await supabase
+                    // Get project data - CORRECTED: use 'data' not 'projectData'
+                    const { data: projectDataResponse, error: projectError } = await supabase
                         .from('projects')
                         .select('id, client_name, client_email')
                         .eq('tracking_code', trackingCode.toUpperCase())
@@ -917,9 +952,9 @@
                     const { error: feedbackError } = await supabase
                         .from('feedback')
                         .insert({
-                            project_id: projectData.id,
-                            client_name: projectData.client_name,
-                            client_email: projectData.client_email,
+                            project_id: projectDataResponse.id,
+                            client_name: projectDataResponse.client_name,
+                            client_email: projectDataResponse.client_email,
                             rating: parseInt(rating),
                             comment: comment,
                             is_approved: false
