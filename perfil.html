@@ -31,7 +31,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: var(--dark);
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            background-color: var(--light);
             overflow-x: hidden;
         }
 
@@ -88,24 +88,6 @@
             color: var(--secondary);
         }
 
-        /* Hamburger menu */
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-            width: 30px;
-            height: 21px;
-            justify-content: space-between;
-        }
-
-        .hamburger span {
-            height: 3px;
-            width: 100%;
-            background-color: white;
-            border-radius: 3px;
-            transition: var(--transition);
-        }
-
         /* Profile Header */
         .profile-header {
             background: white;
@@ -123,68 +105,32 @@
         }
 
         .profile-code {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            background: var(--primary);
             color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
             font-weight: bold;
             display: inline-block;
-            margin: 1rem 0;
-            letter-spacing: 2px;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            margin: 0.5rem 0;
         }
 
-        .project-info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
+        .project-status {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
         }
 
-        .info-card {
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 15px;
+        .status-item {
             text-align: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-            transition: var(--transition);
+            padding: 1rem;
         }
 
-        .info-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
-
-        .info-card i {
+        .status-item i {
             font-size: 2rem;
+            color: var(--primary);
             margin-bottom: 0.5rem;
-        }
-
-        .info-card.status-pending i {
-            color: var(--accent);
-        }
-
-        .info-card.status-in-progress i {
-            color: var(--blue);
-        }
-
-        .info-card.status-demo-ready i {
-            color: var(--green);
-        }
-
-        .info-card.status-completed i {
-            color: var(--secondary);
-        }
-
-        .info-card h3 {
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-            font-size: 1.1rem;
-        }
-
-        .info-card p {
-            color: var(--gray);
-            font-weight: 600;
         }
 
         /* Main Content Grid */
@@ -263,41 +209,36 @@
 
         /* Chat Section */
         .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: 400px;
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-top: 2rem;
         }
 
         .chat-messages {
-            flex: 1;
+            height: 300px;
             overflow-y: auto;
             margin-bottom: 1rem;
             padding: 1rem;
-            background: #f8fafc;
-            border-radius: 15px;
+            background: white;
+            border-radius: 10px;
         }
 
         .message {
             margin-bottom: 1rem;
-            padding: 1rem;
-            border-radius: 12px;
+            padding: 0.75rem;
+            border-radius: 10px;
             max-width: 80%;
         }
 
         .message.admin {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            background: #dbeafe;
             margin-left: auto;
             text-align: right;
         }
 
         .message.client {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-        }
-
-        .message strong {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-size: 0.9rem;
+            background: #f0fdf4;
         }
 
         .chat-input {
@@ -321,12 +262,110 @@
             border-radius: 12px;
             cursor: pointer;
             font-weight: 600;
+        }
+
+        /* Feedback Section */
+        .feedback-section {
+            background: #f1f5f9;
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .feedback-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .feedback-header h2 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .feedback-header p {
+            color: var(--gray);
+        }
+
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .star {
+            font-size: 2.5rem;
+            color: #cbd5e1;
+            cursor: pointer;
             transition: var(--transition);
         }
 
-        .chat-input button:hover {
+        .star:hover,
+        .star.selected {
+            color: #f59e0b;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .btn:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            margin-left: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
         }
 
         /* User Actions */
@@ -335,25 +374,20 @@
             justify-content: center;
             gap: 1rem;
             margin: 2rem 0;
-            flex-wrap: wrap;
         }
 
         .user-action-btn {
             background: var(--primary);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
+            padding: 8px 16px;
+            border-radius: 5px;
             cursor: pointer;
             transition: var(--transition);
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
         }
 
         .user-action-btn:hover {
             background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
         }
 
         .user-action-btn.secondary {
@@ -364,35 +398,12 @@
             background: #475569;
         }
 
-        /* Mobile menu styles */
-        .mobile-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            flex-direction: column;
-            padding: 1rem 0;
-            box-shadow: 0 10px 10px rgba(0,0,0,0.1);
+        .user-action-btn.danger {
+            background: var(--red);
         }
 
-        .mobile-menu a {
-            color: white;
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            font-weight: 500;
-            transition: var(--transition);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .mobile-menu a:last-child {
-            border-bottom: none;
-        }
-
-        .mobile-menu a:hover {
-            color: var(--secondary);
-            background: rgba(255,255,255,0.1);
+        .user-action-btn.danger:hover {
+            background: #dc2626;
         }
 
         /* Footer */
@@ -400,7 +411,6 @@
             background: var(--dark);
             color: white;
             padding: 3rem 0 1.5rem;
-            margin-top: 3rem;
         }
 
         .footer-content {
@@ -458,16 +468,17 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
+            .project-status {
+                flex-direction: column;
+                gap: 1rem;
             }
             
-            .project-info-grid {
-                grid-template-columns: 1fr;
+            .chat-input {
+                flex-direction: column;
             }
             
-            .chat-container {
-                height: 300px;
+            .chat-input button {
+                padding: 12px 24px;
             }
             
             .user-actions {
@@ -479,8 +490,14 @@
                 width: 100%;
             }
             
-            .nav-links { display: none; }
-            .hamburger { display: flex; }
+            .rating-stars {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+            
+            .star {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -495,14 +512,6 @@
             <ul class="nav-links">
                 <li><a href="index.html">Inicio</a></li>
             </ul>
-            <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <div class="mobile-menu" id="mobileMenu">
-                <a href="index.html">Inicio</a>
-            </div>
         </div>
     </header>
 
@@ -512,26 +521,21 @@
             <h1>Mi Proyecto Musical</h1>
             <div class="profile-code" id="profileCode">Código: <span></span></div>
             
-            <div class="project-info-grid">
-                <div class="info-card status-pending">
+            <div class="project-status">
+                <div class="status-item">
                     <i class="fas fa-pen"></i>
-                    <h3>Estado</h3>
+                    <h4>Estado</h4>
                     <p id="projectStatus">Cargando...</p>
                 </div>
-                <div class="info-card">
+                <div class="status-item">
                     <i class="fas fa-calendar"></i>
-                    <h3>Fecha de entrega</h3>
+                    <h4>Fecha de entrega</h4>
                     <p id="deliveryDate">Cargando...</p>
                 </div>
-                <div class="info-card">
+                <div class="status-item">
                     <i class="fas fa-file-alt"></i>
-                    <h3>Letra</h3>
+                    <h4>Letra</h4>
                     <p id="lyricsStatus">Cargando...</p>
-                </div>
-                <div class="info-card">
-                    <i class="fas fa-headphones"></i>
-                    <h3>Demo</h3>
-                    <p id="demoStatus">Cargando...</p>
                 </div>
             </div>
         </div>
@@ -569,7 +573,7 @@
                 <div class="chat-container">
                     <div class="chat-messages" id="chatMessages">
                         <div class="message admin">
-                            <strong>Compositor:</strong>
+                            <strong>Compositor:</strong><br>
                             Cargando mensajes...
                         </div>
                     </div>
@@ -581,11 +585,49 @@
             </div>
         </div>
 
+        <!-- Feedback Section -->
+        <div class="feedback-section">
+            <div class="feedback-header">
+                <h2>Deja tu opinión</h2>
+                <p>Ayúdanos a mejorar compartiendo tu experiencia</p>
+            </div>
+            
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label for="clientName">Nombre completo</label>
+                    <input type="text" id="clientName" name="clientName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="clientEmail">Correo electrónico</label>
+                    <input type="email" id="clientEmail" name="clientEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Calificación (1-5 estrellas)</label>
+                    <div class="rating-stars">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                    <input type="hidden" id="rating" name="rating" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedbackComment">Tu comentario</label>
+                    <textarea id="feedbackComment" name="feedbackComment" placeholder="Cuéntanos sobre tu experiencia..." required></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Enviar feedback</button>
+                <div id="feedbackStatus" style="margin-top: 1rem; text-align: center; color: var(--gray);"></div>
+            </form>
+        </div>
+
         <!-- User Actions -->
         <div class="user-actions">
-            <button class="user-action-btn" onclick="window.location.href='index.html'">
-                <i class="fas fa-home"></i> Volver al inicio
-            </button>
+            <button class="user-action-btn" onclick="window.location.href='index.html'">Volver al inicio</button>
         </div>
     </div>
 
@@ -604,7 +646,7 @@
                 </div>
                 <div class="footer-column">
                     <h3>Contacto</h3>
-                    <p><i class="fas fa-envelope"></i>infostudioraell@gmail.com</p>
+                    <p><i class="fas fa-envelope"></i> infostudioraell@gmail.com</p>
                     <p><i class="fas fa-phone"></i> +34 614255664</p>
                 </div>
                 <div class="footer-column">
@@ -624,28 +666,6 @@
         let currentProjectId = null;
         let projectData = null;
 
-        // Mobile menu toggle
-        document.getElementById('hamburger').addEventListener('click', function() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.style.display = mobileMenu.style.display === 'flex' ? 'none' : 'flex';
-        });
-
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('mobileMenu').style.display = 'none';
-            });
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            if (!hamburger.contains(event.target) && !mobileMenu.contains(event.target)) {
-                mobileMenu.style.display = 'none';
-            }
-        });
-
         // Inicializar todo después de que el DOM esté cargado
         document.addEventListener('DOMContentLoaded', function() {
             // Verificar que la librería de Supabase esté cargada
@@ -659,6 +679,26 @@
                 'https://hpgzsbqfncyehjlizkoh.supabase.co',
                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
             );
+
+            // Star rating system
+            const stars = document.querySelectorAll('.star');
+            const ratingInput = document.getElementById('rating');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = this.dataset.rating;
+                    ratingInput.value = rating;
+                    
+                    // Update star styles
+                    stars.forEach(s => {
+                        if (s.dataset.rating <= rating) {
+                            s.classList.add('selected');
+                        } else {
+                            s.classList.remove('selected');
+                        }
+                    });
+                });
+            });
 
             // Get tracking code from URL
             function getTrackingCode() {
@@ -693,54 +733,36 @@
                     projectData = data;
                     currentProjectId = data.id;
                     
-                    // Fill profile header data
+                    // Fill profile data
                     document.querySelector('#profileCode span').textContent = data.tracking_code;
-                    document.getElementById('projectStatus').textContent = data.status || 'Pendiente';
+                    document.getElementById('projectStatus').textContent = data.status || 'pending';
                     document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
                     document.getElementById('lyricsStatus').textContent = data.lyrics ? 'Lista' : 'Pendiente';
-                    document.getElementById('demoStatus').textContent = data.demo_url ? 'Disponible' : 'Pendiente';
                     
-                    // Update status card icon color
-                    const statusCard = document.querySelector('.info-card.status-pending');
-                    statusCard.className = 'info-card';
-                    if (data.status === 'Pendiente') {
-                        statusCard.classList.add('status-pending');
-                    } else if (data.status === 'En progreso') {
-                        statusCard.classList.add('status-in-progress');
-                    } else if (data.status === 'Demo lista') {
-                        statusCard.classList.add('status-demo-ready');
-                    } else if (data.status === 'Completedo') {
-                        statusCard.classList.add('status-completed');
+                    // Show demo if available
+                    if (data.demo_url && data.demo_url.trim() !== '') {
+                        document.getElementById('audioPlaceholder').style.display = 'none';
+                        document.getElementById('demoAudio').src = data.demo_url;
+                        document.getElementById('demoAudio').style.display = 'block';
+                    } else {
+                        document.getElementById('audioPlaceholder').innerHTML = `
+                            <i class="fas fa-headphones"></i>
+                            <p>El demo será enviado por el compositor cuando esté listo.</p>
+                        `;
+                        document.getElementById('audioPlaceholder').style.display = 'block';
+                        document.getElementById('demoAudio').style.display = 'none';
                     }
                     
                     // Fill lyrics content
-                    const lyricsContent = document.getElementById('lyricsContent');
                     if (data.lyrics && data.lyrics.trim() !== '') {
-                        lyricsContent.innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit;">${data.lyrics}</pre>`;
+                        document.getElementById('lyricsContent').innerHTML = `<pre style="white-space: pre-wrap; font-family: inherit;">${data.lyrics}</pre>`;
                     } else {
-                        lyricsContent.innerHTML = `
+                        document.getElementById('lyricsContent').innerHTML = `
                             <div class="lyrics-placeholder">
                                 <i class="fas fa-file-alt"></i>
                                 <p>La letra será enviada por el compositor cuando esté lista.</p>
                             </div>
                         `;
-                    }
-                    
-                    // Show demo if available
-                    const audioPlaceholder = document.getElementById('audioPlaceholder');
-                    const demoAudio = document.getElementById('demoAudio');
-                    
-                    if (data.demo_url && data.demo_url.trim() !== '') {
-                        audioPlaceholder.style.display = 'none';
-                        demoAudio.src = data.demo_url;
-                        demoAudio.style.display = 'block';
-                    } else {
-                        audioPlaceholder.innerHTML = `
-                            <i class="fas fa-headphones"></i>
-                            <p>El demo será enviado por el compositor cuando esté listo.</p>
-                        `;
-                        audioPlaceholder.style.display = 'block';
-                        demoAudio.style.display = 'none';
                     }
                     
                     // Load chat messages
@@ -771,19 +793,13 @@
                         data.forEach(message => {
                             const messageDiv = document.createElement('div');
                             messageDiv.className = message.sender === 'admin' ? 'message admin' : 'message client';
-                            messageDiv.innerHTML = `
-                                <strong>${message.sender === 'admin' ? 'Compositor' : 'Tú'}:</strong>
-                                <br>${message.message}
-                            `;
+                            messageDiv.innerHTML = `<strong>${message.sender === 'admin' ? 'Compositor' : 'Tú'}:</strong><br>${message.message}`;
                             chatMessages.appendChild(messageDiv);
                         });
                     } else {
                         const welcomeMessage = document.createElement('div');
                         welcomeMessage.className = 'message admin';
-                        welcomeMessage.innerHTML = `
-                            <strong>Compositor:</strong>
-                            <br>¡Hola! Bienvenido a tu espacio de seguimiento. Estoy trabajando en tu composición.
-                        `;
+                        welcomeMessage.innerHTML = `<strong>Compositor:</strong><br>¡Hola! Bienvenido a tu espacio de seguimiento. Estoy trabajando en tu composición.`;
                         chatMessages.appendChild(welcomeMessage);
                     }
                     
@@ -800,10 +816,22 @@
                 
                 if (message) {
                     try {
+                        const trackingCode = getTrackingCode();
+                        
+                        // Get project ID first
+                        const {  projectData, error: projectError } = await supabase
+                            .from('projects')
+                            .select('id')
+                            .eq('tracking_code', trackingCode.toUpperCase())
+                            .single();
+                        
+                        if (projectError) throw projectError;
+                        
+                        // Send message to Supabase
                         const { error: messageError } = await supabase
                             .from('chat_messages')
                             .insert({
-                                project_id: currentProjectId,
+                                project_id: projectData.id,
                                 sender: 'client',
                                 message: message
                             });
@@ -814,10 +842,7 @@
                         const chatMessages = document.getElementById('chatMessages');
                         const messageDiv = document.createElement('div');
                         messageDiv.className = 'message client';
-                        messageDiv.innerHTML = `
-                            <strong>Tú:</strong>
-                            <br>${message}
-                        `;
+                        messageDiv.innerHTML = `<strong>Tú:</strong><br>${message}`;
                         chatMessages.appendChild(messageDiv);
                         chatInput.value = '';
                         chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -833,6 +858,65 @@
             document.getElementById('chatInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     document.getElementById('sendChat').click();
+                }
+            });
+
+            // Submit feedback
+            document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                const clientName = formData.get('clientName');
+                const clientEmail = formData.get('clientEmail');
+                const rating = formData.get('rating');
+                const comment = formData.get('feedbackComment');
+                const feedbackStatus = document.getElementById('feedbackStatus');
+                
+                if (!clientName || !clientEmail || !rating || !comment) {
+                    feedbackStatus.textContent = 'Por favor completa todos los campos obligatorios.';
+                    feedbackStatus.style.color = 'red';
+                    return;
+                }
+                
+                try {
+                    feedbackStatus.textContent = 'Enviando feedback...';
+                    feedbackStatus.style.color = 'var(--gray)';
+                    
+                    // Insert feedback into Supabase
+                    const { data, error } = await supabase
+                        .from('feedback')
+                        .insert({
+                            project_id: currentProjectId,
+                            client_name: clientName,
+                            client_email: clientEmail,
+                            rating: parseInt(rating),
+                            comment: comment,
+                            is_approved: false
+                        })
+                        .select();
+                    
+                    if (error) throw error;
+                    
+                    feedbackStatus.textContent = '¡Gracias por tu feedback!';
+                    feedbackStatus.style.color = 'green';
+                    this.reset();
+                    
+                    // Reset star ratings
+                    stars.forEach(s => s.classList.remove('selected'));
+                    ratingInput.value = '';
+                    
+                } catch (error) {
+                    console.error('Error sending feedback:', error);
+                    feedbackStatus.textContent = 'Error al enviar feedback. Por favor intenta nuevamente.';
+                    feedbackStatus.style.color = 'red';
+                }
+            });
+
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                const successModal = document.getElementById('successModal');
+                if (e.target === successModal) {
+                    closeModal();
                 }
             });
 
