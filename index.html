@@ -264,7 +264,7 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        /* Testimonials Section */
+        /* Testimonials Section - CARRUSEL */
         .testimonials-section {
             padding: 5rem 0;
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
@@ -293,13 +293,21 @@
             margin: 0 auto;
         }
 
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+        /* Carrusel de testimonios */
+        .testimonials-carousel {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .testimonials-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
         }
 
         .testimonial-card {
+            min-width: 100%;
             background: white;
             padding: 2rem;
             border-radius: 20px;
@@ -351,11 +359,59 @@
             color: var(--dark);
         }
 
+        /* Controles del carrusel */
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .carousel-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .carousel-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dot.active {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
         /* Loading and error states */
         .testimonials-loading,
         .testimonials-error {
             text-align: center;
-            grid-column: 1 / -1;
             padding: 2rem;
             color: var(--gray);
         }
@@ -595,6 +651,11 @@
 
         @media (max-width: 480px) {
             .steps { grid-template-columns: 1fr; }
+            .carousel-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -671,15 +732,25 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
+    <!-- Testimonials Section - CARRUSEL -->
     <section id="testimonios" class="testimonials-section">
         <div class="testimonials-container">
             <div class="testimonials-header">
                 <h2>Lo que dicen quienes ya crearon su canción</h2>
                 <p>Experiencias reales de personas que transformaron sus recuerdos en música única</p>
             </div>
-            <div class="testimonials-grid" id="testimonialsGrid">
-                <div class="testimonials-loading">Cargando testimonios...</div>
+            <div class="testimonials-carousel">
+                <div class="testimonials-wrapper" id="testimonialsWrapper">
+                    <!-- Los testimonios se cargarán aquí dinámicamente -->
+                    <div class="testimonial-card">
+                        <div class="testimonials-loading">Cargando testimonios...</div>
+                    </div>
+                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-btn" id="prevBtn">‹</button>
+                    <button class="carousel-btn" id="nextBtn">›</button>
+                </div>
+                <div class="carousel-dots" id="carouselDots"></div>
             </div>
         </div>
     </section>
@@ -887,41 +958,106 @@
                         .select('client_name, comment, rating')
                         .eq('is_approved', true)
                         .order('created_at', { ascending: false })
-                        .limit(6);
+                        .limit(10); // Cargar más para el carrusel
                     
                     if (error) throw error;
                     
-                    const grid = document.getElementById('testimonialsGrid');
+                    const wrapper = document.getElementById('testimonialsWrapper');
+                    const dotsContainer = document.getElementById('carouselDots');
                     
                     if (data && data.length > 0) {
-                        let html = '';
+                        // Limpiar contenedores
+                        wrapper.innerHTML = '';
+                        dotsContainer.innerHTML = '';
+                        
+                        // Crear tarjetas
                         data.forEach(feedback => {
-                            // Solo primer nombre para privacidad
                             const firstName = feedback.client_name.split(' ')[0] || 'Cliente';
                             const stars = '★'.repeat(feedback.rating) + '☆'.repeat(5 - feedback.rating);
                             
-                            html += `
-                                <div class="testimonial-card">
-                                    <div class="avatar">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    <div class="rating">${stars}</div>
-                                    <p class="testimonial-text">"${feedback.comment}"</p>
-                                    <p class="client-name">${firstName}</p>
+                            const card = document.createElement('div');
+                            card.className = 'testimonial-card';
+                            card.innerHTML = `
+                                <div class="avatar">
+                                    <i class="fas fa-user"></i>
                                 </div>
+                                <div class="rating">${stars}</div>
+                                <p class="testimonial-text">"${feedback.comment}"</p>
+                                <p class="client-name">${firstName}</p>
                             `;
+                            wrapper.appendChild(card);
+                            
+                            // Crear punto
+                            const dot = document.createElement('div');
+                            dot.className = 'dot';
+                            dot.addEventListener('click', () => goToSlide(i));
+                            dotsContainer.appendChild(dot);
                         });
-                        grid.innerHTML = html;
+                        
+                        // Inicializar carrusel
+                        initCarousel(data.length);
                     } else {
-                        grid.innerHTML = '<div class="testimonials-error">Pronto compartiré las primeras experiencias.</div>';
+                        wrapper.innerHTML = '<div class="testimonial-card"><div class="testimonials-error">Pronto compartiré las primeras experiencias.</div></div>';
                     }
                 } catch (error) {
                     console.error('Error al cargar testimonios:', error);
-                    document.getElementById('testimonialsGrid').innerHTML = 
-                        '<div class="testimonials-error">No se pudieron cargar los testimonios en este momento.</div>';
+                    document.getElementById('testimonialsWrapper').innerHTML = 
+                        '<div class="testimonial-card"><div class="testimonials-error">No se pudieron cargar los testimonios en este momento.</div></div>';
                 }
             }
 
+            // --- Carrusel ---
+            let currentSlide = 0;
+            let totalSlides = 0;
+            let autoSlideInterval;
+
+            function initCarousel(count) {
+                totalSlides = count;
+                updateDots();
+                startAutoSlide();
+                
+                // Eventos de botones
+                document.getElementById('prevBtn').addEventListener('click', () => {
+                    goToSlide(currentSlide - 1);
+                    resetAutoSlide();
+                });
+                
+                document.getElementById('nextBtn').addEventListener('click', () => {
+                    goToSlide(currentSlide + 1);
+                    resetAutoSlide();
+                });
+            }
+
+            function goToSlide(index) {
+                if (index < 0) index = totalSlides - 1;
+                if (index >= totalSlides) index = 0;
+                currentSlide = index;
+                const wrapper = document.getElementById('testimonialsWrapper');
+                wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+                updateDots();
+            }
+
+            function updateDots() {
+                const dots = document.querySelectorAll('.dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentSlide);
+                });
+            }
+
+            function nextSlide() {
+                goToSlide(currentSlide + 1);
+            }
+
+            function startAutoSlide() {
+                autoSlideInterval = setInterval(nextSlide, 5000); // Cambia cada 5 segundos
+            }
+
+            function resetAutoSlide() {
+                clearInterval(autoSlideInterval);
+                startAutoSlide();
+            }
+
+            // --- Resto de funciones ---
             function generateTrackingCode() {
                 const letters = 'LL';
                 const numbers = '0123456789';
