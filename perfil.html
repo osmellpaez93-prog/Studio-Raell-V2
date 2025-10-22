@@ -554,6 +554,45 @@
         .demo-status i {
             font-size: 1.2rem;
         }
+
+        /* Estilo del recuadro de estado (como en la imagen) */
+        .project-status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .status-item-grid {
+            padding: 1rem;
+        }
+
+        .status-item-grid i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .status-item-grid h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .status-item-grid p {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        .status-item-grid .ready {
+            color: var(--green);
+        }
+
+        .status-item-grid .pending {
+            color: var(--gray);
+        }
     </style>
 </head>
 <body>
@@ -576,21 +615,26 @@
             <h1>Mi Proyecto Musical</h1>
             <div class="profile-code" id="profileCode">Código: <span></span></div>
             
-            <div class="project-status">
-                <div class="status-item">
+            <div class="project-status-grid">
+                <div class="status-item-grid">
                     <i class="fas fa-pen"></i>
                     <h4>Estado</h4>
                     <p id="projectStatus">Cargando...</p>
                 </div>
-                <div class="status-item">
+                <div class="status-item-grid">
                     <i class="fas fa-calendar"></i>
                     <h4>Fecha de entrega</h4>
                     <p id="deliveryDate">Cargando...</p>
                 </div>
-                <div class="status-item">
+                <div class="status-item-grid">
                     <i class="fas fa-file-alt"></i>
                     <h4>Letra</h4>
                     <p id="lyricsStatus">Cargando...</p>
+                </div>
+                <div class="status-item-grid">
+                    <i class="fas fa-music"></i>
+                    <h4>Demo</h4>
+                    <p id="demoStatus">Cargando...</p>
                 </div>
             </div>
         </div>
@@ -777,6 +821,15 @@
                     document.getElementById('projectStatus').textContent = data.status || 'pending';
                     document.getElementById('deliveryDate').textContent = data.delivery_date || 'Próximamente';
                     document.getElementById('lyricsStatus').textContent = data.lyrics ? 'Lista' : 'Pendiente';
+                    
+                    // Set demo status
+                    if (data.demo_url && data.demo_url.trim() !== '') {
+                        document.getElementById('demoStatus').textContent = 'Listo';
+                        document.getElementById('demoStatus').classList.add('ready');
+                    } else {
+                        document.getElementById('demoStatus').textContent = 'En preparación';
+                        document.getElementById('demoStatus').classList.add('pending');
+                    }
                     
                     // Fill lyrics content with scrollable container
                     if (data.lyrics && data.lyrics.trim() !== '') {
