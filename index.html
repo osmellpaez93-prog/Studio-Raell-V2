@@ -264,6 +264,106 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
+        /* Testimonials Section */
+        .testimonials-section {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+
+        .testimonials-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .testimonials-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .testimonials-header h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .testimonials-header p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: """;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.1;
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .rating {
+            color: #f59e0b;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .client-name {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Loading and error states */
+        .testimonials-loading,
+        .testimonials-error {
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 2rem;
+            color: var(--gray);
+        }
+
+        .testimonials-error {
+            color: var(--red);
+        }
+
         /* Form Section */
         .form-section {
             padding: 5rem 0;
@@ -507,6 +607,7 @@
             </div>
             <ul class="nav-links">
                 <li><a href="#como-funciona">Cómo funciona</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
                 <li><a href="#enviar-idea">Envía tu idea</a></li>
                 <li><a href="#iniciar-sesion">Iniciar sesión</a></li>
             </ul>
@@ -517,6 +618,7 @@
             </div>
             <div class="mobile-menu" id="mobileMenu">
                 <a href="#como-funciona">Cómo funciona</a>
+                <a href="#testimonios">Testimonios</a>
                 <a href="#enviar-idea">Envía tu idea</a>
                 <a href="#iniciar-sesion">Iniciar sesión</a>
             </div>
@@ -565,6 +667,19 @@
                     <p>Accede a tu perfil para ver el progreso, escuchar demos y comunicarte directamente.</p>
                     <a href="seguimiento-entrega.html" class="more-info-btn">Saber más</a>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonios" class="testimonials-section">
+        <div class="testimonials-container">
+            <div class="testimonials-header">
+                <h2>Lo que dicen quienes ya crearon su canción</h2>
+                <p>Experiencias reales de personas que transformaron sus recuerdos en música única</p>
+            </div>
+            <div class="testimonials-grid" id="testimonialsGrid">
+                <div class="testimonials-loading">Cargando testimonios...</div>
             </div>
         </div>
     </section>
@@ -712,6 +827,7 @@
                 <div class="footer-column">
                     <h3>Enlaces rápidos</h3>
                     <a href="#como-funciona">Cómo funciona</a><br>
+                    <a href="#testimonios">Testimonios</a><br>
                     <a href="#enviar-idea">Envía tu idea</a><br>
                     <a href="#iniciar-sesion">Iniciar sesión</a><br>
                     <a href="#">Términos y condiciones</a>
@@ -757,11 +873,54 @@
                 return;
             }
 
-            // ✅ CORREGIDO: Se eliminaron los espacios al final de la URL y la clave
+            // ✅ URLs corregidas (sin espacios)
             const supabase = window.supabase.createClient(
                 'https://hpgzsbqfncyehjlizkoh.supabase.co',
                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
             );
+
+            // --- Cargar testimonios desde Supabase ---
+            async function loadTestimonials() {
+                try {
+                    const { data, error } = await supabase
+                        .from('feedback')
+                        .select('client_name, comment, rating')
+                        .eq('is_approved', true)
+                        .order('created_at', { ascending: false })
+                        .limit(6);
+                    
+                    if (error) throw error;
+                    
+                    const grid = document.getElementById('testimonialsGrid');
+                    
+                    if (data && data.length > 0) {
+                        let html = '';
+                        data.forEach(feedback => {
+                            // Solo primer nombre para privacidad
+                            const firstName = feedback.client_name.split(' ')[0] || 'Cliente';
+                            const stars = '★'.repeat(feedback.rating) + '☆'.repeat(5 - feedback.rating);
+                            
+                            html += `
+                                <div class="testimonial-card">
+                                    <div class="avatar">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div class="rating">${stars}</div>
+                                    <p class="testimonial-text">"${feedback.comment}"</p>
+                                    <p class="client-name">${firstName}</p>
+                                </div>
+                            `;
+                        });
+                        grid.innerHTML = html;
+                    } else {
+                        grid.innerHTML = '<div class="testimonials-error">Pronto compartiré las primeras experiencias.</div>';
+                    }
+                } catch (error) {
+                    console.error('Error al cargar testimonios:', error);
+                    document.getElementById('testimonialsGrid').innerHTML = 
+                        '<div class="testimonials-error">No se pudieron cargar los testimonios en este momento.</div>';
+                }
+            }
 
             function generateTrackingCode() {
                 const letters = 'LL';
@@ -801,7 +960,7 @@
                     if (dbError) throw dbError;
 
                     try {
-                        const {  emailResponse, error: emailError } = await supabase.functions.invoke('send-confirmation-email', {
+                        const { emailResponse, error: emailError } = await supabase.functions.invoke('send-confirmation-email', {
                             body: JSON.stringify({
                                 email: formData.get('email'),
                                 trackingCode: trackingCode,
@@ -837,6 +996,9 @@
                     alert('Por favor ingresa un código de seguimiento válido.');
                 }
             });
+
+            // Cargar testimonios al iniciar
+            loadTestimonials();
 
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
