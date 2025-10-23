@@ -741,7 +741,6 @@
             </div>
             <div class="testimonials-carousel">
                 <div class="testimonials-wrapper" id="testimonialsWrapper">
-                    <!-- Los testimonios se cargarán aquí dinámicamente -->
                     <div class="testimonial-card">
                         <div class="testimonials-loading">Cargando testimonios...</div>
                     </div>
@@ -798,6 +797,7 @@
                             <option value="Bachata">Bachata</option>
                             <option value="otros">Otros</option>
                         </select>
+                        <input type="text" id="generoOtro" name="generoOtro" placeholder="Especifica el género..." style="display: none; margin-top: 8px;" />
                     </div>
                     <div class="form-group">
                         <label for="ocasion">¿Para qué ocasión es esta canción?</label>
@@ -811,6 +811,7 @@
                             <option value="regalo">Regalo</option>
                             <option value="otros">Otros</option>
                         </select>
+                        <input type="text" id="ocasionOtro" name="ocasionOtro" placeholder="Especifica la ocasión..." style="display: none; margin-top: 8px;" />
                     </div>
                     <div class="form-group">
                         <label for="idioma">¿En qué idioma quieres la canción?</label>
@@ -823,6 +824,7 @@
                             <option value="italiano">Italiano</option>
                             <option value="otros">Otros</option>
                         </select>
+                        <input type="text" id="idiomaOtro" name="idiomaOtro" placeholder="Especifica el idioma..." style="display: none; margin-top: 8px;" />
                     </div>
                     <div class="form-group">
                         <label for="reference">Referencias musicales (opcional)</label>
@@ -990,7 +992,6 @@
                             // Crear punto
                             const dot = document.createElement('div');
                             dot.className = 'dot';
-                            dot.addEventListener('click', () => goToSlide(i));
                             dotsContainer.appendChild(dot);
                         });
                         
@@ -1026,6 +1027,15 @@
                     goToSlide(currentSlide + 1);
                     resetAutoSlide();
                 });
+                
+                // Eventos para puntos
+                const dots = document.querySelectorAll('.dot');
+                dots.forEach((dot, i) => {
+                    dot.addEventListener('click', () => {
+                        goToSlide(i);
+                        resetAutoSlide();
+                    });
+                });
             }
 
             function goToSlide(index) {
@@ -1057,6 +1067,25 @@
                 startAutoSlide();
             }
 
+            // --- Mostrar/Ocultar campos "Otros" ---
+            document.getElementById('genero').addEventListener('change', function() {
+                const otroInput = document.getElementById('generoOtro');
+                otroInput.style.display = this.value === 'otros' ? 'block' : 'none';
+                if (this.value !== 'otros') otroInput.value = '';
+            });
+
+            document.getElementById('idioma').addEventListener('change', function() {
+                const otroInput = document.getElementById('idiomaOtro');
+                otroInput.style.display = this.value === 'otros' ? 'block' : 'none';
+                if (this.value !== 'otros') otroInput.value = '';
+            });
+
+            document.getElementById('ocasion').addEventListener('change', function() {
+                const otroInput = document.getElementById('ocasionOtro');
+                otroInput.style.display = this.value === 'otros' ? 'block' : 'none';
+                if (this.value !== 'otros') otroInput.value = '';
+            });
+
             // --- Resto de funciones ---
             function generateTrackingCode() {
                 const letters = 'LL';
@@ -1082,9 +1111,9 @@
                         client_email: formData.get('email'),
                         nombre_artistico: formData.get('nombreArtistico') || null,
                         cantante: formData.get('cantante'),
-                        genero: formData.get('genero'),
-                        ocasion: formData.get('ocasion') || null,
-                        idioma: formData.get('idioma'),
+                        genero: formData.get('genero') === 'otros' ? formData.get('generoOtro') : formData.get('genero'),
+                        ocasion: formData.get('ocasion') === 'otros' ? formData.get('ocasionOtro') : formData.get('ocasion') || null,
+                        idioma: formData.get('idioma') === 'otros' ? formData.get('idiomaOtro') : formData.get('idioma'),
                         musical_references: formData.get('reference') || null,
                         demo_requested: formData.get('demo') === 'on',
                         delivery_date: formData.get('fechaEntrega') || null,
@@ -1154,3 +1183,4 @@
     </script>
 </body>
 </html>
+
