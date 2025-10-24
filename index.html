@@ -911,276 +911,256 @@
             </div>
         </div>
     </footer>
-
     <script>
-        function closeModal() {
-            document.getElementById('successModal').style.display = 'none';
+    function closeModal() {
+        document.getElementById('successModal').style.display = 'none';
+    }
+    window.closeModal = closeModal;
+    // Mobile menu toggle
+    document.getElementById('hamburger').addEventListener('click', function() {
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenu.style.display = mobileMenu.style.display === 'flex' ? 'none' : 'flex';
+    });
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.getElementById('mobileMenu').style.display = 'none';
+        });
+    });
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        if (!hamburger.contains(event.target) && !mobileMenu.contains(event.target)) {
+            mobileMenu.style.display = 'none';
         }
-        window.closeModal = closeModal;
+    });
+    document.addEventListener('DOMContentLoaded', async function() {
+        if (typeof window.supabase === 'undefined') {
+            console.error('Supabase library not loaded');
+            return;
+        }
+        const supabase = window.supabase.createClient(
+            'https://hpgzsbqfncyehjlizkoh.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
+        );
+        // --- Cargar testimonios desde Supabase ---
+        async function loadTestimonials() {
+            try {
+                const { data, error } = await supabase
+                    .from('feedback')
+                    .select('client_name, comment, rating')
+                    .eq('is_approved', true)
+                    .order('created_at', { ascending: false })
+                    .limit(10);
 
-        // Mobile menu toggle
-        document.getElementById('hamburger').addEventListener('click', function() {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.style.display = mobileMenu.style.display === 'flex' ? 'none' : 'flex';
-        });
+                if (error) throw error;
 
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('mobileMenu').style.display = 'none';
-            });
-        });
-
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const hamburger = document.getElementById('hamburger');
-            const mobileMenu = document.getElementById('mobileMenu');
-            if (!hamburger.contains(event.target) && !mobileMenu.contains(event.target)) {
-                mobileMenu.style.display = 'none';
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            if (typeof window.supabase === 'undefined') {
-                console.error('Supabase library not loaded');
-                return;
-            }
-
-            // ✅ URLs corregidas (sin espacios)
-            const supabase = window.supabase.createClient(
-                'https://hpgzsbqfncyehjlizkoh.supabase.co',
-                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
-            );
-
-            // --- Cargar testimonios desde Supabase ---
-            async function loadTestimonials() {
-                try {
-                    const { data, error } = await supabase
-                        .from('feedback')
-                        .select('client_name, comment, rating')
-                        .eq('is_approved', true)
-                        .order('created_at', { ascending: false })
-                        .limit(10); // Cargar más para el carrusel
-                    
-                    if (error) throw error;
-                    
-                    const wrapper = document.getElementById('testimonialsWrapper');
-                    const dotsContainer = document.getElementById('carouselDots');
-                    
-                    if (data && data.length > 0) {
-                        // Limpiar contenedores
-                        wrapper.innerHTML = '';
-                        dotsContainer.innerHTML = '';
-                        
-                        // Crear tarjetas
-                        data.forEach(feedback => {
-                            const firstName = feedback.client_name.split(' ')[0] || 'Cliente';
-                            const stars = '★'.repeat(feedback.rating) + '☆'.repeat(5 - feedback.rating);
-                            
-                            const card = document.createElement('div');
-                            card.className = 'testimonial-card';
-                            card.innerHTML = `
-                                <div class="avatar">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <div class="rating">${stars}</div>
-                                <p class="testimonial-text">"${feedback.comment}"</p>
-                                <p class="client-name">${firstName}</p>
-                            `;
-                            wrapper.appendChild(card);
-                            
-                            // Crear punto
-                            const dot = document.createElement('div');
-                            dot.className = 'dot';
-                            dotsContainer.appendChild(dot);
-                        });
-                        
-                        // Inicializar carrusel
-                        initCarousel(data.length);
-                    } else {
-                        wrapper.innerHTML = '<div class="testimonial-card"><div class="testimonials-error">Pronto compartiré las primeras experiencias.</div></div>';
-                    }
-                } catch (error) {
-                    console.error('Error al cargar testimonios:', error);
-                    document.getElementById('testimonialsWrapper').innerHTML = 
-                        '<div class="testimonial-card"><div class="testimonials-error">No se pudieron cargar los testimonios en este momento.</div></div>';
-                }
-            }
-
-            // --- Carrusel ---
-            let currentSlide = 0;
-            let totalSlides = 0;
-            let autoSlideInterval;
-
-            function initCarousel(count) {
-                totalSlides = count;
-                updateDots();
-                startAutoSlide();
-                
-                // Eventos de botones
-                document.getElementById('prevBtn').addEventListener('click', () => {
-                    goToSlide(currentSlide - 1);
-                    resetAutoSlide();
-                });
-                
-                document.getElementById('nextBtn').addEventListener('click', () => {
-                    goToSlide(currentSlide + 1);
-                    resetAutoSlide();
-                });
-                
-                // Eventos para puntos
-                const dots = document.querySelectorAll('.dot');
-                dots.forEach((dot, i) => {
-                    dot.addEventListener('click', () => {
-                        goToSlide(i);
-                        resetAutoSlide();
-                    });
-                });
-            }
-
-            function goToSlide(index) {
-                if (index < 0) index = totalSlides - 1;
-                if (index >= totalSlides) index = 0;
-                currentSlide = index;
                 const wrapper = document.getElementById('testimonialsWrapper');
-                wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
-                updateDots();
-            }
+                const dotsContainer = document.getElementById('carouselDots');
 
-            function updateDots() {
-                const dots = document.querySelectorAll('.dot');
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === currentSlide);
-                });
-            }
+                if (data && data.length > 0) {
+                    wrapper.innerHTML = '';
+                    dotsContainer.innerHTML = '';
 
-            function nextSlide() {
-                goToSlide(currentSlide + 1);
-            }
+                    data.forEach(feedback => {
+                        const firstName = feedback.client_name.split(' ')[0] || 'Cliente';
+                        const stars = '★'.repeat(feedback.rating) + '☆'.repeat(5 - feedback.rating);
+                        const card = document.createElement('div');
+                        card.className = 'testimonial-card';
+                        card.innerHTML = `
+                            <div class="avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="rating">${stars}</div>
+                            <p class="testimonial-text">"${feedback.comment}"</p>
+                            <p class="client-name">${firstName}</p>
+                        `;
+                        wrapper.appendChild(card);
 
-            function startAutoSlide() {
-                autoSlideInterval = setInterval(nextSlide, 5000); // Cambia cada 5 segundos
-            }
+                        const dot = document.createElement('div');
+                        dot.className = 'dot';
+                        dotsContainer.appendChild(dot);
+                    });
 
-            function resetAutoSlide() {
-                clearInterval(autoSlideInterval);
-                startAutoSlide();
-            }
-
-            // --- Mostrar/Ocultar campos "Otros" ---
-            document.getElementById('genero').addEventListener('change', function() {
-                const otroInput = document.getElementById('generoOtro');
-                otroInput.style.display = this.value === 'otros' ? 'block' : 'none';
-                if (this.value !== 'otros') otroInput.value = '';
-            });
-
-            document.getElementById('idioma').addEventListener('change', function() {
-                const otroInput = document.getElementById('idiomaOtro');
-                otroInput.style.display = this.value === 'otros' ? 'block' : 'none';
-                if (this.value !== 'otros') otroInput.value = '';
-            });
-
-            document.getElementById('ocasion').addEventListener('change', function() {
-                const otroInput = document.getElementById('ocasionOtro');
-                otroInput.style.display = this.value === 'otros' ? 'block' : 'none';
-                if (this.value !== 'otros') otroInput.value = '';
-            });
-
-            // --- Resto de funciones ---
-            function generateTrackingCode() {
-                const letters = 'LL';
-                const numbers = '0123456789';
-                let code = 'R';
-                for (let i = 0; i < 4; i++) {
-                    code += numbers.charAt(Math.floor(Math.random() * numbers.length));
-                }
-                for (let i = 0; i < 2; i++) {
-                    code += letters.charAt(Math.floor(Math.random() * letters.length));
-                }
-                return code;
-            }
-
-            document.getElementById('ideaForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                try {
-                    const formData = new FormData(this);
-                    const trackingCode = generateTrackingCode();
-                    const projectData = {
-                        tracking_code: trackingCode,
-                        client_name: formData.get('name'),
-                        client_email: formData.get('email'),
-                        nombre_artistico: formData.get('nombreArtistico') || null,
-                        cantante: formData.get('cantante'),
-                        genero: formData.get('genero') === 'otros' ? formData.get('generoOtro') : formData.get('genero'),
-                        ocasion: formData.get('ocasion') === 'otros' ? formData.get('ocasionOtro') : formData.get('ocasion') || null,
-                        idioma: formData.get('idioma') === 'otros' ? formData.get('idiomaOtro') : formData.get('idioma'),
-                        musical_references: formData.get('reference') || null,
-                        demo_requested: formData.get('demo') === 'on',
-                        delivery_date: formData.get('fechaEntrega') || null,
-                        idea_description: formData.get('idea'),
-                        status: 'pending'
-                    };
-
-                    const { data, error: dbError } = await supabase.from('projects').insert([projectData]).select();
-                    if (dbError) throw dbError;
-
-                    try {
-                        const { emailResponse, error: emailError } = await supabase.functions.invoke('send-confirmation-email', {
-                            body: JSON.stringify({
-                                email: formData.get('email'),
-                                trackingCode: trackingCode,
-                                clientName: formData.get('name')
-                            })
-                        });
-                        if (emailError) {
-                            console.error('❌ Error al llamar la función send-confirmation-email:', emailError);
-                            alert('⚠️ Tu proyecto fue creado, pero hubo un problema al enviar el correo de confirmación. Tu código es: ' + trackingCode + '. Guárdalo, recibirás novedades pronto.');
-                        }
-                    } catch (invokeError) {
-                        console.error('💥 Error inesperado al invocar la función send-confirmation-email:', invokeError);
-                        alert('⚠️ Tu proyecto fue creado, pero no pudimos enviar el correo de confirmación automáticamente. Tu código es: ' + trackingCode + '. Guárdalo, recibirás novedades pronto.');
-                    }
-
-                    document.getElementById('generatedCode').textContent = trackingCode;
-                    document.getElementById('emailSent').textContent = formData.get('email');
-                    document.getElementById('successModal').style.display = 'flex';
-                    this.reset();
-
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('Hubo un error al enviar tu idea. Por favor intenta nuevamente.');
-                }
-            });
-
-            document.getElementById('loginForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const trackingCode = document.getElementById('trackingCode').value.toUpperCase();
-                if (trackingCode) {
-                    window.location.href = `perfil.html?code=${trackingCode}`;
+                    initCarousel(data.length);
                 } else {
-                    alert('Por favor ingresa un código de seguimiento válido.');
+                    wrapper.innerHTML = '<div class="testimonial-card"><div class="testimonials-error">Pronto compartiré las primeras experiencias.</div></div>';
                 }
+            } catch (error) {
+                console.error('Error al cargar testimonios:', error);
+                document.getElementById('testimonialsWrapper').innerHTML = 
+                    '<div class="testimonial-card"><div class="testimonials-error">No se pudieron cargar los testimonios en este momento.</div></div>';
+            }
+        }
+        // --- Carrusel ---
+        let currentSlide = 0;
+        let totalSlides = 0;
+        let autoSlideInterval;
+        function initCarousel(count) {
+            totalSlides = count;
+            updateDots();
+            startAutoSlide();
+
+            document.getElementById('prevBtn').addEventListener('click', () => {
+                goToSlide(currentSlide - 1);
+                resetAutoSlide();
+            });
+            document.getElementById('nextBtn').addEventListener('click', () => {
+                goToSlide(currentSlide + 1);
+                resetAutoSlide();
             });
 
-            // Cargar testimonios al iniciar
-            loadTestimonials();
-
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const target = document.querySelector(this.getAttribute('href'));
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.addEventListener('click', () => {
+                    goToSlide(i);
+                    resetAutoSlide();
                 });
             });
+        }
+        function goToSlide(index) {
+            if (index < 0) index = totalSlides - 1;
+            if (index >= totalSlides) index = 0;
+            currentSlide = index;
+            const wrapper = document.getElementById('testimonialsWrapper');
+            wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
+            updateDots();
+        }
+        function updateDots() {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+        function nextSlide() {
+            goToSlide(currentSlide + 1);
+        }
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(nextSlide, 5000);
+        }
+        function resetAutoSlide() {
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+        // --- Mostrar/Ocultar campos "Otros" ---
+        document.getElementById('genero').addEventListener('change', function() {
+            const otroInput = document.getElementById('generoOtro');
+            otroInput.style.display = this.value === 'otros' ? 'block' : 'none';
+            if (this.value !== 'otros') otroInput.value = '';
+        });
+        document.getElementById('idioma').addEventListener('change', function() {
+            const otroInput = document.getElementById('idiomaOtro');
+            otroInput.style.display = this.value === 'otros' ? 'block' : 'none';
+            if (this.value !== 'otros') otroInput.value = '';
+        });
+        document.getElementById('ocasion').addEventListener('change', function() {
+            const otroInput = document.getElementById('ocasionOtro');
+            otroInput.style.display = this.value === 'otros' ? 'block' : 'none';
+            if (this.value !== 'otros') otroInput.value = '';
+        });
+        // --- Generar código de seguimiento ---
+        function generateTrackingCode() {
+            const letters = 'LL';
+            const numbers = '0123456789';
+            let code = 'R';
+            for (let i = 0; i < 4; i++) {
+                code += numbers.charAt(Math.floor(Math.random() * numbers.length));
+            }
+            for (let i = 0; i < 2; i++) {
+                code += letters.charAt(Math.floor(Math.random() * letters.length));
+            }
+            return code;
+        }
+        // --- Manejar envío del formulario ---
+        document.getElementById('ideaForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-            window.addEventListener('click', function(e) {
-                const modal = document.getElementById('successModal');
-                if (e.target === modal) closeModal();
+            try {
+                const formData = new FormData(this);
+                const trackingCode = generateTrackingCode();
+
+                const projectData = {
+                    tracking_code: trackingCode,
+                    client_name: formData.get('name'),
+                    client_email: formData.get('email'),
+                    nombre_artistico: formData.get('nombreArtistico') || null,
+                    cantante: formData.get('cantante'),
+                    genero: formData.get('genero') === 'otros' ? formData.get('generoOtro') : formData.get('genero'),
+                    ocasion: formData.get('ocasion') === 'otros' ? formData.get('ocasionOtro') : formData.get('ocasion') || null,
+                    idioma: formData.get('idioma') === 'otros' ? formData.get('idiomaOtro') : formData.get('idioma'),
+                    musical_references: formData.get('reference') || null,
+                    demo_requested: formData.get('demo') === 'on',
+                    delivery_date: formData.get('fechaEntrega') || null,
+                    idea_description: formData.get('idea'),
+                    status: 'pending'
+                };
+                // Guardar en Supabase
+                const { data, error: dbError } = await supabase.from('projects').insert([projectData]).select();
+                if (dbError) throw dbError;
+                // Enviar correo de confirmación
+                let emailSent = false;
+                try {
+                    const response = await supabase.functions.invoke('send-confirmation-email', {
+                        body: JSON.stringify({
+                            email: formData.get('email'),
+                            trackingCode: trackingCode,
+                            clientName: formData.get('name')
+                        })
+                    });
+
+                    if (response.error) {
+                        console.error('❌ Error de la función send-confirmation-email:', response.error);
+                    } else {
+                        emailSent = true;
+                    }
+                } catch (invokeError) {
+                    console.error('💥 Error al invocar la función:', invokeError);
+                }
+                // Mostrar modal con resultado
+                document.getElementById('generatedCode').textContent = trackingCode;
+                document.getElementById('emailSent').textContent = formData.get('email');
+                if (!emailSent) {
+                    document.querySelector('.email-sent').textContent = '⚠️ No se pudo enviar el correo. ¡Guarda tu código!';
+                    document.querySelector('.email-sent').style.color = '#ef4444';
+                }
+                document.getElementById('successModal').style.display = 'flex';
+                this.reset();
+            } catch (error) {
+                console.error('Error general:', error);
+                alert('Hubo un error al enviar tu idea. Por favor intenta nuevamente.');
+            }
+        });
+        // --- Login con código ---
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const trackingCode = document.getElementById('trackingCode').value.trim().toUpperCase();
+            if (trackingCode) {
+                window.location.href = `perfil.html?code=${encodeURIComponent(trackingCode)}`;
+            } else {
+                alert('Por favor ingresa un código de seguimiento válido.');
+            }
+        });
+        // --- Scroll suave ---
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
             });
         });
-    </script>
+        // --- Cerrar modal al hacer clic fuera ---
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('successModal');
+            if (e.target === modal) closeModal();
+        });
+
+        // Cargar testimonios
+        loadTestimonials();
+    });
+</script>
 </body>
 </html>
 
