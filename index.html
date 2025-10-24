@@ -784,7 +784,7 @@
             <p>Hemos recibido tu solicitud y estamos emocionados de trabajar en tu composición musical.</p>
             <p>Tu código de seguimiento es:</p>
             <div class="tracking-code" id="generatedCode"></div>
-            <p class="email-sent">Te hemos enviado un correo con este código a <span id="emailSent"></span></p>
+            <p class="email-sent" id="emailStatus">Te hemos enviado un correo con este código a <span id="emailSent"></span></p>
             <p>Guarda este código para acceder a tu perfil y hacer seguimiento de tu proyecto.</p>
             <button class="btn" onclick="closeModal()">Cerrar</button>
         </div>
@@ -832,14 +832,12 @@
             mobileMenu.style.display = mobileMenu.style.display === 'flex' ? 'none' : 'flex';
         });
 
-        // Close mobile menu when clicking a link
         document.querySelectorAll('.mobile-menu a').forEach(link => {
             link.addEventListener('click', () => {
                 document.getElementById('mobileMenu').style.display = 'none';
             });
         });
 
-        // Close mobile menu when clicking outside
         document.addEventListener('click', function(event) {
             const hamburger = document.getElementById('hamburger');
             const mobileMenu = document.getElementById('mobileMenu');
@@ -859,7 +857,6 @@
                 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhwZ3pzYnFmbmN5ZWhqbGl6a29oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAwNTM4OTcsImV4cCI6MjA3NTYyOTg5N30.jqn0ybrzARlvZcp2nBKg8Usdxf4B-JGSvVEwccSdcSg'
             );
 
-            // ✅ Autenticar anónimamente al cargar la página
             try {
                 const { data, error } = await supabase.auth.signInAnonymously();
                 if (error) {
@@ -881,14 +878,11 @@
                         .order('created_at', { ascending: false })
                         .limit(10);
                     if (error) throw error;
-
                     const wrapper = document.getElementById('testimonialsWrapper');
                     const dotsContainer = document.getElementById('carouselDots');
-
                     if (data && data.length > 0) {
                         wrapper.innerHTML = '';
                         dotsContainer.innerHTML = '';
-
                         data.forEach(feedback => {
                             const firstName = feedback.client_name.split(' ')[0] || 'Cliente';
                             const stars = '★'.repeat(feedback.rating) + '☆'.repeat(5 - feedback.rating);
@@ -903,12 +897,10 @@
                                 <p class="client-name">${firstName}</p>
                             `;
                             wrapper.appendChild(card);
-
                             const dot = document.createElement('div');
                             dot.className = 'dot';
                             dotsContainer.appendChild(dot);
                         });
-
                         initCarousel(data.length);
                     } else {
                         wrapper.innerHTML = '<div class="testimonial-card"><div class="testimonials-error">Pronto compartiré las primeras experiencias.</div></div>';
@@ -924,12 +916,10 @@
             let currentSlide = 0;
             let totalSlides = 0;
             let autoSlideInterval;
-
             function initCarousel(count) {
                 totalSlides = count;
                 updateDots();
                 startAutoSlide();
-
                 document.getElementById('prevBtn').addEventListener('click', () => {
                     goToSlide(currentSlide - 1);
                     resetAutoSlide();
@@ -938,7 +928,6 @@
                     goToSlide(currentSlide + 1);
                     resetAutoSlide();
                 });
-
                 const dots = document.querySelectorAll('.dot');
                 dots.forEach((dot, i) => {
                     dot.addEventListener('click', () => {
@@ -947,7 +936,6 @@
                     });
                 });
             }
-
             function goToSlide(index) {
                 if (index < 0) index = totalSlides - 1;
                 if (index >= totalSlides) index = 0;
@@ -956,22 +944,18 @@
                 wrapper.style.transform = `translateX(-${currentSlide * 100}%)`;
                 updateDots();
             }
-
             function updateDots() {
                 const dots = document.querySelectorAll('.dot');
                 dots.forEach((dot, i) => {
                     dot.classList.toggle('active', i === currentSlide);
                 });
             }
-
             function nextSlide() {
                 goToSlide(currentSlide + 1);
             }
-
             function startAutoSlide() {
                 autoSlideInterval = setInterval(nextSlide, 5000);
             }
-
             function resetAutoSlide() {
                 clearInterval(autoSlideInterval);
                 startAutoSlide();
@@ -983,13 +967,11 @@
                 otroInput.style.display = this.value === 'otros' ? 'block' : 'none';
                 if (this.value !== 'otros') otroInput.value = '';
             });
-
             document.getElementById('idioma').addEventListener('change', function() {
                 const otroInput = document.getElementById('idiomaOtro');
                 otroInput.style.display = this.value === 'otros' ? 'block' : 'none';
                 if (this.value !== 'otros') otroInput.value = '';
             });
-
             document.getElementById('ocasion').addEventListener('change', function() {
                 const otroInput = document.getElementById('ocasionOtro');
                 otroInput.style.display = this.value === 'otros' ? 'block' : 'none';
@@ -1013,11 +995,9 @@
             // --- Manejar envío del formulario ---
             document.getElementById('ideaForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
-
                 try {
                     const formData = new FormData(this);
                     const trackingCode = generateTrackingCode();
-
                     const projectData = {
                         tracking_code: trackingCode,
                         client_name: formData.get('name'),
@@ -1037,38 +1017,40 @@
                     const { data, error: dbError } = await supabase.from('projects').insert([projectData]).select();
                     if (dbError) throw dbError;
 
-                    // Enviar correo de confirmación
+                    // ✅ Corrección clave: invocar correctamente la función Edge
                     let emailSent = false;
                     try {
-                        const {  emailData, error: emailError } = await supabase.functions.invoke('send-confirmation-email', {
-                            body: JSON.stringify({
+                        const { data: emailData, error: emailError } = await supabase.functions.invoke('send-confirmation-email', {
+                            body: {
                                 email: formData.get('email'),
                                 trackingCode: trackingCode,
                                 clientName: formData.get('name')
-                            })
+                            }
                         });
 
                         if (emailError) {
-                            console.error('❌ Error al llamar la función send-confirmation-email:', emailError);
+                            console.error('❌ Error al enviar correo:', emailError);
                         } else {
                             emailSent = true;
                         }
                     } catch (invokeError) {
-                        console.error('💥 Error inesperado al invocar la función send-confirmation-email:', invokeError);
+                        console.error('💥 Error al invocar función Edge:', invokeError);
                     }
 
-                    // Mostrar modal con resultado
+                    // Mostrar modal
                     document.getElementById('generatedCode').textContent = trackingCode;
                     document.getElementById('emailSent').textContent = formData.get('email');
+
+                    const emailStatusEl = document.getElementById('emailStatus');
                     if (!emailSent) {
-                        document.querySelector('.email-sent').textContent = '⚠️ No se pudo enviar el correo. ¡Guarda tu código!';
-                        document.querySelector('.email-sent').style.color = '#ef4444';
+                        emailStatusEl.innerHTML = '⚠️ No se pudo enviar el correo. <strong>¡Guarda tu código!</strong>';
+                        emailStatusEl.style.color = '#ef4444';
                     }
+
                     document.getElementById('successModal').style.display = 'flex';
                     this.reset();
-
                 } catch (error) {
-                    console.error('Error:', error);
+                    console.error('Error general:', error);
                     alert('Hubo un error al enviar tu idea. Por favor intenta nuevamente.');
                 }
             });
